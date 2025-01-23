@@ -1,0 +1,2 @@
+{% set partialName = meta.topic ~ '-' ~ event.type ~ '.peb' -%} 
+{%  include partialName %}

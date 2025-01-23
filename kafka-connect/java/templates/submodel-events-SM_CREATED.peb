@@ -1,0 +1,50 @@
+{% set sm = event.submodel %}
+{% set smElems = collectAllSubmodelElements(sm) %}
+statements:
+- statement: |
+    MERGE (s:Submodel { id: $submodel.id }) 
+    {% if sm.idShort -%}
+    SET s.idShort = $submodel.idShort
+    {%- endif %} 
+    {% if meta.sourceUrl -%}
+    SET s.sourceUrl = $submodel.sourceUrl
+    {%- endif %} 
+    {% if meta.registrationTime -%}
+    SET s.registrationTime = $submodel.registrationTime
+    {%- endif %} 
+    {% for eachElem in smElems %} 
+    MERGE (e{{ loop.index }}:SubmodelElement:{{ eachElem.modelType }} {smId: $submodel.id, idShortPath: $sme_{{ loop.index }}.idShortPath })
+    SET e{{ loop.index }}.idShort = $sme_{{ loop.index }}.idShort 
+    {%- if eachElem.value is not null %} 
+    SET e{{ loop.index }}.value = $sme_{{ loop.index }}.value
+    {%- endif %} 
+    {% endfor %}
+    {% for eachElem in smElems %}
+    {%- if eachElem.isRootElement %} 
+    MERGE (s)-[:HAS_SUBMODEL_ELEMENT]->(e{{loop.index}}) 
+    {%- else %} 
+    MERGE (e{{ eachElem.parentPos }})-[:HAS_CHILD]->(e{{loop.index}})
+    {%- endif %}
+    {% endfor %} 
+  parameters:
+    submodel:
+      id: "{{ sm.id }}"
+      {% if sm.idShort -%}
+      idShort: "{{ sm.idShort }}"
+      {%- endif %} 
+      {% if meta.sourceUrl and sm.id -%}
+      {% set idEncoded = sm.id | base64encode | replace({ '=': '' }) | urlencode -%} 
+      {% set url = meta.sourceUrl ~ "/submodels/" ~ idEncoded -%}
+      sourceUrl: "{{ url }}" {% endif %} 
+      {% if meta.registrationTime -%}
+      registrationTime: {{ meta.registrationTime }}
+      {%- endif %} 
+    {% for eachElem in smElems %} 
+    sme_{{ loop.index }}: 
+      idShort: "{{eachElem.idShort}}" 
+      idShortPath: "{{eachElem.idShortPath}}" 
+      {%- if eachElem.value is not null %} 
+      value: "{{eachElem.value}}" 
+      {%- endif %} 
+    {% endfor %}
+      

@@ -1,0 +1,36 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      submodels:
+      - type: ModelReference
+        keys: 
+          type: Submodel
+          value: http://test.sm
+expected:
+  nodes:
+    - id: "0"
+      labels:
+      - Submodel
+      properties:
+        registrationTime: 1732781746575
+        sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+        id: "http://test.sm" 
+    - id: "1" 
+      labels: 
+      - AssetAdministrationShell
+      properties:
+        id: "http://test.shell"
+        registrationTime: 1732779314520
+        sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+  relationships:
+    - id: "0"
+      type: HAS_SUBMODEL
+      startNode: "1"
+      endNode: "0"

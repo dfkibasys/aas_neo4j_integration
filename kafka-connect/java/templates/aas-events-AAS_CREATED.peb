@@ -1,0 +1,62 @@
+{% set aas = event.aas %}
+statements:
+- statement: |
+    MERGE (a:AssetAdministrationShell { id: $shell.id }) 
+    {% if aas.idShort -%}
+    SET a.idShort = $shell.idShort
+    {%- endif %} 
+    {% if meta.sourceUrl -%}
+    SET a.sourceUrl = $shell.sourceUrl
+    {%- endif %} 
+    {% if meta.registrationTime -%}
+    SET a.registrationTime = $shell.registrationTime
+    {%- endif -%} 
+    {%- if aas.assetInformation is not null and aas.assetInformation.globalAssetId %} 
+    MERGE (asset:Asset { globalAssetId: $asset.globalAssetId })
+    {%- if aas.assetInformation.assetKind %} 
+    SET asset.assetKind = $asset.assetKind
+    {%- endif %} 
+    {% if aas.assetInformation.assetType -%}
+    SET asset.assetType = $asset.assetType
+    {%- endif %} 
+    MERGE (a) -[:HAS_ASSET]->(asset) {%- endif %} 
+    {% if aas.submodels is not empty -%} 
+    {% for eachSubmodel in aas.submodels %} 
+    {% if eachSubmodel.type == "ModelReference" and eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
+    MERGE (s_{{loop.index}}:Submodel {id: $submodels.s_{{ loop.index }}.id }) 
+    MERGE (a)-[:HAS_SUBMODEL]->(s_{{loop.index}}) 
+    {%- endif %}  
+    {%- endfor %} 
+    {% endif %} 
+  parameters:
+    shell:
+      id: "{{ aas.id }}"
+      {% if aas.idShort %}idShort: "{{ aas.idShort }}"{% endif %} 
+      {% if meta.sourceUrl -%}
+      {% set idEncoded = aas.id | base64encode | replace({ '=': '' }) | urlencode -%} 
+      {% set url = meta.sourceUrl ~ "/shells/" ~ idEncoded -%}
+      sourceUrl: "{{ url }}" {% endif %} 
+      {% if meta.registrationTime -%}
+      registrationTime: {{ meta.registrationTime }}
+      {%- endif %} 
+    {% if aas.assetInformation is not null and aas.assetInformation.globalAssetId -%}
+    {% set assetInfo = aas.assetInformation -%} 
+    asset:
+      globalAssetId: "{{ assetInfo.globalAssetId }}" 
+      {% if assetInfo.assetKind -%}  
+      assetKind: "{{ assetInfo.assetKind  }}"
+      {%- endif -%} 
+      {%- if assetInfo.assetType %}  
+      assetType: "{{ assetInfo.assetType }}"
+      {%- endif %}
+    {%- endif %} 
+    {% if aas.submodels is not empty -%} 
+    submodels:
+      {% for eachSubmodel in aas.submodels -%}
+      {% if eachSubmodel.type == "ModelReference" and eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
+      s_{{ loop.index }}:
+        id: "{{ eachSubmodel.keys[0].value }}"
+      {% endif -%}  
+      {% endfor -%}
+    {% endif %}
+      

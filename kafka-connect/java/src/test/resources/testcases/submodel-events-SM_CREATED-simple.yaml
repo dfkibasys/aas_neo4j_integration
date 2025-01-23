@@ -1,0 +1,25 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event: 
+    id: https://admin-shell.io/idta/TimeSeries/1/1_1
+    type: SM_CREATED
+    submodel: 
+      id: https://admin-shell.io/idta/TimeSeries/1/1_1
+      idShort: TimeSeries2
+      kind: Template
+expected: | 
+  statements:
+  - statement: |
+      MERGE (s:Submodel { id: $submodel.id }) 
+      SET s.idShort = $submodel.idShort
+      SET s.sourceUrl = $submodel.sourceUrl
+      SET s.registrationTime = $submodel.registrationTime
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+        idShort: "TimeSeries2"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE"
+        registrationTime: 1730878783379

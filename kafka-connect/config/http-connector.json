@@ -1,0 +1,30 @@
+{
+    "name": "Neo4jSinkConnectorAasEvents",
+    "config": {
+        "connector.class":"io.github.clescot.kafka.connect.http.sink.HttpSinkConnector",
+        "tasks.max": "1",    
+        "executor.threads": "1", 
+        "batch.size": "1",
+        "topics": "aas-events,submodel-events",
+
+        "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        
+        
+        "exception.strategy":"PROGRESS_BACK_OFF_STOP_TASK",
+
+        "transforms": "CypherTransformation",
+        "transforms.CypherTransformation.type": "org.eclipse.basyx.kafka.connect.neo4j.CypherTransformation",
+        "errors.tolerance": "all", 
+        "errors.log.enable": true,
+        "errors.deadletterqueue.topic.name": "dlq-aas-events",
+        "errors.deadletterqueue.topic.replication.factor": 1,
+        "errors.deadletterqueue.context.headers.enable": true,
+        
+        "config.default.retries":"3",
+        "config.default.retry.delay.in.ms":"2000",
+        "config.default.retry.max.delay.in.ms":"600000",
+        "config.default.retry.delay.factor":"1.5"
+    }
+}

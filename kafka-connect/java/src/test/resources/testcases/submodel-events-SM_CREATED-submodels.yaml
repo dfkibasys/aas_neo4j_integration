@@ -1,0 +1,172 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event: 
+    id: https://admin-shell.io/idta/TimeSeries/1/1_1
+    type: SM_CREATED
+    submodel: 
+      id: https://admin-shell.io/idta/TimeSeries/1/1_1
+      idShort: TimeSeries2
+      kind: Template
+      submodelElements:
+      - modelType: SubmodelElementCollection
+        semanticId:
+          keys:
+          - type: GlobalReference
+            value: https://admin-shell.io/idta/TimeSeries/Metadata/1/1
+          type: ExternalReference
+        qualifiers:
+        - kind: ConceptQualifier
+          type: Cardinality
+          value: One
+          valueType: xs:string
+        idShort: Metadata
+        value:
+        - modelType: MultiLanguageProperty
+          semanticId:
+            keys:
+            - type: GlobalReference
+              value: https://admin-shell.io/idta/TimeSeries/Metadata/Name/1/1
+            type: ExternalReference
+          value:
+          - language: en
+            text: HgStat_all
+          qualifiers:
+          - kind: ConceptQualifier
+            type: Cardinality
+            value: One
+            valueType: xs:string
+          category: PARAMETER
+          idShort: Name
+        - modelType: MultiLanguageProperty
+          semanticId:
+            keys:
+            - type: GlobalReference
+              value: https://admin-shell.io/idta/TimeSeries/Metadata/Description/1/1
+            type: ExternalReference
+          value:
+          - language: en
+            text: Complete range of status values of the heater from zero to now
+          qualifiers:
+          - kind: ConceptQualifier
+            type: Cardinality
+            value: ZeroToOne
+            valueType: xs:string
+          category: PARAMETER
+          idShort: Description
+        - modelType: SubmodelElementCollection
+          semanticId:
+            keys:
+            - type: GlobalReference
+              value: https://admin-shell.io/idta/TimeSeries/Record/1/1
+            type: ExternalReference
+          qualifiers:
+          - kind: ConceptQualifier
+            type: Cardinality
+            value: One
+            valueType: xs:string
+          idShort: Record
+          value:
+          - modelType: Property
+            embeddedDataSpecifications:
+            - {}
+            semanticId:
+              keys:
+              - type: GlobalReference
+                value: https://admin-shell.io/idta/TimeSeries/RelativePointInTime/1/1
+              type: ExternalReference
+            value: '1730878780000'
+            valueType: xs:long
+            qualifiers:
+            - semanticId:
+                keys:
+                - type: GlobalReference
+                  value: https://admin-shell.io/SubmodelTemplates/Cardinality/1/0
+                type: ExternalReference
+              kind: ConceptQualifier
+              type: Cardinality
+              value: OneToMany
+              valueType: xs:string
+            - semanticId:
+                keys:
+                - type: GlobalReference
+                  value: https://admin-shell.io/SubmodelTemplates/AllowedIdShort/1/0
+                type: ExternalReference
+              kind: ConceptQualifier
+              type: AllowedIdShort
+              value: Time[\d{2,3}]
+              valueType: xs:string
+            category: VARIABLE
+            idShort: Time
+          - modelType: Property
+            semanticId:
+              keys:
+              - type: GlobalReference
+                value: https://sample.com/AccelerationX/1/1
+              type: ExternalReference
+            value: ''
+            valueType: xs:integer
+            qualifiers:
+            - kind: ConceptQualifier
+              type: Cardinality
+              value: ZeroToOne
+              valueType: xs:string
+            category: VARIABLE
+            idShort: HgStat
+            
+expected: | 
+  statements:
+  - statement: |
+      MERGE (s:Submodel { id: $submodel.id }) 
+      SET s.idShort = $submodel.idShort 
+      SET s.sourceUrl = $submodel.sourceUrl 
+      SET s.registrationTime = $submodel.registrationTime    
+      MERGE (e0:SubmodelElement:SubmodelElementCollection {smId: $submodel.id, idShortPath: $sme_0.idShortPath })
+      SET e0.idShort = $sme_0.idShort
+      MERGE (e1:SubmodelElement:MultiLanguageProperty {smId: $submodel.id, idShortPath: $sme_1.idShortPath })
+      SET e1.idShort = $sme_1.idShort
+      MERGE (e2:SubmodelElement:MultiLanguageProperty {smId: $submodel.id, idShortPath: $sme_2.idShortPath })
+      SET e2.idShort = $sme_2.idShort
+      MERGE (e3:SubmodelElement:SubmodelElementCollection {smId: $submodel.id, idShortPath: $sme_3.idShortPath })
+      SET e3.idShort = $sme_3.idShort
+      MERGE (e4:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme_4.idShortPath })
+      SET e4.idShort = $sme_4.idShort
+      SET e4.value = $sme_4.value
+      MERGE (e5:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme_5.idShortPath })
+      SET e5.idShort = $sme_5.idShort
+      SET e5.value = $sme_5.value
+           
+      MERGE (s)-[:HAS_SUBMODEL_ELEMENT]->(e0)
+      MERGE (e0)-[:HAS_CHILD]->(e1)
+      MERGE (e0)-[:HAS_CHILD]->(e2)
+      MERGE (e0)-[:HAS_CHILD]->(e3)
+      MERGE (e3)-[:HAS_CHILD]->(e4)
+      MERGE (e3)-[:HAS_CHILD]->(e5)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+        idShort: "TimeSeries2" 
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE"  
+        registrationTime: 1730878783379
+      sme_0:  
+        idShort: "Metadata" 
+        idShortPath: "Metadata" 
+      sme_1: 
+        idShort: "Name" 
+        idShortPath: "Metadata.Name" 
+      sme_2: 
+        idShort: "Description" 
+        idShortPath: "Metadata.Description" 
+      sme_3: 
+        idShort: "Record" 
+        idShortPath: "Metadata.Record" 
+      sme_4: 
+        idShort: "Time" 
+        idShortPath: "Metadata.Record.Time" 
+        value: "1730878780000"
+      sme_5: 
+        idShort: "HgStat" 
+        idShortPath: "Metadata.Record.HgStat" 
+        value: ""

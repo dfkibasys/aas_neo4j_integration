@@ -1,0 +1,52 @@
+{
+  {% if errors is not empty %}
+  "errors": [
+  {% for eachError in errors -%}
+    "{{ eachError.message }}"
+  
+  {% if not loop.last %}, {% endif %}
+  {% endfor %}
+  ], 
+  {% endif %}
+  "nodes" : [
+    {% for eachResult in results -%}
+    {% for eachData in eachResult.data -%}
+    {% for eachNode in eachData.graph.nodes -%}  
+    {
+      "id": "{{ eachNode.id }}",
+      "labels": [
+      {% for eachLabel in eachNode.labels %}
+      "{{ eachLabel }}"{% if not loop.last %}, {% endif %}
+      {% endfor %} 
+      ],
+      "properties": {
+      {% for entry in eachNode.properties %}
+      {% if entry.value | length > 0 %}
+      "{{entry.key }}" : "{{entry.value }}"{% if not loop.last %}, {% endif %} 
+      {% else %}
+      "{{entry.key }}" : {{ entry.value }}{% if not loop.last %}, {% endif %} 
+      {% endif %}
+      {%- endfor %} 
+      }
+    }{% if not loop.last %}, {% endif %} 
+    {% endfor %}   
+    {% endfor %}  
+    {% endfor %}
+  ],
+  "relationships": [
+  {% for eachResult in results -%}
+    {% for eachData in eachResult.data -%}
+    {% for eachRelation in eachData.graph.relationships -%}  
+    {
+      "id": "{{ eachRelation.id }}",
+      "type": "{{ eachRelation.type }}",
+      "startNode": "{{ eachRelation.startNode }}",
+      "endNode": "{{ eachRelation.endNode }}"
+    } 
+    {%- if not loop.last %}, {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {% endfor %}
+  
+  ]
+}
