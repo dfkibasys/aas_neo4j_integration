@@ -119,7 +119,7 @@ services:
       - kafka
 
   aas-environment:
-    image: eclipsebasyx/aas-environment:kafka
+    image: dfkibasys/aas-environment:kafka
     container_name: aas-environment
     build:
       context: aasenv
@@ -138,6 +138,8 @@ services:
       BASYX_EXTERNALURL: http://localhost:8081,http://aas-environment:8081
     volumes:
       - ./aasx:/application/files/aasx
+      - ./aasenv/src/main/resources/application.properties:/application/application.properties
+
     depends_on:
       aas-registry:
         condition: service_healthy
