@@ -96,17 +96,17 @@
     </dependency>
   </dependencies>
   <properties>
-    <java.version>11</java.version>
     <jackson.version>2.16.2</jackson.version>
-    <junit.jupiter.version>5.11.3</junit.jupiter.version>
     <maven.shade.plugin.version>3.4.1</maven.shade.plugin.version>
-    <kafka.version>3.8.1</kafka.version>
-    <aas4j.version>1.0.2</aas4j.version>
     <spring-cloud.version>2020.0.4</spring-cloud.version>
     <docker.image.name>aas-knowledgegraph</docker.image.name>
     <slf4j.version>1.7.32</slf4j.version>
+    <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+    <java.version>11</java.version>
+    <junit.jupiter.version>5.11.3</junit.jupiter.version>
+    <kafka.version>3.8.1</kafka.version>
+    <aas4j.version>1.0.2</aas4j.version>
     <pebble.version>3.2.2</pebble.version>
     <testcontainers.version>1.20.4</testcontainers.version>
-    <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
   </properties>
 </project>

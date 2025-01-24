@@ -3,3 +3,9 @@
 *.log
 target/
 volumes/
+/.settings/org.eclipse.core.resources.prefs
+/.settings/org.eclipse.m2e.core.prefs
+/kafka-connect/java/*.classpath
+/kafka-connect/java/*.project
+/kafka-connect/java/.settings/org.eclipse.jdt.core.prefs
+/kafka-connect/java/.settings/org.eclipse.m2e.core.prefs
