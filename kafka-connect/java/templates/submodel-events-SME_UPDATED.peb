@@ -1,1 +1,10 @@
-statements: []
+statements:
+- statement: |
+    MERGE (sme:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
+    SET sme.value = $sme.value
+  parameters:
+    submodel:
+      id: "{{ event.id }}"
+    sme:
+      idShortPath: "{{ event.smElementPath }}"
+      value: "{{ event.smElement.value }}"

@@ -3,7 +3,7 @@
 # echo "Building kafka-connect plugin with maven ..."
 # mvn -f kafka-connect/java clean install
 # echo "Starting stack..."
-docker-compose --project-name knowledgegraph-v3 up --detach --remove-orphans --force-recreate --renew-anon-volumes --build
+docker-compose --project-name knowledgegraph-v3 up --detach --remove-orphans --force-recreate --renew-anon-volumes
 
 
 source .env

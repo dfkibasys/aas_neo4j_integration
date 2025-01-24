@@ -194,10 +194,11 @@ services:
 ########### Kafka Connect ###########################################################
 
   kafka-connect:
-    image: Basyx/cp-kafka-connect:7.7.1
+    image: dfkibasys/aas-neo4j-kafka-connect-plugin:7.7.1-${KAFKA_CONNECT_PLUGIN_VERSION}
     container_name: kafka-connect
     build:
       context: kafka-connect
+    pull_policy: never
     ports:
       - "8085:8083"
     environment: 
