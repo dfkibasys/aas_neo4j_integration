@@ -31,6 +31,8 @@ expected: |
       SET a.registrationTime = $shell.registrationTime
       MERGE (s_0:Submodel {id: $submodels.s_0.id })
       MERGE (a)-[:HAS_SUBMODEL]->(s_0)
+      MERGE (s_1:Submodel {id: $submodels.s_1.id })
+      MERGE (a)-[:HAS_SUBMODEL]->(s_1)
       MERGE (s_2:Submodel {id: $submodels.s_2.id })
       MERGE (a)-[:HAS_SUBMODEL]->(s_2)
     parameters:
@@ -42,6 +44,8 @@ expected: |
       submodels:
         s_0: 
           id: "https://admin-shell.io/idta/TimeSeries/1/1_2"
+        s_1: 
+          id: "http://localhost:8081/submodels/"
         s_2:
           id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
         
