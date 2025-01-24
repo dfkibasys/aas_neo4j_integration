@@ -22,7 +22,7 @@ statements:
     MERGE (a) -[:HAS_ASSET]->(asset) {%- endif %} 
     {% if aas.submodels is not empty -%} 
     {% for eachSubmodel in aas.submodels %} 
-    {% if eachSubmodel.type == "ModelReference" and eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
+    {% if eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
     MERGE (s_{{loop.index}}:Submodel {id: $submodels.s_{{ loop.index }}.id }) 
     MERGE (a)-[:HAS_SUBMODEL]->(s_{{loop.index}}) 
     {%- endif %}  
@@ -53,7 +53,7 @@ statements:
     {% if aas.submodels is not empty -%} 
     submodels:
       {% for eachSubmodel in aas.submodels -%}
-      {% if eachSubmodel.type == "ModelReference" and eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
+      {% if eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
       s_{{ loop.index }}:
         id: "{{ eachSubmodel.keys[0].value }}"
       {% endif -%}  

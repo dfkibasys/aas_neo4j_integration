@@ -137,9 +137,9 @@ services:
     volumes:
       #- ./aasx:/application/files/aasx
       - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
-      # - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
-      # - ./aasx/T4TTruckFrame.aasx:/application/files/aasx/T4TTruckFrame.aasx
-      # - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
+      - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
+      #- ./aasx/T4TTruckFrame.aasx:/application/files/aasx/T4TTruckFrame.aasx
+      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
     depends_on:
       aas-registry:
         condition: service_healthy
