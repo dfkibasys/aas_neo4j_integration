@@ -137,19 +137,54 @@ To stop the stack, run:
 
 The `docker-compose.yml` defines several services. Each service has its own environment variables and configuration. Below is a summary of the services and their purpose.
 
-| **Service**           | **Description**                              | **Ports**   |
-|-----------------------|----------------------------------------------|-------------|
-| **aas-environment**   | Basyx AAS environment with Kafka integration | `8081:8081` |
-| **submodel-registry** | Basyx Submodel Registry                      | `8082:8080` |
-| **aas-registry**      | Basyx AAS registry with Kafka integration    | `8083:8080` |
-| **aas-gui**           | Basyx AAS GUI                                | `8099:3000` |
-| **akhq**              | Web UI for managing Kafka topics             | `8086:8080` |
-| **kafka**             | Kafka broker for messaging and topics        | `9092:9094` |
-| **kafka-connect**     | Kafka Connect with Neo4j integration         | `8085:8083` |
-| **kafka-connect-ui**  | UI for Kafka Connect                         | `8094:8000` |
-| **neo4j**             | Neo4j browser interface                      | `7474:7474` |
-| **neo4j**             | Neo4j bolt protocol                          | `7687:7687` |
-| **portainer**         | Manage containers via Portainer CE           | `8084:9000` |
+| **Service**           | **Description**                              | **External Port**               | **Internal Port** |
+|-----------------------|----------------------------------------------|---------------------------------|-------------------|
+| **aas-environment**   | Basyx AAS environment with Kafka integration | [`8081`](http://localhost:8081) | `8081`            |
+| **submodel-registry** | Basyx Submodel Registry                      | [`8082`](http://localhost:8082) | `8080`            |
+| **aas-registry**      | Basyx AAS registry with Kafka integration    | [`8083`](http://localhost:8083) | `8080`            |
+| **aas-gui**           | Basyx AAS GUI                                | [`8099`](http://localhost:8099) | `3000`            |
+| **akhq**              | Web UI for managing Kafka topics             | [`8086`](http://localhost:8086) | `8080`            |
+| **kafka**             | Kafka broker for messaging and topics        | [`9092`](http://localhost:9092) | `9094`            |
+| **kafka-connect**     | Kafka Connect with Neo4j integration         | [`8085`](http://localhost:8085) | `8083`            |
+| **kafka-connect-ui**  | UI for Kafka Connect                         | [`8094`](http://localhost:8094) | `8000`            |
+| **neo4j**             | Neo4j browser interface                      | [`7474`](http://localhost:7474) | `7474`            |
+| **neo4j**             | Neo4j bolt protocol                          | [`7687`](http://localhost:7687) | `7687`            |
+| **portainer**         | Manage containers via Portainer CE           | [`8084`](http://localhost:8084) | `9000`            |
+
+```mermaid
+graph TD;
+    Start((Start)):::start --> Kafka[Kafka]:::kafka;
+    Start --> Neo4j[Neo4j]:::neo4j;
+
+    %% Kafka-abhängige Services
+    Kafka -->|"service_started"| AKHQ[AKHQ]:::kafka;
+    Kafka -->|"service_started"| AASRegistry[AAS Registry]:::basyx;
+    Kafka -->|"service_started"| SubmodelRegistry[Submodel Registry]:::basyx;
+
+    %% Neo4j-abhängige Services
+    Neo4j -->|"service_healthy"| KafkaConnect[Kafka Connect]:::kafka;
+
+    %% AAS Environment hängt von Registry und Submodel Registry ab
+    AASRegistry -->|"service_healthy"| AASEnvironment[AAS Environment]:::basyx;
+    SubmodelRegistry -->|"service_healthy"| AASEnvironment;
+
+    %% Junction für AAS GUI (drei Bedingungen müssen erfüllt sein)
+    AASRegistry -->|"service_healthy"| AASGUI_Junction((J)):::junction;
+    SubmodelRegistry -->|"service_healthy"| AASGUI_Junction;
+    AASEnvironment -->|"service_healthy"| AASGUI_Junction;
+    AASGUI_Junction --> AASGUI[AAS GUI]:::basyx;
+
+    %% Kafka Connect UI hängt von Kafka Connect ab
+    KafkaConnect -->|"service_healthy"| KafkaConnectUI[Kafka Connect UI]:::kafka;
+
+    %% Style Definitionen
+    classDef kafka fill:#ffcccc,stroke:#b30000,stroke-width:1px;
+    classDef basyx fill:#ccffcc,stroke:#008000,stroke-width:1px;
+    classDef neo4j fill:#ccccff,stroke:#0000b3,stroke-width:1px;
+    classDef junction fill:#333,stroke:#333,stroke-width:2px;
+    classDef start fill:#ffcc00,stroke:#333,stroke-width:2px;
+```
+
 
 ## Further Development
 
