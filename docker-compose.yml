@@ -137,20 +137,20 @@ services:
     volumes:
       # AASX
 #      - ./aasx:/application/files/aasx
-      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
+#      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
 #      - ./aasx/ExampleV3.aasx:/application/files/aasx/ExampleV3.aasx
 #      - ./aasx/MRK40_Lab_Instance.aasx:/application/files/aasx/MRK40_Lab_Instance.aasx
-      - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
+#      - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
 #      - ./aasx/T4TTruckFrame.aasx:/application/files/aasx/T4TTruckFrame.aasx
 #      - ./aasx/Twinficient_Maxima2_Instance.aasx:/application/files/aasx/Twinficient_Maxima2_Instance.aasx
 #      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
-      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
-      # JSON
-#      - ./aasx/Semitrailer_afterProcess.json:/application/files/aasx/Semitrailer_afterProcess.json
-#      - ./aasx/Semitrailer_truck_afterProcess.json:/application/files/aasx/Semitrailer_truck_afterProcess.json
-#      - ./aasx/WST_A_1.json:/application/files/aasx/WST_A_1 2.json
-#      - ./aasx/WST_A_5.json:/application/files/aasx/WST_A_5.json
-#      - ./aasx/WST_B_6.json:/application/files/aasx/WST_B_6.json
+#      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
+
+      - ./aasx/Semitrailer_afterProcess.aasx:/application/files/aasx/Semitrailer_afterProcess.aasx
+      - ./aasx/Semitrailer_truck_afterProcess.aasx:/application/files/aasx/Semitrailer_truck_afterProcess.aasx
+      - ./aasx/WST_A_1 1.aasx:/application/files/aasx/WST_A_1 1.aasx
+      - ./aasx/WST_A_5.aasx:/application/files/aasx/WST_A_5.aasx
+      - ./aasx/WST_B_6.aasx:/application/files/aasx/WST_B_6.aasx
     depends_on:
       aas-registry:
         condition: service_healthy
