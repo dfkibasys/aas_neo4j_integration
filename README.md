@@ -137,17 +137,19 @@ To stop the stack, run:
 
 The `docker-compose.yml` defines several services. Each service has its own environment variables and configuration. Below is a summary of the services and their purpose.
 
-| **Service**           | **Description**                                | **Ports**                |
-|-----------------------|------------------------------------------------|--------------------------|
-| **portainer**         | Manage containers via Portainer CE            | `8084:9000`             |
-| **kafka**             | Kafka broker for messaging and topics         | `9092:9094`             |
-| **akhq**              | Web UI for managing Kafka topics              | `8086:8080`             |
-| **aas-registry**      | Basyx AAS registry with Kafka integration     | `8083:8080`             |
-| **submodel-registry** | Basyx Submodel Registry                       | `8082:8080`             |
-| **aas-environment**   | Basyx AAS environment with Kafka integration  | `8081:8081`             |
-| **neo4j**             | Neo4j database for knowledge graph integration| `7474:7474`, `7687:7687`|
-| **kafka-connect**     | Kafka Connect with Neo4j integration          | `8085:8083`             |
-| **kafka-connect-ui**  | UI for Kafka Connect                          | `8094:8000`             |
+| **Service**           | **Description**                              | **Ports**   |
+|-----------------------|----------------------------------------------|-------------|
+| **aas-environment**   | Basyx AAS environment with Kafka integration | `8081:8081` |
+| **submodel-registry** | Basyx Submodel Registry                      | `8082:8080` |
+| **aas-registry**      | Basyx AAS registry with Kafka integration    | `8083:8080` |
+| **aas-gui**           | Basyx AAS GUI                                | `8099:3000` |
+| **akhq**              | Web UI for managing Kafka topics             | `8086:8080` |
+| **kafka**             | Kafka broker for messaging and topics        | `9092:9094` |
+| **kafka-connect**     | Kafka Connect with Neo4j integration         | `8085:8083` |
+| **kafka-connect-ui**  | UI for Kafka Connect                         | `8094:8000` |
+| **neo4j**             | Neo4j browser interface                      | `7474:7474` |
+| **neo4j**             | Neo4j bolt protocol                          | `7687:7687` |
+| **portainer**         | Manage containers via Portainer CE           | `8084:9000` |
 
 ## Further Development
 
