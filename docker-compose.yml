@@ -137,14 +137,11 @@ services:
     volumes:
       # AASX
 #      - ./aasx:/application/files/aasx
-#      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
-#      - ./aasx/ExampleV3.aasx:/application/files/aasx/ExampleV3.aasx
-#      - ./aasx/MRK40_Lab_Instance.aasx:/application/files/aasx/MRK40_Lab_Instance.aasx
-#      - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
-#      - ./aasx/T4TTruckFrame.aasx:/application/files/aasx/T4TTruckFrame.aasx
-#      - ./aasx/Twinficient_Maxima2_Instance.aasx:/application/files/aasx/Twinficient_Maxima2_Instance.aasx
-#      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
-#      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
+      - ./aasx/Semitrailer_slim.aasx:/application/files/aasx/Semitrailer_slim.aasx
+      - ./aasx/Semitrailer_truck_slim.aasx:/application/files/aasx/Semitrailer_truck_slim.aasx
+      - ./aasx/WST_A_1_slim.aasx:/application/files/aasx/WST_A_1_slim.aasx
+      - ./aasx/WST_A_5_slim.aasx:/application/files/aasx/WST_A_5_slim.aasx
+      - ./aasx/WST_B_6_slim.aasx:/application/files/aasx/WST_B_6_slim.aasx
 
       - ./aasx/Semitrailer_afterProcess.aasx:/application/files/aasx/Semitrailer_afterProcess.aasx
       - ./aasx/Semitrailer_truck_afterProcess.aasx:/application/files/aasx/Semitrailer_truck_afterProcess.aasx
