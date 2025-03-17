@@ -38,6 +38,7 @@ services:
     image: confluentinc/cp-kafka:${KAFKA_VERSION}
     hostname: kafka
     container_name: kafka
+    restart: always
     ports:
       - "9092:9094"
     environment:
@@ -161,6 +162,7 @@ services:
   aas-gui:
     image: eclipsebasyx/aas-gui:${AAS_WEBUI_VERSION}
     container_name: aas-gui
+    restart: always
     ports:
       - 8099:3000
     environment:
@@ -234,6 +236,7 @@ services:
   kafka-connect-ui:
     container_name: kafka-connect-ui
     image: landoop/kafka-connect-ui:0.9.7
+    restart: always
     ports:
       - "8094:8000"
     environment:
