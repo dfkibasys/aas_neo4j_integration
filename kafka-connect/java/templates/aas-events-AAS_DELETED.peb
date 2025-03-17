@@ -1,1 +1,8 @@
-statements:[]
+statements:
+- statement: |
+    MATCH (shell:AssetAdministrationShell {id: $shell.id})
+    OPTIONAL MATCH (shell)-[:HAS_SUBMODEL|HAS_ASSET|HAS_CHILD*]->(related)
+    DETACH DELETE shell, related;
+  parameters:
+    shell:
+      id: "{{ event.id }}"
