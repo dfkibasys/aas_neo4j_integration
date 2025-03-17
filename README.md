@@ -118,20 +118,65 @@ cd aas-repository-neo4j-kafka-plugin
 ## Running the Docker Stack
 
 ### Start the Stack
+
 To start the Docker stack, run the following command:
 
 ```bash
 ./up.sh
 ```
 
+or:
+
+```bash
+docker-compose --project-name knowledgegraph-v3 up --detach --remove-orphans --force-recreate --renew-anon-volumes
+```
+
 At the end of the script, URLs and credentials for the services will be displayed.
 
 ### Stop the Stack
+
 To stop the stack, run:
 
 ```bash
 ./down.sh
 ```
+
+or:
+
+```bash
+docker-compose --project-name knowledgegraph-v3 down
+```
+
+## UI Endpoints
+
+### Basyx Services
+
+| **Service**           | **Swagger UI / Endpoints**                  |
+|-----------------------|---------------------------------------------|
+| **AAS Environment**   | http://localhost:8081/swagger-ui/index.html |
+| **AAS Registry**      | http://localhost:8083/swagger-ui/index.html |
+| **Submodel Registry** | http://localhost:8082/swagger-ui/index.html |
+| **AAS GUI**           | http://localhost:8099/                      |
+
+### Kafka
+
+| **Service**          | **URL**               |
+|----------------------|-----------------------|
+| **AKHQ UI**          | http://localhost:8086 |
+| **Kafka Connect UI** | http://localhost:8094 |
+
+### Neo4j
+
+| **Service**  | **URL**               |
+|--------------|-----------------------|
+| **Neo4j UI** | http://localhost:7474 |
+
+### Portainer
+
+| **Service**      | **URL**               |
+|------------------|-----------------------|
+| **Portainer UI** | http://localhost:8084 |
+
 
 ## Project Overview
 
