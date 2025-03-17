@@ -22,7 +22,6 @@ public class SubmodelInfo {
 		if (elements == null) {
 			return List.of();
 		}
-		String id = getId();
 		return elements.stream().map(SubmodelElementInfo::new).collect(Collectors.toList());
 	}
 	 

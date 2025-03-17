@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.SubmodelElementInfo;
 import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.SubmodelInfo;
+import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementList;
 
 import io.pebbletemplates.pebble.extension.Function;
 import io.pebbletemplates.pebble.template.EvaluationContext;
@@ -13,7 +14,7 @@ import io.pebbletemplates.pebble.template.PebbleTemplate;
 
 class CollectSubmodelElementsFunction implements Function {
 
-	private static final String SUBMODEL_ARG = "sm";
+	public static final String SUBMODEL_ARG = "sm";
 
 	@Override
 	public List<String> getArgumentNames() {
@@ -23,7 +24,7 @@ class CollectSubmodelElementsFunction implements Function {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
-		Map<String, Object> arg = (Map<String, Object>) args.get(SUBMODEL_ARG);		
+		Map<String, Object> arg = (Map<String, Object>) args.get(SUBMODEL_ARG);
 		SubmodelInfo submodel = new SubmodelInfo(arg);
 		String smId = submodel.getId();
 		List<SubmodelElementInfo> elems = submodel.getSubmodelElements();
@@ -41,15 +42,25 @@ class CollectSubmodelElementsFunction implements Function {
 			toReturn.add(inputElem);
 			toProcess.addAll(getChildren(inputElem, toReturn.size() - 1));
 		}
+		toReturn.stream().map(SubmodelElementInfo::getIdShortPath).forEach(System.out::println);
 		return toReturn;
 	}
 
 	private List<SubmodelElementInfo> getChildren(SubmodelElementInfo eachElem, int parentPos) {
 		List<SubmodelElementInfo> children = eachElem.getChildren();
 		String parentIdShortPath = eachElem.getIdShortPath();
-		for (SubmodelElementInfo eachChild : children) {
-			eachChild.setIdShortPath(parentIdShortPath + "." + eachChild.getIdShort());
-			eachChild.setParentPos(parentPos);
+		if ("SubmodelElementList".equals(eachElem.getModelType())) {
+			int index = 0;
+			for (SubmodelElementInfo eachChild : children) {
+				eachChild.setIdShortPath(parentIdShortPath + "[" + index + "]");
+				eachChild.setParentPos(parentPos);
+				index++;
+			}
+		} else {
+			for (SubmodelElementInfo eachChild : children) {
+				eachChild.setIdShortPath(parentIdShortPath + "." + eachChild.getIdShort());
+				eachChild.setParentPos(parentPos);
+			}
 		}
 		return children;
 	}

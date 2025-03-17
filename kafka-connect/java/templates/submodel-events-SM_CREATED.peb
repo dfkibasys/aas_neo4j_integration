@@ -14,7 +14,9 @@ statements:
     {%- endif %} 
     {% for eachElem in smElems %} 
     MERGE (e{{ loop.index }}:SubmodelElement:{{ eachElem.modelType }} {smId: $submodel.id, idShortPath: $sme_{{ loop.index }}.idShortPath })
-    SET e{{ loop.index }}.idShort = $sme_{{ loop.index }}.idShort 
+    {% if eachElem.idShort -%}
+    SET e{{ loop.index }}.idShort = $sme_{{ loop.index }}.idShort
+    {%- endif %}
     {%- if eachElem.value is not null %} 
     SET e{{ loop.index }}.value = $sme_{{ loop.index }}.value
     {%- endif %} 
@@ -41,7 +43,9 @@ statements:
       {%- endif %} 
     {% for eachElem in smElems %} 
     sme_{{ loop.index }}: 
-      idShort: "{{eachElem.idShort}}" 
+      {% if eachElem.idShort -%}
+      idShort: "{{eachElem.idShort}}"
+      {%- endif %} 
       idShortPath: "{{eachElem.idShortPath}}" 
       {%- if eachElem.value is not null %} 
       value: "{{eachElem.value}}" 
