@@ -22,7 +22,7 @@
         "errors.deadletterqueue.topic.replication.factor": 1,
         "errors.deadletterqueue.context.headers.enable": true,
         
-        "config.default.retries":"3",
+        "config.default.retries":"5",
         "config.default.retry.delay.in.ms":"2000",
         "config.default.retry.max.delay.in.ms":"600000",
         "config.default.retry.delay.factor":"1.5"

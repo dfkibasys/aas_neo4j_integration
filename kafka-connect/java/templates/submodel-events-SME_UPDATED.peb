@@ -1,13 +1,10 @@
 statements:
 - statement: |
-    MATCH (sub:Submodel {id: $submodel.id})
-    OPTIONAL MATCH (sub)-[:HAS_SUBMODEL_ELEMENT]->(sme:SubmodelElement {idShort: $sme.idShort})
-    OPTIONAL MATCH (sub)-[:HAS_SUBMODEL_ELEMENT]->(parent)-[:HAS_CHILD*]->(sme_nested:SubmodelElement {idShort: $sme.idShort})
-    WITH COALESCE(sme, sme_nested) AS targetNode
-    SET targetNode.value = $sme.value
+    MERGE (sme:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
+    SET sme.value = $sme.value
   parameters:
     submodel:
       id: "{{ event.id }}"
     sme:
-      idShort: "{{ event.smElement.idShort }}"
+      idShortPath: "{{ event.smElementPath }}"
       value: "{{ event.smElement.value }}"

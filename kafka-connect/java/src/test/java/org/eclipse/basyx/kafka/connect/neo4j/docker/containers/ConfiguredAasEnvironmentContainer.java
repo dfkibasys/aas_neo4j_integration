@@ -20,7 +20,7 @@ public class ConfiguredAasEnvironmentContainer extends GenericContainer<Configur
 	}
 
 	private static ImageFromDockerfile dockerFile() {
-		return new ImageFromDockerfile("eclipsebasyx/aas-environment:kafka", false).withFileFromPath(".",
+		return new ImageFromDockerfile("dfkibasys/aas-environment:kafka", false).withFileFromPath(".",
 				Paths.get("../../aasenv"));
 	}
 

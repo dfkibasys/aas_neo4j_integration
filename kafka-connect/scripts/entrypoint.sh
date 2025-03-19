@@ -38,38 +38,60 @@ fi
 echo "Creating NEO4J Indices..."
 
 
-JAR_FILE=/tmp/connect-plugins/knowledgegraph-connect-plugin.jar
-JAVA_CLASS="org.eclipse.basyx.kafka.connect.neo4j.Neo4jIndicesHttpBodyGenerator"
 
-BODY=$(java -cp "$JAR_FILE" "$JAVA_CLASS")
-if [ -z "$BODY" ]; then
-  echo "Failed to crate index body for neo4j-kafka-connect plugin."
-  exit 1
-fi
+create_and_post() {
+  local jar_file="$1"
+  local java_class="$2"
+  local target_url="$3"
+  local retries="${4:-10}"
+  local delay="${5:-3}"
+  local success=0
 
-retries=10
-delay=3
-success=0
+  # Generate the HTTP body using the specified Java class
+  local body
+  body=$(java -cp "$jar_file" "$java_class")
+  if [ -z "$body" ]; then
+    echo "Error: Failed to generate HTTP body using Java class '$java_class'."
+    return 1
+  fi
 
-for ((i=1; i<=retries; i++)); do
-    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$BASYX_NEO4J_TARGET_URL" \
-        -H "Content-Type: application/json" \
-        -d "$BODY")
+  echo "Sending:  $body"
+  # Attempt to send the POST request
+  for ((i=1; i<=retries; i++)); do
+    local http_status
+    http_status=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$target_url" \
+      -H "Content-Type: application/json" \
+      -d "$body")
 
-    if [ $HTTP_STATUS -eq 200 ]; then
-        success=1
-        break
+    if [ "$http_status" -eq 200 ]; then
+      success=1
+      echo "POST request succeeded on attempt $i."
+      break
     else
-        sleep $delay
+      echo "Attempt $i failed with HTTP status $http_status. Retrying in $delay seconds..."
+      sleep "$delay"
     fi
-done
+  done
 
-if [ $success -ne 1 ]; then
-echo "Failed to initialize neo4j-kafka-connect plugin."
-    exit 1
+  if [ "$success" -eq 1 ]; then
+    echo "Operation completed successfully."
+    return 0
+  else
+    echo "Error: Operation failed after $retries attempts."
+    return 1
+  fi
+}
+
+JAR_FILE=/tmp/connect-plugins/knowledgegraph-connect-plugin.jar
+JAVA_CLASS="org.eclipse.basyx.kafka.connect.neo4j.Neo4jInitializingHttpBodyGenerator"
+create_and_post "$JAR_FILE" "$JAVA_CLASS" "$BASYX_NEO4J_TARGET_URL"
+init_status=$?
+
+if [ $init_status -eq 0 ]; then
+  echo "The neo4j-kafka-connect plugin is ready to use. 🎉"
+else
+  echo "Initialization operations failed."
 fi
-
-echo "The neo4j-kafka-connect plugin is ready to use. 🎉"
 
 
 # block to keep async kafka-connect process running

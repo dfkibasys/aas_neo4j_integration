@@ -1,0 +1,25 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event: 
+    id: https://smartfactory.de/submodels/00828c1d-cd3b-418f-a4bf-fe4b69c69b4a
+    type: SME_UPDATED
+    smElementPath: Details.IsFinished
+    smElement: 
+      modelType: Property
+      value: "false"
+      valueType: "xs:string"
+      idShort : "isFinished"
+expected: | 
+  statements:
+  - statement: |
+      MERGE (sme:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
+      SET sme.value = $sme.value
+    parameters:
+      submodel:
+        id: "https://smartfactory.de/submodels/00828c1d-cd3b-418f-a4bf-fe4b69c69b4a"
+      sme:
+        idShortPath: "Details.IsFinished"
+        value: "false"

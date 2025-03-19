@@ -1,6 +1,9 @@
 package org.eclipse.basyx.kafka.connect.neo4j.docker.containers;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +17,17 @@ public class ConfiguredKafkaNeo4jPluginContainer extends GenericContainer<Config
 
 	public ConfiguredKafkaNeo4jPluginContainer(Network network, ConfiguredKafkaContainer kafka, ConfiguredNeo4jContainer neo4j) {
 		super(dockerFile());
+		// could take longer to build
+		withStartupTimeout(Duration.ofMinutes(2));
 		withEnv(envVars()).withNetwork(network).withNetworkAliases("neo4j-kafka-connect").dependsOn(List.of(kafka, neo4j)).withReuse(true)
-				.waitingFor(Wait.forLogMessage(".*neo4j-kafka-connect plugin is ready to use.*", 1));
+				.waitingFor(Wait.forLogMessage(".*neo4j-kafka-connect plugin is ready to use.*", 1))
+				.withLogConsumer(o->System.out.println(o.getUtf8String()));
 	
 	}
 
 	private static ImageFromDockerfile dockerFile() {
-		return new ImageFromDockerfile("dfki/kafka-connect-neo4j:test", true).withFileFromPath(".", Paths.get(".."));
+		return new ImageFromDockerfile("dfkibasys/kafka-connect-neo4j:test", true)
+				 .withDockerfile(Paths.get("../Dockerfile"));
 	}
 
 	private Map<String, String> envVars() {

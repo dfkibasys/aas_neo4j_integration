@@ -6,14 +6,15 @@ statements:
     {% if sm.idShort -%}
     SET s.idShort = $submodel.idShort
     {%- endif %} 
+    
     {% if meta.sourceUrl -%}
     SET s.sourceUrl = $submodel.sourceUrl
-    {%- endif %} 
+    {%- endif %}  
     {% if meta.registrationTime -%}
     SET s.registrationTime = $submodel.registrationTime
     {%- endif %} 
     {% for eachElem in smElems %} 
-    MERGE (e{{ loop.index }}:SubmodelElement:{{ eachElem.modelType }} {smId: $submodel.id, idShortPath: $sme_{{ loop.index }}.idShortPath })
+    MERGE (e{{ loop.index }}:SubmodelElement{% if eachElem.modelType %}:{{ eachElem.modelType }}{% endif %} {smId: $submodel.id, idShortPath: $sme_{{ loop.index }}.idShortPath })
     {% if eachElem.idShort -%}
     SET e{{ loop.index }}.idShort = $sme_{{ loop.index }}.idShort
     {%- endif %}

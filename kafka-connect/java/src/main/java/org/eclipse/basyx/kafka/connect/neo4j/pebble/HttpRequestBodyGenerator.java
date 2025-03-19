@@ -22,8 +22,10 @@ public class HttpRequestBodyGenerator {
 		return generateYaml("event-cypher-request.peb", context.toMap());
 	}
 
-	public String generateYamlForIndices() throws IOException {
-		return generateYaml("indexes-cypher-request.peb", Map.of());
+	
+	
+	public String generateYamlForInitialCypherRequests() throws IOException {
+		return generateYaml("initial-cypher-request.peb", Map.of());
 	}
 	
 	private String generateYaml(String templateName, Map<String, Object> contextAsMap) throws IOException {
@@ -40,4 +42,5 @@ public class HttpRequestBodyGenerator {
 		}
 		return location;
 	}
+
 }

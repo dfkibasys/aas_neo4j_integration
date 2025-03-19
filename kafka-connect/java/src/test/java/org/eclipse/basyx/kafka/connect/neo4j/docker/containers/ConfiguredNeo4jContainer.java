@@ -11,9 +11,10 @@ public class ConfiguredNeo4jContainer extends Neo4jContainer<ConfiguredNeo4jCont
 
 	public ConfiguredNeo4jContainer(Network network) {
 		super(DockerImageName.parse("neo4j:5.23.0-community-bullseye"));
-		withEnv("NEO4J_dbms_logs_debug_level", "DEBUG").withExposedPorts(7474, 7687).withoutAuthentication()
-				.withNetwork(network).waitingFor(Wait.forLogMessage(".*Started.*", 1)).withNetworkAliases(NETWORK_ALIAS)
-				.withReuse(true);
+		withEnv("NEO4J_dbms_logs_debug_level", "DEBUG").withExposedPorts(7474, 7687)
+			.withoutAuthentication()
+			.withNetwork(network).waitingFor(Wait.forLogMessage(".*Started.*", 1)).withNetworkAliases(NETWORK_ALIAS)
+			.withReuse(true);
 	}
 
 	public String getTransactionalHttpUrl() {

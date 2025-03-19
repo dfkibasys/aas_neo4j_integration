@@ -4,7 +4,6 @@ COPY ./java/pom.xml /app/pom.xml
 RUN mvn dependency:go-offline
 COPY ./java/templates/ /app/templates/
 COPY ./java/src/ /app/src/
-RUN ls /app
 RUN mvn clean install -DskipTests
 
 FROM confluentinc/cp-kafka-connect:7.7.1-1-ubi8
