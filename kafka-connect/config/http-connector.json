@@ -22,10 +22,8 @@
   
       "exception.strategy": "RETRY",
   
-      "http.request.mapper.default.mode": "JEXL",
-      "http.request.mapper.default.url": "sinkRecord.value().get(\"url\")",
-      "http.request.mapper.default.method": "sinkRecord.value().get(\"method\")",
-      "http.request.mapper.default.body": "sinkRecord.value().get(\"body\")",
+      "http.request.mapper.default.mode": "DIRECT",
+
   
       "config.default.retries": "5",
       "config.default.retry.delay.in.ms": "2000",
