@@ -1,11 +1,3 @@
-volumes:
-  kafka-storage:
-    driver: local
-  emqx-data:
-    driver: local
-  neo4j-content:
-    driver: local
-
 networks:
   basyx:
     driver: bridge
