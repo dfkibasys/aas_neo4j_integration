@@ -1,42 +1,27 @@
 {
-    "name": "Neo4jSinkConnectorAasEvents",
-    "config": {
-      "connector.class": "io.github.clescot.kafka.connect.http.sink.HttpSinkConnector",
-      "tasks.max": "1",
-      "topics": "aas-events,submodel-events",
-      "executor.threads": "1",
-      "batch.size": "1",
-  
-      "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-      "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-      "value.converter.schemas.enable": "false",
-  
-      "transforms": "CypherTransformation",
-      "transforms.CypherTransformation.type": "org.eclipse.basyx.kafka.connect.neo4j.CypherTransformation",
-  
-      "errors.tolerance": "all",
-      "errors.log.enable": true,
-      "errors.deadletterqueue.topic.name": "dlq-aas-events",
-      "errors.deadletterqueue.topic.replication.factor": "1",
-      "errors.deadletterqueue.context.headers.enable": "true",
-  
-      "exception.strategy": "RETRY",
-  
-      "http.request.mapper.default.mode": "DIRECT",
+  "name": "Neo4jSinkConnectorAasEvents",
+  "config": {
+    "connector.class": "org.eclipse.basyx.kafka.connect.neo4j.Neo4jSinkConnector",
+    "tasks.max": "1",
+    "executor.threads": "1",
+    "batch.size": "1",
+    "topics": "aas-events,submodel-events",
 
-  
-      "config.default.retries": "5",
-      "config.default.retry.delay.in.ms": "2000",
-      "config.default.retry.max.delay.in.ms": "600000",
-      "config.default.retry.delay.factor": "1.5",
-      "config.default.retry.policy.response.code.regex": "^5[0-9][0-9]$",
-      "config.default.success.response.code.regex": "^[1-2][0-9][0-9]$",
-  
-      "config.default.rate.limiter.period.in.ms": "1000",
-      "config.default.rate.limiter.max.executions": "10",
-  
-      "config.default.enrich.request.generate.missing.request.id": "true",
-      "config.default.enrich.request.generate.missing.correlation.id": "true"
-    }
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+
+    "errors.tolerance": "all",
+    "errors.log.enable": true,
+    "errors.deadletterqueue.topic.name": "dlq-aas-events",
+    "errors.deadletterqueue.topic.replication.factor": "1",
+    "errors.deadletterqueue.context.headers.enable": "true",
+
+    "target.url": "http://neo4j:7474/db/neo4j/tx/commit",
+    "headers": "Content-Type:application/json",
+    "retry.max.retries": "5",
+    "retry.backoff.ms": "2000",
+    "http.connection.timeout.ms": "10000",
+    "http.read.timeout.ms": "10000"
   }
-  
+}

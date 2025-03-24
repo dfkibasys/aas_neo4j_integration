@@ -32,9 +32,10 @@ public class CypherTransformation<R extends ConnectRecord<R>> implements Transfo
 			LOG.info(context.toString());
 			String bodyYaml = generator.generateYamlFromMessage(context);
 			LOG.info(bodyYaml);
-			Map<String, Object> httpRequest = toEvent(bodyYaml);
-			String requestBody = converter.writeMapAsJsonString(httpRequest);
-			LOG.info(httpRequest.toString());
+//			Map<String, Object> httpRequest = toEvent(bodyYaml);
+//			String requestBody = converter.writeMapAsJsonString(httpRequest);
+			String requestBody = converter.yamlToJson(bodyYaml);
+			LOG.info(requestBody.toString());
 			return record.newRecord(record.topic(), record.kafkaPartition(), record.keySchema(), record.key(),
 					Schema.STRING_SCHEMA, requestBody, record.timestamp());
 		} catch (IOException e) {

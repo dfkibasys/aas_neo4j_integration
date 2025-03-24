@@ -1,0 +1,12 @@
+{
+  "name": "simple-http-sink",
+  "config": {
+    "connector.class": "com.example.connect.http.SimpleHttpSinkConnector",
+    "tasks.max": "1",
+    "topics": "test-topic",
+    "target.url": "http://host.docker.internal:3000/receive",
+    "headers": "Authorization:Bearer xyz,Content-Type:application/json",
+    "retry.max.retries": "3",
+    "retry.backoff.ms": "1000"
+  }
+}
