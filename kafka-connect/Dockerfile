@@ -15,7 +15,7 @@ RUN curl -L https://repo1.maven.org/maven2/io/github/clescot/kafka-connect-http-
 COPY ./java/templates /home/appuser/templates
 COPY ./config/http-connector.json /etc/kafka-connect/config/neo4j-connector.json
 ENV CONNECT_PLUGIN_PATH "/usr/share/java,/usr/share/confluent-hub-components,/tmp/connect-plugins"
-RUN confluent-hub install tmp/kafka-connect-http-connectors.zip --no-prompt
+RUN confluent-hub install /tmp/kafka-connect-http-connectors.zip --no-prompt
 USER root
 COPY scripts/entrypoint.sh /etc/basyx/entrypoint.sh
 RUN chmod +x /etc/basyx/entrypoint.sh
