@@ -2,6 +2,8 @@
 
 This project provides a Dockerized stack to transfer events from the administration shell registry into a Neo4j database using a Kafka-Connect plugin. The Kafka-Connect plugin leverages [Pebble](https://pebbletemplates.io/) templates to format data and the [HTTP Sink Kafka Connector](https://github.com/clescot/kafka-connect-http) to send data to Neo4j.
 
+![Overview](docs/overview.png)
+
 ## Prerequisites
 
 Ensure your environment is set up with the following:

@@ -1,6 +1,7 @@
 .idea
 *.iml
 *.log
+*.bkp
 target/
 volumes/
 /.settings/org.eclipse.core.resources.prefs
