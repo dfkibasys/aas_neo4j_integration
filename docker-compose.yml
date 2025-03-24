@@ -179,11 +179,11 @@ services:
 #      - ./aasx/Twinficient_Maxima2_Instance.aasx:/application/files/aasx/Twinficient_Maxima2_Instance.aasx
 #      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
 #      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
-    - ./aasx/Semitrailer_slim.aasx:/application/files/aasx/Semitrailer_slim.aasx
-     # - ./aasx/Semitrailer_truck_slim.aasx:/application/files/aasx/Semitrailer_truck_slim.aasx
-    - ./aasx/WST_A_1_slim.aasx:/application/files/aasx/WST_A_1_slim.aasx
-    - ./aasx/WST_A_5_slim.aasx:/application/files/aasx/WST_A_5_slim.aasx
-    - ./aasx/WST_B_6_slim.aasx:/application/files/aasx/WST_B_6_slim.aasx
+    - ./aasx/Semitrailer.aasx:/application/files/aasx/Semitrailer.aasx
+    - ./aasx/Semitrailer_truck.aasx:/application/files/aasx/Semitrailer_truck.aasx
+    - ./aasx/WST_A_1.aasx:/application/files/aasx/WST_A_1.aasx
+    - ./aasx/WST_A_5.aasx:/application/files/aasx/WST_A_5.aasx
+    - ./aasx/WST_B_6.aasx:/application/files/aasx/WST_B_6.aasx
 
 
       # - ./aasx/Semitrailer_afterProcess.aasx:/application/files/aasx/Semitrailer_afterProcess.aasx
