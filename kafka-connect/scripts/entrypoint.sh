@@ -2,7 +2,7 @@
 
 /etc/confluent/docker/run &
 
-until curl -s http://localhost:8083/connectors; do
+until curl -sf http://localhost:8083/connectors > /dev/null; do
   echo "Waiting for Kafka Connect to start..."
   sleep 3
 done

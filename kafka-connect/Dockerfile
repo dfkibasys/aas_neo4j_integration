@@ -8,7 +8,10 @@ RUN mvn clean install -DskipTests
 
 FROM confluentinc/cp-kafka-connect:7.7.1-1-ubi8
 COPY --from=build /app/target/knowledgegraph-connect-plugin-*.jar /tmp/connect-plugins/knowledgegraph-connect-plugin.jar
-COPY ./plugins/kafka-connect-http-connectors*.zip tmp/kafka-connect-http-connectors.zip
+#COPY ./plugins/kafka-connect-http-connectors*.zip tmp/kafka-connect-http-connectors.zip
+RUN curl -L https://repo1.maven.org/maven2/io/github/clescot/kafka-connect-http-connectors/0.8.9/kafka-connect-http-connectors-0.8.9.zip \
+    -o /tmp/kafka-connect-http-connectors.zip \
+ && confluent-hub install /tmp/kafka-connect-http-connectors.zip --no-prompt
 COPY ./java/templates /home/appuser/templates
 COPY ./config/http-connector.json /etc/kafka-connect/config/neo4j-connector.json
 ENV CONNECT_PLUGIN_PATH "/usr/share/java,/usr/share/confluent-hub-components,/tmp/connect-plugins"
