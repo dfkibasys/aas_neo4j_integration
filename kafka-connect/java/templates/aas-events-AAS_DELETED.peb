@@ -1,8 +1,7 @@
 statements:
 - statement: |
-    MATCH (shell:AssetAdministrationShell {id: $shell.id})
-    OPTIONAL MATCH (shell)-[:HAS_SUBMODEL|HAS_ASSET|HAS_CHILD*]->(related)
-    DETACH DELETE shell, related;
+    MATCH (shell:AssetAdministrationShell {id: $shell.id})-[:HAS_ASSET*0..]->(node)
+    DETACH DELETE node;
   parameters:
     shell:
       id: "{{ event.id }}"

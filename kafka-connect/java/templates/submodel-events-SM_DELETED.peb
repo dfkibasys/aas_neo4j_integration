@@ -1,8 +1,7 @@
 statements:
 - statement: |
-    MATCH (s:Submodel {id: $submodel.id})
-    OPTIONAL MATCH (s)-[:HAS_SUBMODEL_ELEMENT|HAS_CHILD*]->(elem)
-    DETACH DELETE s, elem;
+    MATCH (s:Submodel {id: $submodel.id})-[:HAS_SUBMODEL_ELEMENT|HAS_CHILD*0..]->(node)
+    DETACH DELETE node;
   parameters:
     submodel:
       id: "{{ event.id }}"
