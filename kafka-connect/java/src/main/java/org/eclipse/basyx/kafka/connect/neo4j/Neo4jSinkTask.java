@@ -32,7 +32,6 @@ public class Neo4jSinkTask extends SinkTask {
 
 	@Override
 	public void start(Map<String, String> props) {
-
 		transformation = new CypherTransformation<SinkRecord>();
 		this.targetUrl = props.get(Neo4jSinkConnectorConfig.TARGET_URL);
 		this.headers = Neo4jSinkConnectorConfig.parseHeaders(props.get(Neo4jSinkConnectorConfig.HEADERS));
