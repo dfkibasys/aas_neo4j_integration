@@ -1,16 +1,22 @@
 package org.eclipse.basyx.kafka.connect.neo4j;
 
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Pattern;
 
+import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
 import org.apache.kafka.connect.sink.SinkTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Neo4jSinkTask extends SinkTask {
 
@@ -23,8 +29,8 @@ public class Neo4jSinkTask extends SinkTask {
 	private int connectTimeoutMs;
 	private int readTimeoutMs;
 
-	private CypherTransformation<SinkRecord> transformation; 
-	
+	private CypherTransformation<SinkRecord> transformation;
+
 	@Override
 	public String version() {
 		return "1.0.0";
@@ -49,14 +55,16 @@ public class Neo4jSinkTask extends SinkTask {
 	}
 
 	private void writeRecord(SinkRecord record) {
-		
 		String payload = (String) transformation.apply(record).value();
-		
 		boolean success = false;
+		int status = -1;
+		String responseBody = null;
 		for (int attempt = 1; attempt <= maxRetries; attempt++) {
+			HttpURLConnection conn = null;
+
 			try {
-				log.debug("Sending record to {}", targetUrl);
-				HttpURLConnection conn = (HttpURLConnection) new URL(targetUrl).openConnection();
+				log.debug("Sending record to {} (attempt {})", targetUrl, attempt);
+				conn = (HttpURLConnection) new URL(targetUrl).openConnection();
 				conn.setRequestMethod("POST");
 				conn.setConnectTimeout(connectTimeoutMs);
 				conn.setReadTimeout(readTimeoutMs);
@@ -69,20 +77,34 @@ public class Neo4jSinkTask extends SinkTask {
 
 				try (OutputStream os = conn.getOutputStream()) {
 					byte[] input = payload.getBytes(StandardCharsets.UTF_8);
-					os.write(input, 0, input.length);
+					os.write(input);
 				}
 
-				int status = conn.getResponseCode();
-				if (status >= 200 && status < 300) {
-					log.info("Successfully sent record to {} [HTTP {}]", targetUrl, status);
-					success = true;
-					break;
-				} else {
-					log.warn("HTTP error code: {} on attempt {}", status, attempt);
+				status = conn.getResponseCode();
+
+				try (InputStream is = conn.getInputStream()) {
+					responseBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
 				}
+
+				ObjectMapper mapper = AasIo.jsonMapper();
+				JsonNode root = mapper.readTree(responseBody);
+				JsonNode errors = root.path("errors");
+
+				if (errors.isArray() && errors.size() > 0) {
+					log.error("Neo4j responded with semantic/logical errors: {}", errors.toPrettyString());
+					throw new ConnectException("Neo4j rejected the query: " + errors.toString());
+				}
+
+				log.info("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status , responseBody);
+				success = true;
+				break;
 
 			} catch (Exception e) {
-				log.error("Error on attempt {} to send record", attempt, e);
+				log.error("Error while sending record (attempt {}): {}", attempt, e.getMessage(), e);
+			} finally {
+				if (conn != null) {
+					conn.disconnect();
+				}
 			}
 
 			try {
@@ -94,7 +116,8 @@ public class Neo4jSinkTask extends SinkTask {
 		}
 
 		if (!success) {
-			throw new RuntimeException("Failed to send record after " + maxRetries + " attempts.");
+			log.info("HttpResponse: Failed to send record! statusCode={} statusMessage='Success' responseBody='{}' ", status , responseBody);
+			throw new ConnectException("Failed to send record after " + maxRetries + " attempts.");
 		}
 	}
 

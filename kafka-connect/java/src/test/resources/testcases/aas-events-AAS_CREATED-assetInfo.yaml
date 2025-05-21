@@ -17,10 +17,11 @@ expected: |
   statements:
   - statement: |
       MERGE (a:AssetAdministrationShell { id: $shell.id }) 
+      SET a:AssetAdministrationShell:Identifiable:Referable
       SET a.idShort = $shell.idShort
       SET a.sourceUrl = $shell.sourceUrl
       SET a.registrationTime = $shell.registrationTime
-      MERGE (asset:Asset { globalAssetId: $asset.globalAssetId })
+      MERGE (asset:Asset { id: $asset.globalAssetId })
       SET asset.assetKind = $asset.assetKind
       SET asset.assetType = $asset.assetType
       MERGE (a) -[:HAS_ASSET]->(asset)

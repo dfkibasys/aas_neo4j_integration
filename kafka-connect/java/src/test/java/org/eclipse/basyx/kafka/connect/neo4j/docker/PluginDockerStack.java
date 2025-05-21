@@ -3,6 +3,7 @@ package org.eclipse.basyx.kafka.connect.neo4j.docker;
 import java.util.List;
 
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAasEnvironmentContainer;
+import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAkhqContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaNeo4jPluginContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredNeo4jContainer;
@@ -18,22 +19,22 @@ public class PluginDockerStack implements Startable {
 	private final ConfiguredNeo4jContainer neo4j = new ConfiguredNeo4jContainer(network);
 	private final ConfiguredAasEnvironmentContainer aasEnv = new ConfiguredAasEnvironmentContainer(network, kafka);
 	private final ConfiguredKafkaNeo4jPluginContainer connect = new ConfiguredKafkaNeo4jPluginContainer(network, kafka, neo4j);
-		
+//	private final ConfiguredAkhqContainer akhq = new ConfiguredAkhqContainer(network, kafka);	
+	
+	
 	@Override
 	public void start() {
-		kafka.start();
-		neo4j.start();
-		aasEnv.start();
-		connect.start();
-		//Startables.deepStart(List.of(kafka, neo4j, aasEnv, connect)).join();
-		kafka.getNetworkAliases().get(0);
+		Startables.deepStart(List.of(kafka, neo4j, aasEnv, connect)).join();
+
 	}
 	
 	@Override
 	public void stop() {
+		
 		connect.stop();
 		aasEnv.stop();
 		neo4j.stop();
+	//	akhq.stop();
 		kafka.stop();
 	}
 

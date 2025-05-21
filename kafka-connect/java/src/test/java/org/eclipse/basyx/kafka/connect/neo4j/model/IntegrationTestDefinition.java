@@ -6,7 +6,7 @@ import org.eclipse.basyx.kafka.connect.neo4j.model.operations.IntegrationTestOpe
 
 public class IntegrationTestDefinition {
 
-	private List<IntegrationTestOperation> input;
+	private List<IntegrationTestOperation<?>> input;
 
 	private IntegrationTestResult expected;
 
@@ -18,11 +18,11 @@ public class IntegrationTestDefinition {
 		this.expected = expected;
 	}
 
-	public List<IntegrationTestOperation> getInput() {
+	public List<IntegrationTestOperation<?>> getInput() {
 		return input;
 	}
 
-	public void setInput(List<IntegrationTestOperation> input) {
+	public void setInput(List<IntegrationTestOperation<?>> input) {
 		this.input = input;
 	}
 }

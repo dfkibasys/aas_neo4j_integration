@@ -11,27 +11,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 
-import org.eclipse.basyx.kafka.connect.neo4j.util.SerializationTools;
+import org.eclipse.basyx.kafka.connect.neo4j.AasIo;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.DeserializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.SerializationException;
-import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonDeserializer;
 import org.eclipse.digitaltwin.aas4j.v3.model.Identifiable;
 import org.junit.Assert;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class RepositoryAccess<T extends Identifiable> {
 
 	private final String baseUri;
 	private final Class<T> cls;
 	private final HttpClient client;
-	private final SerializationTools ioTools;
 	
-	public RepositoryAccess(SerializationTools ioTools, Class<T> cls, String baseUri) {
+	public RepositoryAccess(Class<T> cls, String baseUri) {
 		this.client = HttpClient.newHttpClient();
 		this.cls = cls;		
 		this.baseUri = baseUri;
-		this.ioTools = ioTools;
 	}
 
 	public List<T> getAll() throws IOException, InterruptedException, DeserializationException {
@@ -40,12 +38,12 @@ public class RepositoryAccess<T extends Identifiable> {
 				.header("Accept", "application/json").GET().build();
 		HttpResponse<InputStream> response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
 		Assert.assertEquals(200, response.statusCode());
-		JsonDeserializer deserializer = ioTools.jsonDeserializer();
+		ObjectMapper mapper = AasIo.jsonMapper();
 		try (InputStream in = response.body();
 				BufferedInputStream bIn = new BufferedInputStream(in)) {
-			JsonNode resultMapper = deserializer.read(in, JsonNode.class);
+			JsonNode resultMapper = mapper.readValue(in, JsonNode.class);
 			JsonNode resultNode = resultMapper.get("result");
-			return deserializer.readList(resultNode, cls);
+			return mapper.treeToValue(resultNode, mapper.getTypeFactory().constructCollectionLikeType(List.class, cls));
 		}
 	}
 
@@ -66,9 +64,10 @@ public class RepositoryAccess<T extends Identifiable> {
 	}
 
 	public T post(T item) throws IOException, InterruptedException, SerializationException, DeserializationException {
-		String body = ioTools.jsonSerializer().write(item);
+		ObjectMapper mapper = AasIo.jsonMapper();
+		String body = mapper.writeValueAsString(item);
 		String result = post(body);
-		return ioTools.jsonDeserializer().read(result, cls);
+		return mapper.readValue(result, cls);
 	}
 	private String post(String body) throws IOException, InterruptedException {
 		URI uri = URI.create(baseUri);

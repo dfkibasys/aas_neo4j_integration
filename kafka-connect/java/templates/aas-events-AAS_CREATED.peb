@@ -2,6 +2,7 @@
 statements:
 - statement: |
     MERGE (a:AssetAdministrationShell { id: $shell.id }) 
+    SET a{% for eachLabel in aas.labels %}:{{eachLabel}}{% endfor %}  
     {% if aas.idShort -%}
     SET a.idShort = $shell.idShort
     {%- endif %} 
@@ -10,24 +11,32 @@ statements:
     {%- endif %} 
     {% if meta.registrationTime -%}
     SET a.registrationTime = $shell.registrationTime
-    {%- endif -%} 
-    {%- if aas.assetInformation is not null and aas.assetInformation.globalAssetId %} 
-    MERGE (asset:Asset { globalAssetId: $asset.globalAssetId })
-    {%- if aas.assetInformation.assetKind %} 
+    {%- endif %} 
+    {% if aas.assetInformation is not null %} 
+    {%- set assetInfo = aas.assetInformation -%} 
+    {%- if assetInfo.globalAssetId is not null %} 
+    MERGE (asset:Asset { id: $asset.globalAssetId })
+    {%- endif %} 
+    {%- if assetInfo.assetKind is not null %} 
     SET asset.assetKind = $asset.assetKind
     {%- endif %} 
-    {% if aas.assetInformation.assetType -%}
+    {%- if assetInfo.assetType is not null %} 
     SET asset.assetType = $asset.assetType
     {%- endif %} 
-    MERGE (a) -[:HAS_ASSET]->(asset) {%- endif %} 
+    MERGE (a) -[:HAS_ASSET]->(asset)
+    {%- endif -%}
     {% if aas.submodels is not empty -%} 
     {% for eachSubmodel in aas.submodels %} 
-    {% if eachSubmodel.keys is not empty and eachSubmodel.keys[0].value -%}
+    {% if eachSubmodel.keys is not empty and eachSubmodel.keys[0].value %} 
     MERGE (s_{{loop.index}}:Submodel {id: $submodels.s_{{ loop.index }}.id }) 
     MERGE (a)-[:HAS_SUBMODEL]->(s_{{loop.index}}) 
     {%- endif %}  
     {%- endfor %} 
-    {% endif %} 
+    {%- endif %}
+    {% for eachRef in aas.refs %} 
+    MERGE (r_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %} { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}}) 
+    MERGE (a) -[:HAS_REFERENCE {type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }}) 
+    {%- endfor %} 
   parameters:
     shell:
       id: "{{ aas.id }}"
@@ -38,13 +47,13 @@ statements:
       sourceUrl: "{{ url }}" {% endif %} 
       {% if meta.registrationTime -%}
       registrationTime: {{ meta.registrationTime }}
-      {%- endif %} 
-    {% if aas.assetInformation is not null and aas.assetInformation.globalAssetId -%}
-    {% set assetInfo = aas.assetInformation -%} 
+      {%- endif -%} 
+    {%- if aas.assetInformation is not null %}
+    {%- set assetInfo = aas.assetInformation %} 
     asset:
       globalAssetId: "{{ assetInfo.globalAssetId }}" 
-      {% if assetInfo.assetKind -%}  
-      assetKind: "{{ assetInfo.assetKind  }}"
+      {% if assetInfo.assetKind is not null -%}  
+      assetKind: "{{ assetInfo.assetKind | capitalize }}"
       {%- endif -%} 
       {%- if assetInfo.assetType %}  
       assetType: "{{ assetInfo.assetType }}"
@@ -58,5 +67,19 @@ statements:
         id: "{{ eachSubmodel.keys[0].value }}"
       {% endif -%}  
       {% endfor -%}
+    {% endif %} 
+    {%- if aas.refs is not empty %} 
+    refs: 
+      {% for eachRef in aas.refs -%}
+      r_{{ loop.index }}:
+        id: "{{ eachRef.id }}"
+        {%- if eachRef.idShortPath is not null %} 
+        path: "{{ eachRef.idShortPath }}"
+        {%- endif %} 
+        {%- if eachRef.label is not null %} 
+        label: "{{ eachRef.label }}"
+        {%- endif %} 
+        type: "{{ eachRef.refType }}" 
+      {%- endfor %} 
     {% endif %}
       

@@ -3,28 +3,23 @@ package org.eclipse.basyx.kafka.connect.neo4j.pebble;
 import java.util.Map;
 import java.util.Objects;
 
+import org.eclipse.basyx.kafka.connect.neo4j.events.Event;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class PebbleContext {
 
-	private Map<String, Object> event;
-	private PebbleContextMeta meta;
-
-	public PebbleContext() {
-	}
+	private final Event event;
+	private final PebbleContextMeta meta;
 	
-	public PebbleContext(Map<String, Object> event, PebbleContextMeta meta) {
+	@JsonCreator
+	public PebbleContext(@JsonProperty("event") Event event, @JsonProperty("meta") PebbleContextMeta meta) {
 		this.event = event;
 		this.meta = meta;
 	}
 	
-	public void setEvent(Map<String, Object> event) {
-		this.event = event;
-	}
-	
-	public void setMeta(PebbleContextMeta meta) {
-		this.meta = meta;
-	}
-	
-	public Map<String, Object> getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 

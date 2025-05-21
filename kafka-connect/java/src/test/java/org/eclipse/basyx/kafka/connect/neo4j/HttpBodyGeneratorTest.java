@@ -13,7 +13,6 @@ import java.util.stream.Stream;
 
 import org.eclipse.basyx.kafka.connect.neo4j.pebble.HttpRequestBodyGenerator;
 import org.eclipse.basyx.kafka.connect.neo4j.pebble.PebbleContext;
-import org.eclipse.basyx.kafka.connect.neo4j.util.SerializationTools;
 import org.junit.Assert;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -33,12 +32,11 @@ public class HttpBodyGeneratorTest {
 	}
 
 	private static Arguments toTestCase(Path path) {
-		SerializationTools tools = new SerializationTools();
-		ObjectMapper mapper = tools.yamlMapper();
+		ObjectMapper yamlMapper = AasIo.yamlMapper();
 		try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-			TestDefinition definition = mapper.readValue(reader, TestDefinition.class);
+			TestDefinition definition = yamlMapper.readValue(reader, TestDefinition.class);
 			String name = path.getFileName().toString();
-			return Arguments.of(name, definition, mapper);
+			return Arguments.of(name, definition, yamlMapper);
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -54,13 +52,8 @@ public class HttpBodyGeneratorTest {
 		assertEquals(expected, yaml, yamlMapper);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void assertEquals(String expectedYaml, String resultYaml, ObjectMapper yamlMapper)
 			throws JsonMappingException, JsonProcessingException {
-		System.out.println(resultYaml);
-		Map<String, Object> map = yamlMapper.readValue(resultYaml, Map.class);
-		String tmp = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(map);
-		System.out.println(tmp);
 		resultYaml = normalizeYaml(resultYaml);
 		expectedYaml = normalizeYaml(expectedYaml);
 		Assert.assertEquals(expectedYaml, resultYaml);

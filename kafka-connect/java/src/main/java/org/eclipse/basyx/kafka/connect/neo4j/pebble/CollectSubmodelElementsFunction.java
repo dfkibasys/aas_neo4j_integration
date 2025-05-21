@@ -3,9 +3,10 @@ package org.eclipse.basyx.kafka.connect.neo4j.pebble;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.SubmodelElementInfo;
-import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.SubmodelInfo;
+import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.json.PebbleSubmodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementList;
 
 import io.pebbletemplates.pebble.extension.Function;
@@ -21,13 +22,11 @@ class CollectSubmodelElementsFunction implements Function {
 		return List.of(SUBMODEL_ARG);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Object execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
-		Map<String, Object> arg = (Map<String, Object>) args.get(SUBMODEL_ARG);
-		SubmodelInfo submodel = new SubmodelInfo(arg);
+	public List<SubmodelElementInfo> execute(Map<String, Object> args, PebbleTemplate self, EvaluationContext context, int lineNumber) {
+		PebbleSubmodel submodel = (PebbleSubmodel) args.get(SUBMODEL_ARG);
 		String smId = submodel.getId();
-		List<SubmodelElementInfo> elems = submodel.getSubmodelElements();
+		List<SubmodelElementInfo> elems = submodel.getSubmodelElements().stream().map(SubmodelElementInfo::new).collect(Collectors.toList());
 		return collectElements(smId, elems);
 	}
 
@@ -48,8 +47,8 @@ class CollectSubmodelElementsFunction implements Function {
 
 	private List<SubmodelElementInfo> getChildren(SubmodelElementInfo eachElem, int parentPos) {
 		List<SubmodelElementInfo> children = eachElem.getChildren();
-		String parentIdShortPath = eachElem.getIdShortPath();
-		if ("SubmodelElementList".equals(eachElem.getModelType())) {
+		String parentIdShortPath = eachElem.getIdShortPath();		
+		if (eachElem.getElement() instanceof SubmodelElementList) {
 			int index = 0;
 			for (SubmodelElementInfo eachChild : children) {
 				eachChild.setIdShortPath(parentIdShortPath + "[" + index + "]");

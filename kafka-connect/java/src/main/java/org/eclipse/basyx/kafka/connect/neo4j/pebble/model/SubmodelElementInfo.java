@@ -1,51 +1,50 @@
 package org.eclipse.basyx.kafka.connect.neo4j.pebble.model;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.eclipse.basyx.kafka.connect.neo4j.pebble.model.json.PebbleSubmodelElement;
+import org.eclipse.digitaltwin.aas4j.v3.model.Property;
+import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 
 public class SubmodelElementInfo {
 
-	private final Map<String, Object> elem;
 	private Integer parentPos;
 	private String idShortPath;
+	private PebbleSubmodelElement element;
+	private List<SubmodelElementInfo> children;
 
-	public SubmodelElementInfo(Map<String, Object> elem) {
-		this.elem = elem;
+	public SubmodelElementInfo(SubmodelElement element) {
+		this.element = (PebbleSubmodelElement) element;
 	}
 
+	public SubmodelElement getElement() {
+		return element;
+	}
+	
 	public String getIdShort() {
-		return (String) elem.get("idShort");
+		return element.getIdShort();
+	}
+	
+	public List<ReferenceInfo> getRefs() {
+		return element.getRefs();
 	}
 
 	public void setIdShortPath(String path) {
 		this.idShortPath = path;
 	}
-
-	public Map<String, Object> asMap() {
-		return elem;
-	}
-
-	public String getModelType() {
-		return (String) elem.get("modelType");
-	}
-
-	@SuppressWarnings("unchecked")
+	
 	public List<SubmodelElementInfo> getChildren() {
-		String modelType = getModelType();
-		if ("SubmodelElementCollection".equals(modelType) || "SubmodelElementList".equals(modelType)) {
-			List<Map<String, Object>> children = (List<Map<String, Object>>) elem.get("value");
-			if (children != null) {
-				return children.stream().map(SubmodelElementInfo::new).collect(Collectors.toList());
-			}
+		if (children == null) {
+			children = element.getChildren().stream().map(SubmodelElementInfo::new).collect(Collectors.toList());
 		}
-		return List.of();
+		return children;
 	}
 
 	public String getValue() {
-		String modelType = getModelType();
-		if ("Property".equals(modelType)) {
-			return (String) elem.get("value");
+		if (element instanceof Property) {
+			Property prop = (Property)element;
+			return prop.getValue();
 		}
 		return null;
 	}
@@ -71,6 +70,14 @@ public class SubmodelElementInfo {
 		return "SubmodelElementInfo [idShort: " + getIdShort() + ", modelType: " + getModelType() + ", value: "
 				+ getValue() + ", idShortPath:" + getIdShortPath() + ", parentPos:" + getParentPos() + ", children: "
 				+ getChildren() + "]";
+	}
+
+	private String getModelType() {
+		return element.getClass().getSuperclass().getInterfaces()[0].getSimpleName();
+	}
+
+	public List<String> getLabels() {
+		return element.getLabels();
 	}
 
 }

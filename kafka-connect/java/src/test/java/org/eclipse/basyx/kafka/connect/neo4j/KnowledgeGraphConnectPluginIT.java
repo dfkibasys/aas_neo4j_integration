@@ -24,11 +24,9 @@ import org.eclipse.basyx.kafka.connect.neo4j.model.IntegrationTestResult;
 import org.eclipse.basyx.kafka.connect.neo4j.model.IntegrationTestResultNode;
 import org.eclipse.basyx.kafka.connect.neo4j.model.IntegrationTestResultRelationShips;
 import org.eclipse.basyx.kafka.connect.neo4j.model.operations.IntegrationTestOperation;
-import org.eclipse.basyx.kafka.connect.neo4j.util.SerializationTools;
 import org.eclipse.basyx.kafka.connect.neo4j.util.UnknownComparing;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.DeserializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.SerializationException;
-import org.eclipse.digitaltwin.aas4j.v3.dataformat.json.JsonDeserializer;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -47,8 +45,6 @@ import io.pebbletemplates.pebble.template.PebbleTemplate;
 
 public class KnowledgeGraphConnectPluginIT {
 
-	private static final SerializationTools ioTools = new SerializationTools();
-
 	private static final PluginDockerStack stack = new PluginDockerStack();
 
 	private static final Neo4jKafkaPluginResultResolver resultResolver = new Neo4jKafkaPluginResultResolver(
@@ -66,7 +62,7 @@ public class KnowledgeGraphConnectPluginIT {
 
 	private static Arguments toTestCase(Path path) {
 		try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-			IntegrationTestDefinition definition = ioTools.yamlMapper().readValue(reader,
+			IntegrationTestDefinition definition = AasIo.yamlMapper().readValue(reader,
 					IntegrationTestDefinition.class);
 			String name = path.getFileName().toString();
 			return Arguments.of(name, definition);
@@ -78,9 +74,8 @@ public class KnowledgeGraphConnectPluginIT {
 	@BeforeAll
 	public static void startContainers() {
 		stack.start();
-		envAccess = new EnvironmentAccess(ioTools, stack.aasEnv().urlAsString());
+		envAccess = new EnvironmentAccess(stack.aasEnv().urlAsString());
 		neo4jAccess = new Neo4jAccess(stack.neo4j().getTransactionalHttpUrl());
-		resultResolver.start(stack.kafka().externalBrokerAddress());
 	}
 
 	@AfterAll
@@ -117,7 +112,7 @@ public class KnowledgeGraphConnectPluginIT {
 		UnknownComparing comparing = new UnknownComparing("registrationTime", 0L);
 		comparing.compareAndReset(expected.getNodes(), result.getNodes());
 		
-		ObjectMapper mapper = ioTools.yamlMapper();
+		ObjectMapper mapper = AasIo.yamlMapper();
 		
 		String expectedStr = mapper.writeValueAsString(expected);
 		String resultStr = mapper.writeValueAsString(result);
@@ -131,9 +126,9 @@ public class KnowledgeGraphConnectPluginIT {
 	}
 
 	public void postResources(IntegrationTestDefinition def) throws Exception {
-		List<IntegrationTestOperation> input = def.getInput();
+		List<IntegrationTestOperation<?>> input = def.getInput();
 		for (IntegrationTestOperation eachInputItem : input) {
-			eachInputItem.execute(envAccess, ioTools);
+			eachInputItem.execute(envAccess);
 			ProcessingEvent evt = resultResolver.awaitNext();
 			Assert.assertTrue(evt.message(), evt.isSuccess());
 		}
@@ -144,9 +139,9 @@ public class KnowledgeGraphConnectPluginIT {
 		PebbleEngine engine = new PebbleEngine.Builder().loader(new ClasspathLoader()).build();
 		PebbleTemplate compiledTemplate = engine.getTemplate("testresult-mapping.peb");
 		StringWriter writer = new StringWriter();
-		JsonDeserializer deserializer = ioTools.jsonDeserializer();
-		Map<String, Object> resultAsMap = deserializer.read(result, Map.class);
+		ObjectMapper mapper = AasIo.jsonMapper();
+		Map<String, Object> resultAsMap = mapper.readValue(result, Map.class);
 		compiledTemplate.evaluate(writer, resultAsMap);
-		return deserializer.read(writer.toString(), IntegrationTestResult.class);
+		return mapper.readValue(writer.toString(), IntegrationTestResult.class);
 	}
 }

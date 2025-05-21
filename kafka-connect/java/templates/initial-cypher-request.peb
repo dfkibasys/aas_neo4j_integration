@@ -1,5 +1,7 @@
 statements:
   - statement: "CREATE CONSTRAINT unique_aas_id IF NOT EXISTS FOR (a:AssetAdministrationShell) REQUIRE a.id IS UNIQUE"
+  - statement: "CREATE CONSTRAINT unique_aas_id IF NOT EXISTS FOR (a:Identifiable) REQUIRE a.id IS UNIQUE"
   - statement: "CREATE CONSTRAINT unique_sm_id IF NOT EXISTS FOR (s:Submodel) REQUIRE s.id IS UNIQUE"
+  - statement: "CREATE CONSTRAINT unique_asset_id IF NOT EXISTS FOR (a:Asset) REQUIRE a.id IS UNIQUE"
   - statement: "CREATE CONSTRAINT unique_composite_sme_id_and_path IF NOT EXISTS FOR (se:SubmodelElement) REQUIRE (se.id, se.idShortPath) IS UNIQUE"
   - statement: "CREATE INDEX node_range_index_sme_id IF NOT EXISTS FOR (se:SubmodelElement) ON (se.id)"

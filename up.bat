@@ -4,6 +4,7 @@ setlocal
 :: Start the Docker Compose stack
 docker-compose --project-name knowledgegraph-v3 up --detach --remove-orphans --force-recreate --renew-anon-volumes
 
+
 echo.
 echo ========================= Basyx Services =========================
 echo AAS Environment:

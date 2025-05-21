@@ -22,8 +22,6 @@ public class HttpRequestBodyGenerator {
 		return generateYaml("event-cypher-request.peb", context.toMap());
 	}
 
-	
-	
 	public String generateYamlForInitialCypherRequests() throws IOException {
 		return generateYaml("initial-cypher-request.peb", Map.of());
 	}
@@ -32,7 +30,9 @@ public class HttpRequestBodyGenerator {
 		PebbleTemplate compiledTemplate = engine.getTemplate(templateName);
 		StringWriter writer = new StringWriter();
 		compiledTemplate.evaluate(writer, contextAsMap);
-		return writer.toString();
+		String result = writer.toString();
+		System.out.println(result);
+		return result;
 	}
 
 	private String locationPrefix() {

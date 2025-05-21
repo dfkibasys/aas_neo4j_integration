@@ -30,19 +30,26 @@ expected: |
   statements:
   - statement: |
       MERGE (s:Submodel { id: $submodel.id }) 
+      SET s:Identifiable:Referable:Submodel
       SET s.idShort = $submodel.idShort 
       SET s.sourceUrl = $submodel.sourceUrl 
       SET s.registrationTime = $submodel.registrationTime    
-      MERGE (e0:SubmodelElement:SubmodelElementCollection {smId: $submodel.id, idShortPath: $sme_0.idShortPath })
+      MERGE (e0:SubmodelElement {smId: $submodel.id, idShortPath: $sme_0.idShortPath })
+      SET e0:Referable:SubmodelElement:SubmodelElementCollection
       SET e0.idShort = $sme_0.idShort
-      MERGE (e1:SubmodelElement:SubmodelElementList {smId: $submodel.id, idShortPath: $sme_1.idShortPath })
+      MERGE (e1:SubmodelElement {smId: $submodel.id, idShortPath: $sme_1.idShortPath })
+      SET e1:Referable:SubmodelElement:SubmodelElementList
       SET e1.idShort = $sme_1.idShort
-      MERGE (e2:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme_2.idShortPath })
+      MERGE (e2:SubmodelElement {smId: $submodel.id, idShortPath: $sme_2.idShortPath })
+      SET e2:DataElement:Property:Referable:SubmodelElement
       SET e2.value = $sme_2.value
-      MERGE (e3:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme_3.idShortPath })
+      MERGE (e3:SubmodelElement {smId: $submodel.id, idShortPath: $sme_3.idShortPath })
+      SET e3:DataElement:Property:Referable:SubmodelElement
       SET e3.value = $sme_3.value
-      MERGE (e4:SubmodelElement:SubmodelElementCollection {smId: $submodel.id, idShortPath: $sme_4.idShortPath })
-      MERGE (e5:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme_5.idShortPath })
+      MERGE (e4:SubmodelElement {smId: $submodel.id, idShortPath: $sme_4.idShortPath })
+      SET e4:Referable:SubmodelElement:SubmodelElementCollection
+      MERGE (e5:SubmodelElement {smId: $submodel.id, idShortPath: $sme_5.idShortPath })
+      SET e5:DataElement:Property:Referable:SubmodelElement
       SET e5.idShort = $sme_5.idShort
       SET e5.value = $sme_5.value
       

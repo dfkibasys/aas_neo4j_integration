@@ -11,7 +11,7 @@
 	<description>AAS Knowledge Graph Kafka Connect Plugin</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>15</java.version>
 		<docker.image.name>aas-knowledgegraph</docker.image.name>
 		<spring-cloud.version>2020.0.4</spring-cloud.version>
 		<kafka.version>3.8.1</kafka.version>

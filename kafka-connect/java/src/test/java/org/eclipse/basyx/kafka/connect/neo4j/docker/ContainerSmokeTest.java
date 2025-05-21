@@ -1,16 +1,20 @@
 package org.eclipse.basyx.kafka.connect.neo4j.docker;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.time.Duration;
 
+import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAkhqContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaNeo4jPluginContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredNeo4jContainer;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.Stopwatch;
 import org.testcontainers.containers.Network;
-import org.testcontainers.lifecycle.Startables;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.kafka.ConfluentKafkaContainer;
+import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 public class ContainerSmokeTest {
 
@@ -18,10 +22,12 @@ public class ContainerSmokeTest {
 	public void testStackStarts() throws InterruptedException {
 		Network network = Network.newNetwork();
 		try (ConfiguredKafkaContainer kafka = new ConfiguredKafkaContainer(network);
+				ConfiguredAkhqContainer akhq = new ConfiguredAkhqContainer(network, kafka).withExposedPorts(8080);
 				ConfiguredNeo4jContainer neo4j = new ConfiguredNeo4jContainer(network).withExposedPorts(7474, 7687);
 				ConfiguredKafkaNeo4jPluginContainer plugin = new ConfiguredKafkaNeo4jPluginContainer(network, kafka, neo4j)) {
 
-			Startables.deepStart(kafka, neo4j);
+			kafka.start();
+			neo4j.start();
 			plugin.start();
 
 			waitForRunning(plugin);
@@ -35,8 +41,8 @@ public class ContainerSmokeTest {
 	}
 
 	private void assertIndicesDeployed(ConfiguredNeo4jContainer neo4j) {
-		String address1 = "http://localhost:"+neo4j.getMappedPort(7474);
-		String address2 = "http://localhost:"+neo4j.getMappedPort(7687);
+		String address1 = "http://localhost:" + neo4j.getMappedPort(7474);
+		String address2 = "http://localhost:" + neo4j.getMappedPort(7687);
 		System.out.println(address1);
 		System.out.println(address2);
 		System.out.println("===0");
@@ -55,6 +61,6 @@ public class ContainerSmokeTest {
 			System.out.println("sleep");
 			Thread.sleep(1000); // wait one second
 		}
-
+		System.out.println("running");
 	}
 }

@@ -26,6 +26,7 @@ expected: |
   statements:
   - statement: |
       MERGE (a:AssetAdministrationShell { id: $shell.id }) 
+      SET a:AssetAdministrationShell:Identifiable:Referable
       SET a.idShort = $shell.idShort
       SET a.sourceUrl = $shell.sourceUrl
       SET a.registrationTime = $shell.registrationTime

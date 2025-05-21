@@ -1,11 +1,9 @@
 package org.eclipse.basyx.kafka.connect.neo4j.docker.containers;
 
-import java.nio.file.Paths;
 import java.util.Map;
 
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.images.builder.ImageFromDockerfile;
 import org.testcontainers.lifecycle.Startable;
 
 public class ConfiguredAasEnvironmentContainer extends GenericContainer<ConfiguredAasEnvironmentContainer> {
@@ -13,16 +11,12 @@ public class ConfiguredAasEnvironmentContainer extends GenericContainer<Configur
 	private static final String NETWORK_ALIAS = "aas-env";
 
 	public ConfiguredAasEnvironmentContainer(Network network, Startable kafka) {
-		super(dockerFile().get());
+		super("eclipsebasyx/aas-environment:2.0.0-SNAPSHOT-d81b59c");
 
 		withNetwork(network).withNetworkAliases(NETWORK_ALIAS).withReuse(true).withExposedPorts(8081).dependsOn(kafka)
 				.withEnv(envVars());
 	}
 
-	private static ImageFromDockerfile dockerFile() {
-		return new ImageFromDockerfile("dfkibasys/aas-environment:kafka", false).withFileFromPath(".",
-				Paths.get("../../aasenv"));
-	}
 
 	public void enableCommandLineLogging() {
 		withLogConsumer(o -> System.out.println(o.getUtf8StringWithoutLineEnding()));

@@ -35,6 +35,12 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>connect-api</artifactId>
+      <version>3.8.1</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.testcontainers</groupId>
       <artifactId>testcontainers</artifactId>
       <version>1.20.4</version>
@@ -102,7 +108,7 @@
     <docker.image.name>aas-knowledgegraph</docker.image.name>
     <slf4j.version>1.7.32</slf4j.version>
     <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-    <java.version>11</java.version>
+    <java.version>15</java.version>
     <junit.jupiter.version>5.11.3</junit.jupiter.version>
     <kafka.version>3.8.1</kafka.version>
     <aas4j.version>1.0.2</aas4j.version>

@@ -14,6 +14,7 @@ expected: |
   statements:
   - statement: |
       MERGE (s:Submodel { id: $submodel.id }) 
+      SET s:Identifiable:Referable:Submodel
       SET s.idShort = $submodel.idShort
       SET s.sourceUrl = $submodel.sourceUrl
       SET s.registrationTime = $submodel.registrationTime
