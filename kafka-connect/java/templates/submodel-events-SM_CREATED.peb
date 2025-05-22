@@ -26,9 +26,9 @@ statements:
     {% endfor %}
     {% for eachElem in smElems %}
     {%- if eachElem.isRootElement %} 
-    MERGE (s)-[:HAS_SUBMODEL_ELEMENT]->(e{{loop.index}}) 
+    MERGE (s)-[:HAS_ELEMENT]->(e{{loop.index}}) 
     {%- else %} 
-    MERGE (e{{ eachElem.parentPos }})-[:HAS_CHILD]->(e{{loop.index}})
+    MERGE (e{{ eachElem.parentPos }})-[:HAS_ELEMENT]->(e{{loop.index}})
     {%- endif %}
     {% set outerLoopIndex = loop.index %}
     {% for eachRef in eachElem.refs %} 

@@ -145,12 +145,12 @@ expected: |
       SET e5.idShort = $sme_5.idShort
       SET e5.value = $sme_5.value
            
-      MERGE (s)-[:HAS_SUBMODEL_ELEMENT]->(e0)
-      MERGE (e0)-[:HAS_CHILD]->(e1)
-      MERGE (e0)-[:HAS_CHILD]->(e2)
-      MERGE (e0)-[:HAS_CHILD]->(e3)
-      MERGE (e3)-[:HAS_CHILD]->(e4)
-      MERGE (e3)-[:HAS_CHILD]->(e5)
+      MERGE (s)-[:HAS_ELEMENT]->(e0)
+      MERGE (e0)-[:HAS_ELEMENT]->(e1)
+      MERGE (e0)-[:HAS_ELEMENT]->(e2)
+      MERGE (e0)-[:HAS_ELEMENT]->(e3)
+      MERGE (e3)-[:HAS_ELEMENT]->(e4)
+      MERGE (e3)-[:HAS_ELEMENT]->(e5)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
