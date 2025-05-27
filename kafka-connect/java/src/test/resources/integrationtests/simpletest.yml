@@ -17,8 +17,8 @@ expected:
   nodes:
     - id: "0"
       labels:
-      - Submodel
       - Identifiable
+      - Submodel
       - Referable
       properties:
         registrationTime: 1732781746575
@@ -26,9 +26,9 @@ expected:
         id: "http://test.sm" 
     - id: "1" 
       labels: 
+      - AssetAdministrationShell
       - Identifiable
       - Referable
-      - AssetAdministrationShell
       properties:
         id: "http://test.shell"
         registrationTime: 1732779314520

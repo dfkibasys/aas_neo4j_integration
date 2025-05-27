@@ -120,7 +120,11 @@ public class KnowledgeGraphConnectPluginIT {
 	}
 
 	private void sortElements(IntegrationTestResult result) {
-		result.getErrors().sort(null);
+		if (result == null) {
+			return;
+		}
+		result.getErrors().sort(Comparator.naturalOrder());
+		
 		result.getNodes().sort(Comparator.comparing(IntegrationTestResultNode::getId));
 		result.getRelationships().sort(Comparator.comparing(IntegrationTestResultRelationShips::getId));
 	}

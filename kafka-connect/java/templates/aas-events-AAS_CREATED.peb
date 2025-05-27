@@ -35,7 +35,7 @@ statements:
     {%- endif %}
     {% for eachRef in aas.refs %} 
     MERGE (r_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %} { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}}) 
-    MERGE (a) -[:HAS_REFERENCE {type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }}) 
+    MERGE (a) -[:{% if eachRef.semantic %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }})
     {%- endfor %} 
   parameters:
     shell:
@@ -75,7 +75,7 @@ statements:
         id: "{{ eachRef.id }}"
         {%- if eachRef.idShortPath is not null %} 
         path: "{{ eachRef.idShortPath }}"
-        {%- endif %} 
+        {%- endif %}
         {%- if eachRef.label is not null %} 
         label: "{{ eachRef.label }}"
         {%- endif %} 

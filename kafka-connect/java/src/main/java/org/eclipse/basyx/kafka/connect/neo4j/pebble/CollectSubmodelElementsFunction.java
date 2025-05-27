@@ -39,26 +39,27 @@ class CollectSubmodelElementsFunction implements Function {
 		while (!toProcess.isEmpty()) {
 			SubmodelElementInfo inputElem = toProcess.removeFirst();
 			toReturn.add(inputElem);
-			toProcess.addAll(getChildren(inputElem, toReturn.size() - 1));
+			int parentPos = toReturn.size() - 1;
+			toProcess.addAll(getChildren(inputElem, toReturn.get(parentPos), parentPos));
 		}
 		toReturn.stream().map(SubmodelElementInfo::getIdShortPath).forEach(System.out::println);
 		return toReturn;
 	}
 
-	private List<SubmodelElementInfo> getChildren(SubmodelElementInfo eachElem, int parentPos) {
+	private List<SubmodelElementInfo> getChildren(SubmodelElementInfo eachElem, SubmodelElementInfo parent, int parentPos) {
 		List<SubmodelElementInfo> children = eachElem.getChildren();
 		String parentIdShortPath = eachElem.getIdShortPath();		
 		if (eachElem.getElement() instanceof SubmodelElementList) {
 			int index = 0;
 			for (SubmodelElementInfo eachChild : children) {
 				eachChild.setIdShortPath(parentIdShortPath + "[" + index + "]");
-				eachChild.setParentPos(parentPos);
+				eachChild.setParent(parent, parentPos);
 				index++;
 			}
 		} else {
 			for (SubmodelElementInfo eachChild : children) {
 				eachChild.setIdShortPath(parentIdShortPath + "." + eachChild.getIdShort());
-				eachChild.setParentPos(parentPos);
+				eachChild.setParent(parent, parentPos);
 			}
 		}
 		return children;

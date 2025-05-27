@@ -2,7 +2,6 @@ package org.eclipse.basyx.kafka.connect.neo4j.docker.containers;
 
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.kafka.ConfluentKafkaContainer;
 import org.testcontainers.utility.MountableFile;
 
 public class ConfiguredAkhqContainer extends GenericContainer<ConfiguredAkhqContainer> {

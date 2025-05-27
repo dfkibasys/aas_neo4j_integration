@@ -70,10 +70,19 @@ public class ReferenceInfos {
 	private static ReferenceInfo resolve(Key eachKey, String refType) {
 		KeyTypes type = eachKey.getType();
 		String value = eachKey.getValue();
+		if ("semanticId".equals(refType)) {
+			return new SemanticConceptInfo(value, refType);
+		}
 		switch (eachKey.getType()) {
+		case CONCEPT_DESCRIPTION:
+		case GLOBAL_REFERENCE:
+		//TODO for fragent references we need to use the parent (min object in range element for example)
+		//case FRAGMENT_REFERENCE:
+			return new SemanticConceptInfo(value, refType);
 		case ASSET_ADMINISTRATION_SHELL:
 		case SUBMODEL:
-		case CONCEPT_DESCRIPTION:
+		case IDENTIFIABLE:
+		case REFERABLE:
 			return new IdentifiableReferenceInfo(type, value, refType);
 		default:
 			// a submodel element should have at least 2 key elements

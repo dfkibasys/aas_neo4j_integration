@@ -9,6 +9,7 @@ public interface PebbleSubmodelElement extends SubmodelElement, PebbleHasSemanti
 	
 	List<SubmodelElement> getChildren();
 	
+	
 	@Override
 	default void applyLabels(List<String> labels) {
 		PebbleReferable.super.applyLabels(labels);

@@ -28,4 +28,9 @@ public abstract class ReferableReferenceInfo extends ReferenceInfo {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	@Override
+	public boolean isSemantics() {
+		return false;
+	}
 }

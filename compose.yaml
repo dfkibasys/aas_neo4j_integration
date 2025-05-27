@@ -90,6 +90,8 @@ services:
       - 8081:8081
     environment:
       BASYX_FEATURE_KAFKA_ENABLED: true
+      # TODO update the basyx implementation so that we can also use a variable without submodelservice in it
+      BASYX_SUBMODELSERVICE_FEATURE_KAFKA_PRESERVATIONLEVEL: REMOVE_BLOB_VALUE
       SPRING_KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       BASYX_AASREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://aas-registry:8080
       BASYX_SUBMODELREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://submodel-registry:8080
@@ -110,7 +112,8 @@ services:
 #      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
 #      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
 
-      - ./kalzip/:/application/files/aasx/
+   #   - ./kalzip/:/application/files/aasx/
+      - ./lab/:/application/files/aasx/
 
 
     # - ./aasx/Semitrailer.aasx:/application/files/aasx/Semitrailer.aasx
@@ -169,7 +172,7 @@ services:
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"            
       CONNECT_LOG4J_LOGGERS: "org.eclipse.basyx.kafka.connect.neo4j=DEBUG,org.apache.kafka.connect=INFO,org.apache.kafka.connect.runtime=INFO,io.pebbletemplates.pebble=TRACE"    
       BASYX_AAS_REPO_URL: http://aas-environment:8081
-      BASYX_NEO4J_TARGET_URL: http://neo4j:7474/db/neo4j/tx/commit 
+      BASYX_NEO4J_TARGET_URL: http://neo4j:7474/db/neo4j/tx/commit
 #     BASYX_TEMPLATE_LOCATION: /home/appuser/templates
 #     BASYX_CREATE_INDEX_PATH: /etc/basyx/create-index-body.json
     networks:
@@ -185,3 +188,76 @@ services:
       # not realy needed but the user of this plugin can just update the templates and connect plugin and override the logik
       - ./kafka-connect/java/templates:/home/appuser/templates
       - ./kafka-connect/config/http-connector.json:/etc/kafka-connect/config/neo4j-connector.json
+      - ./kafka-connect/scripts/entrypoint.sh:/etc/basyx/entrypoint.sh
+
+      
+  portainer:
+    image: portainer/portainer-ce:${PORTAINER_VERSION}
+    container_name: portainer
+    restart: always
+    command: --admin-password-file=/run/secrets/portainer-admin-password
+    ports: 
+      - "8084:9000"
+    secrets:
+      - portainer-admin-password
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  akhq:
+    image: tchiotludo/akhq:${AKHQ_VERSION}
+    container_name: akhq
+    restart: always
+    ports:
+      - 8086:8080
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            docker-kafka-server:
+              properties:
+                bootstrap.servers: "kafka:9092"
+    depends_on:
+      - kafka
+    networks:
+      - kafka
+
+  aas-gui:
+    image: eclipsebasyx/aas-gui:${AAS_WEBUI_VERSION}
+    container_name: aas-gui
+    restart: always
+    ports:
+      - 8099:3000
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+      AAS_REGISTRY_PATH: http://localhost:8083
+      SUBMODEL_REGISTRY_PATH: http://localhost:8082
+      AAS_REPO_PATH: http://localhost:8081/shells
+      SUBMODEL_REPO_PATH: http://localhost:8081/submodels
+      CD_REPO_PATH: http://localhost:8081/concept-descriptions
+    networks:
+      - basyx
+    depends_on:
+      aas-registry:
+        condition: service_healthy
+      submodel-registry:
+        condition: service_healthy    
+      aas-environment:
+        condition: service_healthy
+
+  kafka-connect-ui:
+    container_name: kafka-connect-ui
+    image: landoop/kafka-connect-ui:0.9.7
+    restart: always
+    ports:
+      - "8094:8000"
+    environment:
+      CONNECT_URL: "http://kafka-connect:8083" 
+    networks:
+      - kafka-connect
+    depends_on:
+      kafka-connect:
+        condition: service_healthy
+
+secrets:
+  portainer-admin-password:
+    environment: PORTAINER_ADMIN_PASSWORD

@@ -9,9 +9,10 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 
 public class SubmodelElementInfo {
 
+	private SubmodelElementInfo parent;
 	private Integer parentPos;
 	private String idShortPath;
-	private PebbleSubmodelElement element;
+	private final PebbleSubmodelElement element;
 	private List<SubmodelElementInfo> children;
 
 	public SubmodelElementInfo(SubmodelElement element) {
@@ -56,13 +57,18 @@ public class SubmodelElementInfo {
 	public boolean getIsRootElement() {
 		return parentPos == null;
 	}
-
-	public void setParentPos(Integer parentPos) {
+	
+	public void setParent(SubmodelElementInfo parent, int parentPos) {
+		this.parent = parent;
 		this.parentPos = parentPos;
 	}
 
 	public Integer getParentPos() {
 		return parentPos;
+	}
+	
+	public SubmodelElementInfo getParent() {
+		return parent;
 	}
 
 	@Override
@@ -79,5 +85,6 @@ public class SubmodelElementInfo {
 	public List<String> getLabels() {
 		return element.getLabels();
 	}
+
 
 }

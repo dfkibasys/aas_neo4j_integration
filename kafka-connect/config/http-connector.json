@@ -13,9 +13,6 @@
 
     "errors.tolerance": "all",
     "errors.log.enable": true,
-    "errors.deadletterqueue.topic.name": "dlq-aas-events",
-    "errors.deadletterqueue.topic.replication.factor": "1",
-    "errors.deadletterqueue.context.headers.enable": "true",
 
     "target.url": "http://neo4j:7474/db/neo4j/tx/commit",
     "headers": "Content-Type:application/json",

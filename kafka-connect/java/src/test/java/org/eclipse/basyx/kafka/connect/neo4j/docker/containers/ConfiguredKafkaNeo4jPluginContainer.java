@@ -9,7 +9,6 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.ImageFromDockerfile;
-import org.testcontainers.kafka.ConfluentKafkaContainer;
 
 public class ConfiguredKafkaNeo4jPluginContainer extends GenericContainer<ConfiguredKafkaNeo4jPluginContainer> {
 

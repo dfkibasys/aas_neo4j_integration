@@ -3,7 +3,6 @@ package org.eclipse.basyx.kafka.connect.neo4j.docker;
 import java.util.List;
 
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAasEnvironmentContainer;
-import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAkhqContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredKafkaNeo4jPluginContainer;
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredNeo4jContainer;

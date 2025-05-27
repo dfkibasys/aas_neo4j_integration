@@ -7,38 +7,15 @@ statements:
     {% if sm.idShort -%}
     SET s.idShort = $submodel.idShort
     {%- endif %} 
-    
     {% if meta.sourceUrl -%}
     SET s.sourceUrl = $submodel.sourceUrl
-    {%- endif %}  
+    {%- endif %} 
     {% if meta.registrationTime -%}
     SET s.registrationTime = $submodel.registrationTime
     {%- endif %} 
-    {% for eachElem in smElems %} 
-    MERGE (e{{ loop.index }}:SubmodelElement {smId: $submodel.id, idShortPath: $sme_{{ loop.index }}.idShortPath })
-    SET e{{ loop.index }}{% for eachLabel in eachElem.labels %}:{{eachLabel}}{% endfor %} 
-    {% if eachElem.idShort -%}
-    SET e{{ loop.index }}.idShort = $sme_{{ loop.index }}.idShort
-    {%- endif %}
-    {%- if eachElem.value is not null %} 
-    SET e{{ loop.index }}.value = $sme_{{ loop.index }}.value
-    {%- endif %} 
-    {% endfor %}
-    {% for eachElem in smElems %}
-    {%- if eachElem.isRootElement %} 
-    MERGE (s)-[:HAS_ELEMENT]->(e{{loop.index}}) 
-    {%- else %} 
-    MERGE (e{{ eachElem.parentPos }})-[:HAS_ELEMENT]->(e{{loop.index}})
-    {%- endif %}
-    {% set outerLoopIndex = loop.index %}
-    {% for eachRef in eachElem.refs %} 
-    MERGE (re_{{outerLoopIndex}}_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { id: $sme_{{ outerLoopIndex }}.refs.r_{{ loop.index }}.id})
-    MERGE (e{{outerLoopIndex}}) -[:HAS_REFERENCE {type: $sme_{{ outerLoopIndex }}.refs.r_{{ loop.index }}.type} ]->(re_{{outerLoopIndex}}_{{ loop.index }}) 
-    {%- endfor %}  
-    {% endfor %}
     {% for eachRef in sm.refs %} 
     MERGE (r_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
-    MERGE (a) -[:HAS_REFERENCE {type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }}) 
+    MERGE (s) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }})     
     {%- endfor %} 
   parameters:
     submodel:
@@ -53,8 +30,48 @@ statements:
       {% if meta.registrationTime -%}
       registrationTime: {{ meta.registrationTime }}
       {%- endif %} 
-    {% for eachElem in smElems %} 
-    sme_{{ loop.index }}: 
+    {%- if sm.refs is not empty %} 
+    refs: 
+      {% for eachRef in sm.refs %} 
+      r_{{ loop.index }}:
+        id: "{{ eachRef.id }}"
+        {%- if eachRef.idShortPath is not null %} 
+        idShortPath: "{{ eachRef.idShortPath }}"
+        {%- endif %} 
+        {%- if eachRef.label is not null %} 
+        label: "{{ eachRef.label }}" 
+        {%- endif %} 
+        type: "{{ eachRef.refType }}" 
+      {%- endfor %} 
+    {% endif %}
+{% for eachElem in smElems %}      
+- statement: | 
+    MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+    SET e{% for eachLabel in eachElem.labels %}:{{eachLabel}}{% endfor %} 
+    {%- if eachElem.isRootElement %} 
+    MERGE (p:Submodel {id: $submodel.id })
+    {%- else %} 
+    MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+    {%- endif %} 
+    MERGE (p)-[:HAS_ELEMENT]->(e)
+    {%- if eachElem.idShort %} 
+    SET e.idShort = $sme.idShort
+    {%- endif %}
+    {%- if eachElem.value is not null %} 
+    SET e.value = $sme.value
+    {%- endif %} 
+    {% for eachRef in eachElem.refs %} 
+    MERGE (re_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
+    MERGE (e) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {type: $refs.r_{{ loop.index }}.type} ]->(re_{{ loop.index }}) 
+    {%- endfor %}  
+  parameters:
+    submodel:
+      id: "{{ sm.id }}"
+    {%- if eachElem.parent.idShortPath %} 
+    parent: 
+      idShortPath: "{{eachElem.parent.idShortPath}}" 
+    {%- endif %} 
+    sme:   
       {% if eachElem.idShort -%}
       idShort: "{{eachElem.idShort}}"
       {%- endif %} 
@@ -63,32 +80,17 @@ statements:
       value: "{{eachElem.value}}" 
       {%- endif %} 
       {%- if eachElem.refs is not empty %} 
-      refs: 
-        {%- for eachRef in eachElem.refs %} 
-        r_{{ loop.index }}:
-          id: "{{ eachRef.id }}"
-          {%- if eachRef.idShortPath is not null %} 
-          path: "{{ eachRef.idShortPath }}"
-          {%- endif %} 
-          {%- if eachRef.label is not null %} 
-          label: "{{ eachRef.label }}"
-          {%- endif %} 
-          type: "{{ eachRef.refType }}" 
-        {%- endfor %} 
-      {% endif %}
-    {% endfor %}
-    {%- if sm.refs is not empty %} 
     refs: 
-      {% for eachRef in sm.refs %} 
+      {%- for eachRef in eachElem.refs %} 
       r_{{ loop.index }}:
         id: "{{ eachRef.id }}"
         {%- if eachRef.idShortPath is not null %} 
-        path: "{{ eachRef.idShortPath }}"
+        idShortPath: "{{ eachRef.idShortPath }}"
         {%- endif %} 
         {%- if eachRef.label is not null %} 
-        label: "{{ eachRef.label }}" 
+        label: "{{ eachRef.label }}"
         {%- endif %} 
         type: "{{ eachRef.refType }}" 
       {%- endfor %} 
-    {% endif %}
-      
+  {% endif %}
+{%- endfor %}

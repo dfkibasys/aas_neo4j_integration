@@ -25,7 +25,7 @@ public interface PebbleModel {
 		applyRefs(refs);
 		return ReferenceInfos.sort(refs);
 	}
-
+	
 	void applyLabels(List<String> labels);
 	
 	void applyRefs(List<ReferenceInfo> refs);

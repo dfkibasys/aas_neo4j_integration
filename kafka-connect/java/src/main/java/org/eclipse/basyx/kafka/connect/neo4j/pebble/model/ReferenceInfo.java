@@ -13,5 +13,7 @@ public abstract class ReferenceInfo {
 	public String getRefType() {
 		return refType;
 	}
+	
+	public abstract boolean isSemantics();
 }
 

@@ -22,8 +22,9 @@ public class PebbleSubmodel extends DefaultSubmodel implements PebbleModel, Pebb
 
 	@Override
 	public void applyRefs(List<ReferenceInfo> refs) {
-		addAdministativeInformation(getAdministration(), refs);
 		PebbleIdentifiable.super.applyRefs(refs);		
+		PebbleHasSemantics.super.applyRefs(refs);
+		addAdministativeInformation(getAdministration(), refs);
 		PebbleHasDataSpecification.super.applyRefs(refs);
 	}
 

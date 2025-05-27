@@ -14,4 +14,6 @@ public class IdentifiableReferenceInfo extends ReferableReferenceInfo {
 	public String getId() {
 		return id;
 	}
+
+	
 }

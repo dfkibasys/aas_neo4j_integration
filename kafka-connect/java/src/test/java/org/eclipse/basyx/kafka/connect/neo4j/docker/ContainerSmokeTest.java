@@ -1,8 +1,5 @@
 package org.eclipse.basyx.kafka.connect.neo4j.docker;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.time.Duration;
 
 import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredAkhqContainer;
@@ -12,9 +9,6 @@ import org.eclipse.basyx.kafka.connect.neo4j.docker.containers.ConfiguredNeo4jCo
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.kafka.ConfluentKafkaContainer;
-import org.testcontainers.shaded.org.awaitility.Awaitility;
 
 public class ContainerSmokeTest {
 

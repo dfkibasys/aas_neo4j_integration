@@ -119,61 +119,154 @@ input:
 expected: | 
   statements:
   - statement: |
-      MERGE (s:Submodel { id: $submodel.id }) 
+      MERGE (s:Submodel { id: $submodel.id })
       SET s:Identifiable:Referable:Submodel
-      SET s.idShort = $submodel.idShort 
-      SET s.sourceUrl = $submodel.sourceUrl 
-      SET s.registrationTime = $submodel.registrationTime    
-      MERGE (e0:SubmodelElement {smId: $submodel.id, idShortPath: $sme_0.idShortPath })
-      SET e0:Referable:SubmodelElement:SubmodelElementCollection
-      SET e0.idShort = $sme_0.idShort
-      MERGE (e1:SubmodelElement {smId: $submodel.id, idShortPath: $sme_1.idShortPath })
-      SET e1:DataElement:MultiLanguageProperty:Referable:SubmodelElement
-      SET e1.idShort = $sme_1.idShort
-      MERGE (e2:SubmodelElement {smId: $submodel.id, idShortPath: $sme_2.idShortPath })
-      SET e2:DataElement:MultiLanguageProperty:Referable:SubmodelElement
-      SET e2.idShort = $sme_2.idShort
-      MERGE (e3:SubmodelElement {smId: $submodel.id, idShortPath: $sme_3.idShortPath })
-      SET e3:Referable:SubmodelElement:SubmodelElementCollection
-      SET e3.idShort = $sme_3.idShort
-      MERGE (e4:SubmodelElement {smId: $submodel.id, idShortPath: $sme_4.idShortPath })
-      SET e4:DataElement:Property:Referable:SubmodelElement
-      SET e4.idShort = $sme_4.idShort
-      SET e4.value = $sme_4.value
-      MERGE (e5:SubmodelElement {smId: $submodel.id, idShortPath: $sme_5.idShortPath })
-      SET e5:DataElement:Property:Referable:SubmodelElement
-      SET e5.idShort = $sme_5.idShort
-      SET e5.value = $sme_5.value
-           
-      MERGE (s)-[:HAS_ELEMENT]->(e0)
-      MERGE (e0)-[:HAS_ELEMENT]->(e1)
-      MERGE (e0)-[:HAS_ELEMENT]->(e2)
-      MERGE (e0)-[:HAS_ELEMENT]->(e3)
-      MERGE (e3)-[:HAS_ELEMENT]->(e4)
-      MERGE (e3)-[:HAS_ELEMENT]->(e5)
+      SET s.idShort = $submodel.idShort
+      SET s.sourceUrl = $submodel.sourceUrl
+      SET s.registrationTime = $submodel.registrationTime
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
-        idShort: "TimeSeries2" 
-        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE"  
+        idShort: "TimeSeries2"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE"
         registrationTime: 1730878783379
-      sme_0:  
-        idShort: "Metadata" 
-        idShortPath: "Metadata" 
-      sme_1: 
-        idShort: "Name" 
-        idShortPath: "Metadata.Name" 
-      sme_2: 
-        idShort: "Description" 
-        idShortPath: "Metadata.Description" 
-      sme_3: 
-        idShort: "Record" 
-        idShortPath: "Metadata.Record" 
-      sme_4: 
-        idShort: "Time" 
-        idShortPath: "Metadata.Record.Time" 
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:Referable:SubmodelElement:SubmodelElementCollection
+      MERGE (p:Submodel {id: $submodel.id })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      sme:
+        idShort: "Metadata"
+        idShortPath: "Metadata"
+      refs:
+        r_0:
+          id: "https://admin-shell.io/idta/TimeSeries/Metadata/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:MultiLanguageProperty:Referable:SubmodelElement
+      MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      parent:
+        idShortPath: "Metadata"
+      sme:
+        idShort: "Name"
+        idShortPath: "Metadata.Name"
+      refs:
+        r_0:
+          id: "https://admin-shell.io/idta/TimeSeries/Metadata/Name/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:MultiLanguageProperty:Referable:SubmodelElement
+      MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      parent:
+        idShortPath: "Metadata"
+      sme:
+        idShort: "Description"
+        idShortPath: "Metadata.Description"
+      refs:
+        r_0:
+          id: "https://admin-shell.io/idta/TimeSeries/Metadata/Description/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:Referable:SubmodelElement:SubmodelElementCollection
+      MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      parent:
+        idShortPath: "Metadata"
+      sme:
+        idShort: "Record"
+        idShortPath: "Metadata.Record"
+      refs:
+        r_0:
+          id: "https://admin-shell.io/idta/TimeSeries/Record/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      SET e.value = $sme.value
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_1:SemanticConcept  { id: $refs.r_1.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_1.type} ]->(re_1)
+      MERGE (re_2:SemanticConcept  { id: $refs.r_2.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_2.type} ]->(re_2)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      parent:
+        idShortPath: "Metadata.Record"
+      sme:
+        idShort: "Time"
+        idShortPath: "Metadata.Record.Time"
         value: "1730878780000"
-      sme_5: 
-        idShort: "HgStat" 
-        idShortPath: "Metadata.Record.HgStat" 
+      refs:
+        r_0:
+          id: "https://admin-shell.io/idta/TimeSeries/RelativePointInTime/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"
+        r_1:
+          id: "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
+          label: "SemanticConcept"
+          type: "semanticId"
+        r_2:
+          id: "https://admin-shell.io/SubmodelTemplates/AllowedIdShort/1/0"
+          label: "SemanticConcept"
+          type: "semanticId"
+  - statement: |
+      MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.idShort = $sme.idShort
+      SET e.value = $sme.value
+      MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
+      parent:
+        idShortPath: "Metadata.Record"
+      sme:
+        idShort: "HgStat"
+        idShortPath: "Metadata.Record.HgStat"
         value: ""
+      refs:
+        r_0:
+          id: "https://sample.com/AccelerationX/1/1"
+          label: "SemanticConcept"
+          type: "semanticId"

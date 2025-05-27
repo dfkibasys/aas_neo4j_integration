@@ -1,0 +1,39 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event: 
+    id: http://aas.dfki.de/ids/sm/6520_7132_1112_3075
+    type: SM_CREATED
+    submodel: 
+      modelType: Submodel
+      kind: Instance
+      semanticId:
+        keys:
+        - type: Submodel
+          value: https://www.hsu-hh.de/aut/aas/identification
+        type: ExternalReference
+      id: http://aas.dfki.de/ids/sm/6520_7132_1112_3075
+      idShort: Identification
+expected: | 
+  statements:
+  - statement: |
+      MERGE (s:Submodel { id: $submodel.id })
+      SET s:Identifiable:Referable:Submodel
+      SET s.idShort = $submodel.idShort
+      SET s.sourceUrl = $submodel.sourceUrl
+      SET s.registrationTime = $submodel.registrationTime
+      MERGE (r_0:SemanticConcept  { id: $refs.r_0.id})
+      MERGE (s) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(r_0)
+    parameters:
+      submodel:
+        id: "http://aas.dfki.de/ids/sm/6520_7132_1112_3075"
+        idShort: "Identification"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS82NTIwXzcxMzJfMTExMl8zMDc1"
+        registrationTime: 1730878783379
+      refs:
+        r_0:
+          id: "https://www.hsu-hh.de/aut/aas/identification"
+          label: "SemanticConcept"
+          type: "semanticId"

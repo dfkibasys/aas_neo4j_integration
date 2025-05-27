@@ -18,4 +18,8 @@ public class AssetReferenceInfo extends ReferenceInfo {
 		return "Asset";
 	}
 
+	@Override
+	public boolean isSemantics() {
+		return false;
+	}
 }
