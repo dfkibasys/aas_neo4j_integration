@@ -82,6 +82,19 @@ services:
       # - mongodb
       - kafka
 
+
+  aas-discovery:
+    image: eclipsebasyx/aas-discovery:${BASYX_V3_VERSION}
+    container_name: aas-discovery
+    restart: always
+    ports:
+      - "9100:8081"
+    environment:
+      BASYX_CORS_ALLOWED_ORIGINS: '*'
+      BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+    networks:
+      - basyx
+
   aas-environment:
     image: eclipsebasyx/aas-environment:${BASYX_V3_VERSION}
     container_name: aas-environment
@@ -90,8 +103,7 @@ services:
       - 8081:8081
     environment:
       BASYX_FEATURE_KAFKA_ENABLED: true
-      # TODO update the basyx implementation so that we can also use a variable without submodelservice in it
-      BASYX_SUBMODELSERVICE_FEATURE_KAFKA_PRESERVATIONLEVEL: REMOVE_BLOB_VALUE
+      BASYX_AASREPOSITORY_FEATURE_DISCOVERYINTEGRATION: http://aas-discovery:8081
       SPRING_KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       BASYX_AASREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://aas-registry:8080
       BASYX_SUBMODELREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://submodel-registry:8080
@@ -112,8 +124,8 @@ services:
 #      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
 #      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
 
-   #   - ./kalzip/:/application/files/aasx/
-      - ./lab/:/application/files/aasx/
+      - ./kalzip/:/application/files/aasx/
+   #   - ./lab/:/application/files/aasx/
 
 
     # - ./aasx/Semitrailer.aasx:/application/files/aasx/Semitrailer.aasx
@@ -171,7 +183,7 @@ services:
       CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"     
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"            
       CONNECT_LOG4J_LOGGERS: "org.eclipse.basyx.kafka.connect.neo4j=DEBUG,org.apache.kafka.connect=INFO,org.apache.kafka.connect.runtime=INFO,io.pebbletemplates.pebble=TRACE"    
-      BASYX_AAS_REPO_URL: http://aas-environment:8081
+      BASYX_AAS_REPO_URL: http://localhost:8081
       BASYX_NEO4J_TARGET_URL: http://neo4j:7474/db/neo4j/tx/commit
 #     BASYX_TEMPLATE_LOCATION: /home/appuser/templates
 #     BASYX_CREATE_INDEX_PATH: /etc/basyx/create-index-body.json
@@ -229,6 +241,7 @@ services:
       - 8099:3000
     environment:
       CHOKIDAR_USEPOLLING: "true"
+      AAS_DISCOVERY_PATH: http://localhost:9100
       AAS_REGISTRY_PATH: http://localhost:8083
       SUBMODEL_REGISTRY_PATH: http://localhost:8082
       AAS_REPO_PATH: http://localhost:8081/shells

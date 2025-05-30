@@ -136,6 +136,7 @@ expected: |
       MERGE (p:Submodel {id: $submodel.id })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -143,6 +144,7 @@ expected: |
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
       sme:
         idShort: "Metadata"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata
         idShortPath: "Metadata"
       refs:
         r_0:
@@ -155,6 +157,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -164,6 +167,7 @@ expected: |
         idShortPath: "Metadata"
       sme:
         idShort: "Name"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata.Name
         idShortPath: "Metadata.Name"
       refs:
         r_0:
@@ -176,6 +180,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -185,6 +190,7 @@ expected: |
         idShortPath: "Metadata"
       sme:
         idShort: "Description"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata.Description
         idShortPath: "Metadata.Description"
       refs:
         r_0:
@@ -197,6 +203,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -206,6 +213,7 @@ expected: |
         idShortPath: "Metadata"
       sme:
         idShort: "Record"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata.Record
         idShortPath: "Metadata.Record"
       refs:
         r_0:
@@ -218,6 +226,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
@@ -232,6 +241,7 @@ expected: |
         idShortPath: "Metadata.Record"
       sme:
         idShort: "Time"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata.Record.Time
         idShortPath: "Metadata.Record.Time"
         value: "1730878780000"
       refs:
@@ -253,6 +263,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
       MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
@@ -263,6 +274,7 @@ expected: |
         idShortPath: "Metadata.Record"
       sme:
         idShort: "HgStat"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hZG1pbi1zaGVsbC5pby9pZHRhL1RpbWVTZXJpZXMvMS8xXzE/submodel-elements/Metadata.Record.HgStat
         idShortPath: "Metadata.Record.HgStat"
         value: ""
       refs:

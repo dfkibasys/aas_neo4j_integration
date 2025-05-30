@@ -140,11 +140,13 @@ expected: |
       MERGE (p:Submodel {id: $submodel.id })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
       sme:
         idShort: "ProfileClip"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip
         idShortPath: "ProfileClip"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -152,6 +154,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:Entity  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
       MERGE (re_1:Entity  { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
@@ -163,16 +166,17 @@ expected: |
         idShortPath: "ProfileClip"
       sme:
         idShort: "Rel_65400080_E20_0"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0
         idShortPath: "ProfileClip.Rel_65400080_E20_0"
       refs:
         r_0:
           id: "http://aas.dfki.de/ids/sm/profile_types"
-          idShortPath: "KAL65.KAL65400.KAL65400080"
+          idShortPath: "KAL.KAL65.KAL65400.KAL65400080"
           label: "Entity"
           type: "first"
         r_1:
           id: "http://aas.dfki.de/ids/sm/clip_types"
-          idShortPath: "E.E20"
+          idShortPath: "Clip.E.E20"
           label: "Entity"
           type: "second"
   - statement: |
@@ -181,6 +185,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:Entity  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
       MERGE (re_1:Entity  { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
@@ -192,16 +197,17 @@ expected: |
         idShortPath: "ProfileClip"
       sme:
         idShort: "Rel_65400080_L120_0"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0
         idShortPath: "ProfileClip.Rel_65400080_L120_0"
       refs:
         r_0:
           id: "http://aas.dfki.de/ids/sm/profile_types"
-          idShortPath: "KAL65.KAL65400.KAL65400080"
+          idShortPath: "KAL.KAL65.KAL65400.KAL65400080"
           label: "Entity"
           type: "first"
         r_1:
           id: "http://aas.dfki.de/ids/sm/clip_types"
-          idShortPath: "L.L120"
+          idShortPath: "Clip.L.L120"
           label: "Entity"
           type: "second"
   - statement: |
@@ -210,6 +216,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -217,6 +224,7 @@ expected: |
         idShortPath: "ProfileClip"
       sme:
         idShort: "Rel_65400080_E20_0_Data"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0_Data
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -224,6 +232,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -231,6 +240,7 @@ expected: |
         idShortPath: "ProfileClip"
       sme:
         idShort: "Rel_65400080_L120_0_Data"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0_Data
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -238,6 +248,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SubmodelElementCollection  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -247,11 +258,12 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_E20_0"
       sme:
         idShort: "Data"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0.Data
         idShortPath: "ProfileClip.Rel_65400080_E20_0.Data"
       refs:
         r_0:
           id: "http://aas.dfki.de/ids/sm/product_relationships"
-          idShortPath: "Rel_65400080_E20_0_Data"
+          idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
           label: "SubmodelElementCollection"
           type: "value"
   - statement: |
@@ -260,6 +272,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SubmodelElementCollection  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
     parameters:
@@ -269,11 +282,12 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_L120_0"
       sme:
         idShort: "Data"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0.Data
         idShortPath: "ProfileClip.Rel_65400080_L120_0.Data"
       refs:
         r_0:
           id: "http://aas.dfki.de/ids/sm/product_relationships"
-          idShortPath: "Rel_65400080_L120_0_Data"
+          idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
           label: "SubmodelElementCollection"
           type: "value"
   - statement: |
@@ -282,6 +296,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -290,6 +305,7 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
       sme:
         idShort: "ReactionForce"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0_Data.ReactionForce
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data.ReactionForce"
         value: "4.15"
   - statement: |
@@ -298,6 +314,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -305,6 +322,7 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
       sme:
         idShort: "BendingMoment"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0_Data.BendingMoment
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data.BendingMoment"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -312,6 +330,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -320,6 +339,7 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
       sme:
         idShort: "ValidFrom"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_E20_0_Data.ValidFrom
         idShortPath: "ProfileClip.Rel_65400080_E20_0_Data.ValidFrom"
         value: "1970-01-01T00:00.00Z"
   - statement: |
@@ -328,6 +348,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -336,6 +357,7 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
       sme:
         idShort: "ReactionForce"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0_Data.ReactionForce
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data.ReactionForce"
         value: "4.65"
   - statement: |
@@ -344,6 +366,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -351,6 +374,7 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
       sme:
         idShort: "BendingMoment"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0_Data.BendingMoment
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data.BendingMoment"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -358,6 +382,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -366,5 +391,6 @@ expected: |
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
       sme:
         idShort: "ValidFrom"
+        sourceUrl: http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9wcm9kdWN0X3JlbGF0aW9uc2hpcHM/submodel-elements/ProfileClip.Rel_65400080_L120_0_Data.ValidFrom
         idShortPath: "ProfileClip.Rel_65400080_L120_0_Data.ValidFrom"
         value: "1970-01-01T00:00.00Z"

@@ -16,6 +16,9 @@ statements:
     {%- set assetInfo = aas.assetInformation -%} 
     {%- if assetInfo.globalAssetId is not null %} 
     MERGE (asset:Asset { id: $asset.globalAssetId })
+    {% if meta.sourceUrl -%}
+    SET asset.sourceUrl = $asset.sourceUrl
+    {%- endif %} 
     {%- endif %} 
     {%- if assetInfo.assetKind is not null %} 
     SET asset.assetKind = $asset.assetKind
@@ -43,8 +46,8 @@ statements:
       {% if aas.idShort %}idShort: "{{ aas.idShort }}"{% endif %} 
       {% if meta.sourceUrl -%}
       {% set idEncoded = aas.id | base64encode | replace({ '=': '' }) | urlencode -%} 
-      {% set url = meta.sourceUrl ~ "/shells/" ~ idEncoded -%}
-      sourceUrl: "{{ url }}" {% endif %} 
+      {% set sourceUrl = meta.sourceUrl ~ "/shells/" ~ idEncoded -%}
+      sourceUrl: "{{ sourceUrl }}" {% endif %} 
       {% if meta.registrationTime -%}
       registrationTime: {{ meta.registrationTime }}
       {%- endif -%} 
@@ -52,7 +55,10 @@ statements:
     {%- set assetInfo = aas.assetInformation %} 
     asset:
       globalAssetId: "{{ assetInfo.globalAssetId }}" 
-      {% if assetInfo.assetKind is not null -%}  
+      {% if meta.sourceUrl -%} 
+      sourceUrl: {{ sourceUrl ~ "/asset-information" }} 
+      {%- endif -%} 
+      {% if assetInfo.assetKind is not null %}  
       assetKind: "{{ assetInfo.assetKind | capitalize }}"
       {%- endif -%} 
       {%- if assetInfo.assetType %}  

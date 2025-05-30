@@ -81,7 +81,7 @@ create_and_post() {
 }
 
 JAR_FILE=/tmp/connect-plugins/knowledgegraph-connect-plugin.jar
-JAVA_CLASS="org.eclipse.basyx.kafka.connect.neo4j.Neo4jInitializingHttpBodyGenerator"
+JAVA_CLASS="de.dfki.cos.aas2graph.kafka.init.Neo4jInitializingHttpBodyGenerator"
 create_and_post "$JAR_FILE" "$JAVA_CLASS" "$BASYX_NEO4J_TARGET_URL"
 init_status=$?
 
@@ -108,7 +108,7 @@ done
 
 echo "Kafka Connect started, deploying connectors..."
 
-CONNECTOR_NAME="Neo4jSinkConnectorAasEvents"
+CONNECTOR_NAME="Kafka2Neo4jConnector"
 CONNECTOR_CONFIG_PATH="/etc/kafka-connect/config/neo4j-connector.json"
 CONNECTOR_URL="http://localhost:8083/connectors/$CONNECTOR_NAME/config"
 

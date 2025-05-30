@@ -46,11 +46,13 @@ expected: |
       MERGE (p:Submodel {id: $submodel.id })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "https://aas.example.org/sm/1"
       sme:
         idShort: "Col1"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1
         idShortPath: "Col1"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -58,6 +60,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "https://aas.example.org/sm/1"
@@ -65,12 +68,14 @@ expected: |
         idShortPath: "Col1"
       sme:
         idShort: "List1"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1
         idShortPath: "Col1.List1"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:Property:Referable:SubmodelElement
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -78,6 +83,7 @@ expected: |
       parent:
         idShortPath: "Col1.List1"
       sme:
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B0%5D
         idShortPath: "Col1.List1[0]"
         value: "P1"
   - statement: |
@@ -85,6 +91,7 @@ expected: |
       SET e:DataElement:Property:Referable:SubmodelElement
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -92,6 +99,7 @@ expected: |
       parent:
         idShortPath: "Col1.List1"
       sme:
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B1%5D
         idShortPath: "Col1.List1[1]"
         value: "P2"
   - statement: |
@@ -99,12 +107,14 @@ expected: |
       SET e:Referable:SubmodelElement:SubmodelElementCollection
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
+      SET e.sourceUrl = $sme.sourceUrl
     parameters:
       submodel:
         id: "https://aas.example.org/sm/1"
       parent:
         idShortPath: "Col1.List1"
       sme:
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B2%5D
         idShortPath: "Col1.List1[2]"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
@@ -112,6 +122,7 @@ expected: |
       MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
     parameters:
       submodel:
@@ -120,5 +131,6 @@ expected: |
         idShortPath: "Col1.List1[2]"
       sme:
         idShort: "P3"
+        sourceUrl: http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B2%5D.P3
         idShortPath: "Col1.List1[2].P3"
-        value: "P3"
+        value: "P3" 

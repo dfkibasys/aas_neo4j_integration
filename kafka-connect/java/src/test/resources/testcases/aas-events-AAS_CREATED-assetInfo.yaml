@@ -22,6 +22,7 @@ expected: |
       SET a.sourceUrl = $shell.sourceUrl
       SET a.registrationTime = $shell.registrationTime
       MERGE (asset:Asset { id: $asset.globalAssetId })
+      SET asset.sourceUrl = $asset.sourceUrl
       SET asset.assetKind = $asset.assetKind
       SET asset.assetType = $asset.assetType
       MERGE (a) -[:HAS_ASSET]->(asset)
@@ -33,6 +34,7 @@ expected: |
         registrationTime: 1730878783379
       asset:
         globalAssetId: "http://asset.twinficient.de/heater/mrk40-lab/C1/1/1"
+        sourceUrl: http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information
         assetKind: "Instance"
         assetType: "Heater"
       
