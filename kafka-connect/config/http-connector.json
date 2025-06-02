@@ -2,14 +2,14 @@
   "name": "Kafka2Neo4jConnector",
   "config": {
     "connector.class": "de.dfki.cos.aas2graph.kafka.Kafka2Neo4jConnector",
-    "tasks.max": "1",
+    "tasks.max": "5",
     "executor.threads": "1",
     "batch.size": "1",
     "topics": "aas-events,submodel-events",
-
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
-    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
     "value.converter.schemas.enable": "false",
+    
 
     "errors.tolerance": "all",
     "errors.log.enable": true,
@@ -17,7 +17,7 @@
     "target.url": "http://neo4j:7474/db/neo4j/tx/commit",
     "headers": "Content-Type:application/json",
     "retry.max.retries": "5",
-    "retry.backoff.ms": "2000",
+    "retry.backoff.ms": "1000",
     "http.connection.timeout.ms": "10000",
     "http.read.timeout.ms": "10000"
   }

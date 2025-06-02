@@ -1,0 +1,45 @@
+Desktop Windows PC 
+Processor: 12th Gen Intel(R) Core(TM) i7-12800HX   2.00 GHz
+ROM: 64,0 GB (63,7 GB verwendbar)
+
+Rancher Desktop with 
+
+Identification Submodel : 21 Sme
+Sigal Submodel: 47 Sme
+
+
+MongoDB and registry integration
+
+
+Deployment
+10000 Shells + submodel with Kafka-Streaming: 133 sec
+10000 Shells + submodel without Kafka-Streaming: 99 sec
+
+
+
+1:
+
+10:
+
+100:
+
+1000:
+
+10000:
+
+100000:
+
+1000000:
+
+
+Updating just one property value:
+
+1:
+
+10:
+
+100:
+
+10000:
+
+100000:

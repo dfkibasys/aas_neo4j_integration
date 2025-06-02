@@ -10,10 +10,40 @@ networks:
 
 services:
 
+########### Mongo ###################################################################
+
+  # mongo:
+  #   image: mongo:${MONGODB_VERSION}
+  #   hostname: mongo
+  #   container_name: mongo
+  #   # Provide mongo config
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: mongoAdmin
+  #     MONGO_INITDB_ROOT_PASSWORD: mongoPassword
+  #   # Set health checks to wait until mongo has started
+  #   healthcheck:
+  #     test: ["CMD", "mongosh", "mongodb://mongoAdmin:mongoPassword@localhost:27017/admin", "--eval", "db.adminCommand('ping')"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     start_period: 10s
+  #     retries: 5
+  #   # Maps tcp port to host
+  #   # ports:
+  #   #   - 27017:27017
+  #   volumes:
+  #     - ./mongodb/data:/data/db
+  #     # - mongo-data:/data/db
+  #   networks:
+  #     - basyx
+
+
+
+
 ########### Kafka ###################################################################
 
   kafka:
-    image: confluentinc/cp-kafka:7.8.1
+    image: confluentinc/cp-kafka:${KAFKA_VERSION}
     hostname: kafka
     container_name: kafka
     ports:
@@ -34,7 +64,7 @@ services:
       CLUSTER_ID: jmpccZs2RHaYUbZ-LgaIhQ
       KAFKA_LOG_DIRS: /var/lib/kafka/data
       KAFKA_MIN_INSYNC_REPLICAS: 1
-      KAFKA_NUM_PARTITIONS: 1
+      KAFKA_NUM_PARTITIONS: 10
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     healthcheck:
@@ -49,7 +79,10 @@ services:
 # ########### BASYX ###################################################################
 
   aas-registry:
-    image: eclipsebasyx/aas-registry-kafka-mem:${BASYX_V3_VERSION}
+    image: eclipsebasyx/aas-registry-log-mem:${BASYX_V3_VERSION}
+
+   # image: eclipsebasyx/aas-registry-log-mongodb:${BASYX_V3_VERSION}
+
     container_name: aas-registry
     restart: always
     ports:
@@ -58,15 +91,22 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       BASYX_CORS_ALLOWED_ORIGINS: '*'
       BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
+      # mongo:
+      #   condition: service_healthy
+
     networks:
       - basyx
       # - mongodb
       - kafka
 
   submodel-registry:
-    image:  eclipsebasyx/submodel-registry-kafka-mem:${BASYX_V3_VERSION}
+    image:  eclipsebasyx/submodel-registry-log-mem:${BASYX_V3_VERSION}
+    #image: eclipsebasyx/submodel-registry-log-mongodb:${BASYX_V3_VERSION}
     container_name: submodel-registry
     restart: always
     ports:
@@ -75,8 +115,12 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       BASYX_CORS_ALLOWED_ORIGINS: '*'
       BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
+      # mongo:
+      #   condition: service_healthy
     networks:
       - basyx
       # - mongodb
@@ -103,16 +147,29 @@ services:
       - 8081:8081
     environment:
       BASYX_FEATURE_KAFKA_ENABLED: true
-      BASYX_AASREPOSITORY_FEATURE_DISCOVERYINTEGRATION: http://aas-discovery:8081
+    #  BASYX_AASREPOSITORY_FEATURE_DISCOVERYINTEGRATION: http://aas-discovery:8081
       SPRING_KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
       BASYX_AASREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://aas-registry:8080
-      BASYX_SUBMODELREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://submodel-registry:8080
+    #  BASYX_SUBMODELREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://submodel-registry:8080
       BASYX_AASREPOSITORY_FEATURE_AASXUPLOAD_ENABLED: "true"   
       BASYX_CORS_ALLOWED_ORIGINS: '*'
       BASYX_ENVIRONMENT: file:/application/files/aasx/
       BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
       BASYX_EXTERNALURL: http://localhost:8081,http://aas-environment:8081
+
+
+      #BASYX_BACKEND: MongoDB
+      # SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+      # SPRING_DATA_MONGODB_DATABASE: aas-env
+
+
     volumes: 
+      - ./aasx/mir100_10000000_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
+      - ./aasx/mir100_10000001_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
+      - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
+      - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
+      - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
+      - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
       # AASX
 #      - ./aasx:/application/files/aasx
 #      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
@@ -124,8 +181,8 @@ services:
 #      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
 #      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
 
-      - ./kalzip/:/application/files/aasx/
-   #   - ./lab/:/application/files/aasx/
+    #  - ./kalzip/:/application/files/aasx/
+    #- ./lab/:/application/files/aasx/
 
 
     # - ./aasx/Semitrailer.aasx:/application/files/aasx/Semitrailer.aasx
@@ -145,9 +202,10 @@ services:
         condition: service_healthy
       submodel-registry:
         condition: service_healthy
+      # mongo:
+      #   condition: service_healthy
     networks:
       - basyx
-      # - mongodb
       - kafka
 
 ########### Neo4j ###################################################################
@@ -180,13 +238,19 @@ services:
     ports:
       - "8085:8083"
     environment: 
+      # CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "de.dfki.cos.aas2graph.kafka.PollLatencyInterceptor"
       CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"     
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"            
-      CONNECT_LOG4J_LOGGERS: "org.eclipse.basyx.kafka.connect.neo4j=DEBUG,org.apache.kafka.connect=INFO,org.apache.kafka.connect.runtime=INFO,io.pebbletemplates.pebble=TRACE"    
+      CONNECT_LOG4J_LOGGERS: "de.dfki.cos=INFO,org.apache.kafka.connect=ERROR,org.apache.kafka.connect.runtime=WARN,io.pebbletemplates.pebble=ERROR"    
       BASYX_AAS_REPO_URL: http://localhost:8081
       BASYX_NEO4J_TARGET_URL: http://neo4j:7474/db/neo4j/tx/commit
 #     BASYX_TEMPLATE_LOCATION: /home/appuser/templates
 #     BASYX_CREATE_INDEX_PATH: /etc/basyx/create-index-body.json
+
+      CONNECT_CONSUMER_POLL_INTERVAL_MS: "100"
+      CONNECT_CONSUMER_FETCH_MAX_WAIT_MS: "50"
+      CONNECT_CONSUMER_FETCH_MIN_BYTES: "1"
+      CONNECT_CONSUMER_MAX_POLL_RECORDS: "500"
     networks:
       - neo4j
       - kafka
@@ -201,6 +265,8 @@ services:
       - ./kafka-connect/java/templates:/home/appuser/templates
       - ./kafka-connect/config/http-connector.json:/etc/kafka-connect/config/neo4j-connector.json
       - ./kafka-connect/scripts/entrypoint.sh:/etc/basyx/entrypoint.sh
+      # - ./kafka-connect/config/connect-distributed.properties:/etc/kafka/connect-distributed.properties
+      - ./kafka-connect/config/worker.properties:/etc/kafka/worker.properties
 
       
   portainer:

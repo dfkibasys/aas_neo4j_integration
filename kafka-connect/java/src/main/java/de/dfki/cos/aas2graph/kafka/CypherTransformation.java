@@ -10,6 +10,9 @@ import org.apache.kafka.connect.transforms.Transformation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import de.dfki.cos.aas2graph.kafka.events.Event;
 import de.dfki.cos.aas2graph.kafka.pebble.HttpRequestBodyGenerator;
 import de.dfki.cos.aas2graph.kafka.pebble.PebbleContext;
@@ -20,34 +23,27 @@ import de.dfki.cos.aas2graph.kafka.util.YamlJsonConverter;
 
 public class CypherTransformation<R extends ConnectRecord<R>> implements Transformation<R> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CypherTransformation.class);
-
 	private final HttpRequestBodyGenerator generator = new HttpRequestBodyGenerator();
 
 	private final YamlJsonConverter converter = new YamlJsonConverter();
 
 	@Override
 	public R apply(R record) {
-		LOG.info("Transform record. ");
-		PebbleContext context = context(record);
 		try {
-			LOG.info(context.toString());
+			PebbleContext context = context(record);
 			String bodyYaml = generator.generateYamlFromMessage(context);
-			LOG.info(bodyYaml);
 			String requestBody = converter.yamlToJson(bodyYaml);
-			LOG.error(requestBody.toString());
 			return record.newRecord(record.topic(), record.kafkaPartition(), record.keySchema(), record.key(), Schema.STRING_SCHEMA, requestBody, record.timestamp());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private PebbleContext context(R record) {
-		Map<String, Object> eventMap = (Map<String, Object>) record.value();
+	private PebbleContext context(R record) throws JsonMappingException, JsonProcessingException {
+		String sEvent = (String) record.value();
 
 		PebbleContextMeta meta = metaData(record);
-		Event event = AasIo.jsonMapper().convertValue(eventMap, Event.class);
+		Event event = AasIo.jsonMapper().readValue(sEvent, Event.class);
 		return new PebbleContext(event, meta);
 	}
 

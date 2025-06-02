@@ -3,10 +3,15 @@ package de.dfki.cos.aas2graph.kafka;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
@@ -19,8 +24,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.dfki.cos.aas2graph.kafka.util.AasIo;
 
-public class  Kafka2Neo4jSinkTask extends SinkTask {
+public class Kafka2Neo4jSinkTask extends SinkTask {
 
+	private final HttpClient client = HttpClient.newHttpClient();
 	private static final Logger log = LoggerFactory.getLogger(Kafka2Neo4jSinkTask.class);
 
 	private String targetUrl;
@@ -50,45 +56,48 @@ public class  Kafka2Neo4jSinkTask extends SinkTask {
 
 	@Override
 	public void put(Collection<SinkRecord> records) {
-		for (SinkRecord record : records) {
-			writeRecord(record);
+		if (records.isEmpty()) {
+			return;
 		}
+		
+		
+	//	long startTransformation = System.nanoTime();
+		for (SinkRecord r : records) {
+			long startTime = System.nanoTime();
+			long afterTrans = writeRecord(r);
+			long now = System.nanoTime();
+			
+			long transTime = (afterTrans - startTime) / 1_000_000;
+			long httpTime = (now - afterTrans) / 1_000_000;
+			long total = (now - startTime) / 1_000_000;
+			
+			log.info("EVAL-RECORD-{}-transformation{}ms-httpCypher{}-total-{}",  r.topic(), transTime, httpTime, total);
+		}
+	//	long endTransformation = System.nanoTime();
+	//	log.info("EVAL-ALL-RECORDS-{}-{}ms", records.size(), (endTransformation - startTransformation)  / 1_000_000);
 	}
 
-	private void writeRecord(SinkRecord record) {
+	private long writeRecord(SinkRecord record) {
+		
 		String payload = (String) transformation.apply(record).value();
+		long afterTrans = System.nanoTime();
 		boolean success = false;
 		int status = -1;
 		String responseBody = null;
+		
+		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(targetUrl));
+		for (Entry<String, String> eachHeader : headers.entrySet()) {
+			builder.header(eachHeader.getKey(), eachHeader.getValue());
+		}
+		HttpRequest request = builder.POST(HttpRequest.BodyPublishers.ofString(payload)).build();
+		
 		for (int attempt = 1; attempt <= maxRetries; attempt++) {
-			HttpURLConnection conn = null;
-
+			
 			try {
-				log.debug("Sending record to {} (attempt {})", targetUrl, attempt);
-				conn = (HttpURLConnection) new URL(targetUrl).openConnection();
-				conn.setRequestMethod("POST");
-				conn.setConnectTimeout(connectTimeoutMs);
-				conn.setReadTimeout(readTimeoutMs);
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-
-				for (Map.Entry<String, String> entry : headers.entrySet()) {
-					conn.setRequestProperty(entry.getKey(), entry.getValue());
-				}
-
-				try (OutputStream os = conn.getOutputStream()) {
-					byte[] input = payload.getBytes(StandardCharsets.UTF_8);
-					os.write(input);
-				}
-
-				status = conn.getResponseCode();
-
-				try (InputStream is = conn.getInputStream()) {
-					responseBody = new String(is.readAllBytes(), StandardCharsets.UTF_8);
-				}
-
+				HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+				
 				ObjectMapper mapper = AasIo.jsonMapper();
-				JsonNode root = mapper.readTree(responseBody);
+				JsonNode root = mapper.readTree(response.body());
 				JsonNode errors = root.path("errors");
 
 				if (errors.isArray() && errors.size() > 0) {
@@ -96,16 +105,12 @@ public class  Kafka2Neo4jSinkTask extends SinkTask {
 					throw new ConnectException("Neo4j rejected the query: " + errors.toString());
 				}
 
-				log.info("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status , responseBody);
+				log.debug("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
 				success = true;
 				break;
 
 			} catch (Exception e) {
 				log.error("Error while sending record (attempt {}): {}", attempt, e.getMessage(), e);
-			} finally {
-				if (conn != null) {
-					conn.disconnect();
-				}
 			}
 
 			try {
@@ -116,10 +121,12 @@ public class  Kafka2Neo4jSinkTask extends SinkTask {
 			}
 		}
 
+		
 		if (!success) {
-			log.info("HttpResponse: Failed to send record! statusCode={} statusMessage='Success' responseBody='{}' ", status , responseBody);
+			log.error("HttpResponse: Failed to send record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
 			throw new ConnectException("Failed to send record after " + maxRetries + " attempts.");
 		}
+		return afterTrans;
 	}
 
 	@Override

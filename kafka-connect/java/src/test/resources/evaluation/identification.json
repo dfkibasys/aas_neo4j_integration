@@ -1,0 +1,327 @@
+{
+	"modelType": "Submodel",
+	"kind": "Instance",
+	"semanticId": {
+		"keys": [
+			{
+				"type": "Submodel",
+				"value": "https://www.hsu-hh.de/aut/aas/identification"
+			}
+		],
+		"type": "ExternalReference"
+	},
+	"id": "http://aas.dfki.de/ids/sm/identification_%i%",
+	"idShort": "Identification",
+	"submodelElements": [
+		{
+			"modelType": "Property",
+			"value": "http://aas.dfki.de/ids/cd/type_mir100",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "AssetType"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAO677#002"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "Mobile Industrial Robots",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerName"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAY812#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerId"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAO676#003"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "MiR193",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerProductId"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAW338#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "MiR100",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerProductDesignation"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAU734#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerProductDescription"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAO607#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "00200073",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ProductNumber"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAU731#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerProductFamily"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/4135_0272_7091_2192"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "eclass",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ClassificationSystem"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAR972#002"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturingDate"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/4370_5082_7091_1975"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "DeviceRevision"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAS383#003"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "%version%",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "SoftwareRevision"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/3401_5082_7091_6886"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "HardwareRevision"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAO694#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "URL"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAW338#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "MiR100",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ManufacturerTypName"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAO735#003"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "MiR",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "SupplierName"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAU731#001"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "TUGGER_MOUSE",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "TypClass"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/4135_0272_7091_2192"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "eclass",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "ClassificationSystem"
+		},
+		{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/9544_4082_7091_8596"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": "MiR100_DFKI_%i%",
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "InstanceId"
+		},
+		{
+			"modelType": "File",
+			"contentType": "image/png",
+			"value": "/tmp/basyx-temp4434824516675448476/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS83MDI0XzExMTBfNjAxMl83NzQ2-TypeThumbnail-mir100.png",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "www.company.com/ids/cd/4401_1272_7091_3437"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"category": "PARAMETER",
+			"idShort": "TypeThumbnail"
+		},
+		{
+			"modelType": "File",
+			"contentType": "application/pdf",
+			"value": "http://www.mobile-industrial-robots.com/media/2947/mir100_specs_eng_corrected.pdf",
+			"idShort": "Documentation"
+		}
+	]
+}

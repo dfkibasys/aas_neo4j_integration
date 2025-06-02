@@ -1,7 +1,0 @@
-statements:
-# it's already handled by the constrant on the submodel id, because neo4j creates indexes for constraints
-  # see https://neo4j.com/docs/cypher-manual/current/indexes/search-performance-indexes/managing-indexes/
- # - statement: "CREATE INDEX node_range_index_aas_id IF NOT EXISTS FOR (a:AssetAdministrationShell) ON (a.id)"
-#  - statement: "CREATE INDEX node_range_index_sm_id IF NOT EXISTS FOR (s:Submodel) ON (s.id)"
-  - statement: "CREATE INDEX node_range_index_sme_id IF NOT EXISTS FOR (se:SubmodelElement) ON (se.id)"
-  #- statement: "CREATE INDEX composite_node_range_index_sme_id_and_path IF NOT EXISTS FOR (se:SubmodelElement) ON (se.id, se.idShortPath)"

@@ -1,0 +1,814 @@
+{
+	"modelType": "Submodel",
+	"kind": "Instance",
+	"semanticId": {
+		"keys": [
+			{
+				"type": "ConceptDescription",
+				"value": "http://aas.dfki.de/ids/cd/sm_signals"
+			}
+		],
+		"type": "ModelReference"
+	},
+	"id": "http://aas.dfki.de/ids/sm/signals_%i%",
+	"idShort": "Signals",
+	"submodelElements": [
+		{
+			"modelType": "SubmodelElementCollection",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "http://aas.dfki.de/ids/cd/2321_2190_7012_5123"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"category": "VARIABLE",
+			"idShort": "MessageBrokerSet",
+			"value": [
+				{
+					"modelType": "SubmodelElementCollection",
+					"semanticId": {
+						"keys": [
+							{
+								"type": "GlobalReference",
+								"value": "http://aas.dfki.de/ids/cd/0421_2190_7012_5225"
+							}
+						],
+						"type": "ExternalReference"
+					},
+					"category": "PARAMETER",
+					"idShort": "MessageBroker01",
+					"value": [
+						{
+							"modelType": "Property",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/3421_2190_7012_5331"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"value": "kafka",
+							"valueType": "xs:string",
+							"category": "PARAMETER",
+							"idShort": "Type"
+						},
+						{
+							"modelType": "Property",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5421_2190_7012_2397"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"value": "kafka.mrk40.dfki.lan:9092",
+							"valueType": "xs:string",
+							"category": "PARAMETER",
+							"idShort": "ConnectionString"
+						}
+					]
+				}
+			]
+		},
+		{
+			"modelType": "SubmodelElementCollection",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "http://aas.dfki.de/ids/cd/3331_2190_7012_2120"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"category": "PARAMETER",
+			"idShort": "SignalSet",
+			"value": [
+				{
+					"modelType": "SubmodelElementCollection",
+					"semanticId": {
+						"keys": [
+							{
+								"type": "GlobalReference",
+								"value": "http://aas.dfki.de/ids/cd/9331_2190_7012_7489"
+							}
+						],
+						"type": "ExternalReference"
+					},
+					"category": "PARAMETER",
+					"idShort": "Path",
+					"value": [
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5431_2190_7012_2159"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataAcquisition",
+							"value": [
+								{
+									"modelType": "Property",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/0531_2190_7012_7807"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"value": "30",
+									"valueType": "xs:string",
+									"category": "PARAMETER",
+									"idShort": "SamplingRate"
+								}
+							]
+						},
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5041_2190_7012_4596"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataProvisionings",
+							"value": [
+								{
+									"modelType": "SubmodelElementCollection",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/2141_2190_7012_7300"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"category": "PARAMETER",
+									"idShort": "DataProvisioning01",
+									"value": [
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/8141_2190_7012_2892"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "true",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "Active"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/3335_3190_7012_9214"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "30",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "ProvisioningRate"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/4441_2190_7012_1255"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": " first",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "AggregationMode"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0541_2190_7012_4414"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "mirpathstamped.mir100-1",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "MessageTopic"
+										},
+										{
+											"modelType": "SubmodelElementCollection",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0214_3190_7012_5569"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "SchemaDescription",
+											"value": [
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/3421_2190_7012_5331"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "avro",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "Type"
+												},
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/1444_3190_7012_8793"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "http://kafka.mrk40.dfki.lan:8081",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "SchemaLocation"
+												},
+												{
+													"modelType": "File",
+													"contentType": "application/json",
+													"value": "/tmp/basyx-temp9425532720688966719/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS8yNTEzXzAxNTJfODAyMl8xODU0-SignalSet.Path.DataProvisionings.DataProvisioning01.SchemaDescription.SchemaFile-PathStamped.avsc",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/8544_3190_7012_1916"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"category": "PARAMETER",
+													"idShort": "SchemaFile"
+												}
+											]
+										},
+										{
+											"modelType": "ReferenceElement",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/1245_3190_7012_0127"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "MessageBrokerReference",
+											"value": {
+												"keys": [
+													{
+														"type": "Submodel",
+														"value": "http://aas.dfki.de/ids/sm/2513_0152_8022_1854"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBrokerSet"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBroker01"
+													}
+												],
+												"type": "ModelReference"
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"modelType": "SubmodelElementCollection",
+					"semanticId": {
+						"keys": [
+							{
+								"type": "GlobalReference",
+								"value": "http://aas.dfki.de/ids/cd/9331_2190_7012_7489"
+							}
+						],
+						"type": "ExternalReference"
+					},
+					"category": "PARAMETER",
+					"idShort": "Pose",
+					"value": [
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5431_2190_7012_2159"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataAcquisition",
+							"value": [
+								{
+									"modelType": "Property",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/0531_2190_7012_7807"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"value": "30",
+									"valueType": "xs:string",
+									"category": "PARAMETER",
+									"idShort": "SamplingRate"
+								}
+							]
+						},
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5041_2190_7012_4596"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataProvisionings",
+							"value": [
+								{
+									"modelType": "SubmodelElementCollection",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/2141_2190_7012_7300"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"category": "PARAMETER",
+									"idShort": "DataProvisioning01",
+									"value": [
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/8141_2190_7012_2892"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "true",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "Active"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/3335_3190_7012_9214"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "30",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "ProvisioningRate"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/4441_2190_7012_1255"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": " first",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "AggregationMode"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0541_2190_7012_4414"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "mirposestamped.mir100-1",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "MessageTopic"
+										},
+										{
+											"modelType": "SubmodelElementCollection",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0214_3190_7012_5569"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "SchemaDescription",
+											"value": [
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/3421_2190_7012_5331"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "avro",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "Type"
+												},
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/1444_3190_7012_8793"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "http://kafka.mrk40.dfki.lan:8081",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "SchemaLocation"
+												},
+												{
+													"modelType": "File",
+													"contentType": "application/json",
+													"value": "/tmp/basyx-temp9425532720688966719/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS8yNTEzXzAxNTJfODAyMl8xODU0-SignalSet.Pose.DataProvisionings.DataProvisioning01.SchemaDescription.SchemaFile-MiRPoseStamped.avsc",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/8544_3190_7012_1916"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"category": "PARAMETER",
+													"idShort": "SchemaFile"
+												}
+											]
+										},
+										{
+											"modelType": "ReferenceElement",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/1245_3190_7012_0127"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "MessageBrokerReference",
+											"value": {
+												"keys": [
+													{
+														"type": "Submodel",
+														"value": "http://aas.dfki.de/ids/sm/2513_0152_8022_1854"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBrokerSet"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBroker01"
+													}
+												],
+												"type": "ModelReference"
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"modelType": "SubmodelElementCollection",
+					"semanticId": {
+						"keys": [
+							{
+								"type": "GlobalReference",
+								"value": "http://aas.dfki.de/ids/cd/9331_2190_7012_7489"
+							}
+						],
+						"type": "ExternalReference"
+					},
+					"category": "PARAMETER",
+					"idShort": "Status",
+					"value": [
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5431_2190_7012_2159"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataAcquisition",
+							"value": [
+								{
+									"modelType": "Property",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/0531_2190_7012_7807"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"value": "30",
+									"valueType": "xs:string",
+									"category": "PARAMETER",
+									"idShort": "SamplingRate"
+								}
+							]
+						},
+						{
+							"modelType": "SubmodelElementCollection",
+							"semanticId": {
+								"keys": [
+									{
+										"type": "GlobalReference",
+										"value": "http://aas.dfki.de/ids/cd/5041_2190_7012_4596"
+									}
+								],
+								"type": "ExternalReference"
+							},
+							"category": "PARAMETER",
+							"idShort": "DataProvisionings",
+							"value": [
+								{
+									"modelType": "SubmodelElementCollection",
+									"semanticId": {
+										"keys": [
+											{
+												"type": "GlobalReference",
+												"value": "http://aas.dfki.de/ids/cd/2141_2190_7012_7300"
+											}
+										],
+										"type": "ExternalReference"
+									},
+									"category": "PARAMETER",
+									"idShort": "DataProvisioning01",
+									"value": [
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/8141_2190_7012_2892"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "true",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "Active"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/3335_3190_7012_9214"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "30",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "ProvisioningRate"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/4441_2190_7012_1255"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": " first",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "AggregationMode"
+										},
+										{
+											"modelType": "Property",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0541_2190_7012_4414"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"value": "mirstatusstamped.mir100-1",
+											"valueType": "xs:string",
+											"category": "PARAMETER",
+											"idShort": "MessageTopic"
+										},
+										{
+											"modelType": "SubmodelElementCollection",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/0214_3190_7012_5569"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "SchemaDescription",
+											"value": [
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/3421_2190_7012_5331"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "avro",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "Type"
+												},
+												{
+													"modelType": "Property",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/1444_3190_7012_8793"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"value": "http://kafka.mrk40.dfki.lan:8081",
+													"valueType": "xs:string",
+													"category": "PARAMETER",
+													"idShort": "SchemaLocation"
+												},
+												{
+													"modelType": "File",
+													"contentType": "application/json",
+													"value": "/tmp/basyx-temp9425532720688966719/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS8yNTEzXzAxNTJfODAyMl8xODU0-SignalSet.Status.DataProvisionings.DataProvisioning01.SchemaDescription.SchemaFile-MiRStatusStamped.avsc",
+													"semanticId": {
+														"keys": [
+															{
+																"type": "GlobalReference",
+																"value": "http://aas.dfki.de/ids/cd/8544_3190_7012_1916"
+															}
+														],
+														"type": "ExternalReference"
+													},
+													"category": "PARAMETER",
+													"idShort": "SchemaFile"
+												}
+											]
+										},
+										{
+											"modelType": "ReferenceElement",
+											"semanticId": {
+												"keys": [
+													{
+														"type": "GlobalReference",
+														"value": "http://aas.dfki.de/ids/cd/1245_3190_7012_0127"
+													}
+												],
+												"type": "ExternalReference"
+											},
+											"category": "PARAMETER",
+											"idShort": "MessageBrokerReference",
+											"value": {
+												"keys": [
+													{
+														"type": "Submodel",
+														"value": "http://aas.dfki.de/ids/sm/2513_0152_8022_1854"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBrokerSet"
+													},
+													{
+														"type": "SubmodelElementCollection",
+														"value": "MessageBroker01"
+													}
+												],
+												"type": "ModelReference"
+											}
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

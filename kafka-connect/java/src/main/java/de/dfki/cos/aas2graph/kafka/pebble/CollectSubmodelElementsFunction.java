@@ -42,7 +42,6 @@ class CollectSubmodelElementsFunction implements Function {
 			int parentPos = toReturn.size() - 1;
 			toProcess.addAll(getChildren(inputElem, toReturn.get(parentPos), parentPos));
 		}
-		toReturn.stream().map(SubmodelElementInfo::getIdShortPath).forEach(System.out::println);
 		return toReturn;
 	}
 

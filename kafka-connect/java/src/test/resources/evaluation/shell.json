@@ -1,0 +1,49 @@
+{
+	"modelType": "AssetAdministrationShell",
+	"assetInformation": {
+		"assetKind": "Instance",
+		"assetType": "http://aas.dfki.de/ids/asset/mir100_type",
+		"globalAssetId": "http://aas.dfki.de/ids/asset/mir100_%i%"
+	},
+	"derivedFrom": {
+		"keys": [
+			{
+				"type": "AssetAdministrationShell",
+				"value": "http://aas.dfki.de/ids/aas/mir100_type"
+			}
+		],
+		"type": "ModelReference"
+	},
+	"submodels": [
+		{
+			"keys": [
+				{
+					"type": "Submodel",
+					"value": "http://aas.dfki.de/ids/sm/identification_%i%"
+				}
+			],
+			"type": "ModelReference"
+		},
+		{
+			"keys": [
+				{
+					"type": "Submodel",
+					"value": "http://aas.dfki.de/ids/sm/signals_%i%"
+				}
+			],
+			"type": "ModelReference"
+		}
+	],
+	"administration": {
+		"revision": "0",
+		"version": "1"
+	},
+	"id": "http://aas.dfki.de/ids/aas/evaluation/mir100_%i%",
+	"displayName": [
+		{
+			"language": "en",
+			"text": "MiR100-%i%"
+		}
+	],
+	"idShort": "mir100_%i%_aas"
+}
