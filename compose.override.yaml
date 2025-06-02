@@ -37,13 +37,12 @@ services:
       - 8099:3000
     environment:
       CHOKIDAR_USEPOLLING: "true"
+      AAS_DISCOVERY_PATH: http://localhost:9100
       AAS_REGISTRY_PATH: http://localhost:8083
       SUBMODEL_REGISTRY_PATH: http://localhost:8082
       AAS_REPO_PATH: http://localhost:8081/shells
       SUBMODEL_REPO_PATH: http://localhost:8081/submodels
       CD_REPO_PATH: http://localhost:8081/concept-descriptions
-    networks:
-      - basyx
     depends_on:
       aas-registry:
         condition: service_healthy
@@ -65,6 +64,8 @@ services:
   #   depends_on:
   #     kafka-connect:
   #       condition: service_healthy
+
+  
 
 secrets:
   portainer-admin-password:
