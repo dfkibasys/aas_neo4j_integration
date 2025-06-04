@@ -9,6 +9,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -52,6 +53,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 		this.backoffMs = Long.parseLong(props.getOrDefault(Kafka2Neo4jConnectorConfig.RETRY_BACKOFF_MS, "1000"));
 		this.connectTimeoutMs = Integer.parseInt(props.getOrDefault(Kafka2Neo4jConnectorConfig.CONNECT_TIMEOUT_MS, "10000"));
 		this.readTimeoutMs = Integer.parseInt(props.getOrDefault(Kafka2Neo4jConnectorConfig.READ_TIMEOUT_MS, "10000"));
+		
 	}
 
 	@Override
@@ -66,12 +68,13 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			long startTime = System.nanoTime();
 			long afterTrans = writeRecord(r);
 			long now = System.nanoTime();
-			
+			long fromIns = System.currentTimeMillis() - r.timestamp();
 			long transTime = (afterTrans - startTime) / 1_000_000;
 			long httpTime = (now - afterTrans) / 1_000_000;
 			long total = (now - startTime) / 1_000_000;
 			
-			log.info("EVAL-RECORD-{}-transformation{}ms-httpCypher{}-total-{}",  r.topic(), transTime, httpTime, total);
+			
+			log.info("EVAL-RECORD-{}-{}-transformation{}ms-httpCypher{}-total{}-sinceInsertion{}",  r.topic(), r.key(), transTime, httpTime, total, fromIns);
 		}
 	//	long endTransformation = System.nanoTime();
 	//	log.info("EVAL-ALL-RECORDS-{}-{}ms", records.size(), (endTransformation - startTransformation)  / 1_000_000);
@@ -80,6 +83,8 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 	private long writeRecord(SinkRecord record) {
 		
 		String payload = (String) transformation.apply(record).value();
+	//	log.info("PAYLOAD {}", payload);
+		
 		long afterTrans = System.nanoTime();
 		boolean success = false;
 		int status = -1;
@@ -89,6 +94,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 		for (Entry<String, String> eachHeader : headers.entrySet()) {
 			builder.header(eachHeader.getKey(), eachHeader.getValue());
 		}
+		builder.timeout(Duration.ofMillis(connectTimeoutMs));
 		HttpRequest request = builder.POST(HttpRequest.BodyPublishers.ofString(payload)).build();
 		
 		for (int attempt = 1; attempt <= maxRetries; attempt++) {

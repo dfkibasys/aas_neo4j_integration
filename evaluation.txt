@@ -1,3 +1,0 @@
-1000 instanzen shell + identification teilmodell
--> mit kafka: 7749ms
--> ohne kafka: 

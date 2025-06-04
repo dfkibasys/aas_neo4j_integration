@@ -7,10 +7,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import org.apache.kafka.shaded.io.opentelemetry.proto.trace.v1.Status.StatusCode;
+import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
+import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -28,8 +32,8 @@ public class Evaluation {
 		ArrayList<String> identifications = new ArrayList<>();
 		ArrayList<String> signals = new ArrayList<>();
 		
-		int from = 10000000;
-		int num = 6;
+		int from = 1;
+		int num = 10000;
 		
 		for (int i = from; i < num + from; i++) {
 			String shell = newShell(i);
@@ -50,8 +54,17 @@ public class Evaluation {
 		//	Thread.sleep(10);
 		}
 		long end = System.nanoTime();
-		System.out.println((end - start) / 1_000_000);
+		System.out.println((end - start) / 1_000_000 / 10000);
+//		
+//		
+//		Thread.sleep(5000);
+//		for (int i = 0; i < 100; i++) {
+//			pushVersionUpdate("http://aas.dfki.de/ids/sm/identification_10000000", "3.2."+i);
+//			Thread.sleep(100);
+//		}
 	}
+
+
 
 	private static int countSmes(String sme) throws JsonMappingException, JsonProcessingException {
 		Submodel sm = AasIo.jsonMapper().readValue(sme, Submodel.class);
@@ -70,6 +83,37 @@ public class Evaluation {
 			count += countSmes((PebbleSubmodelElement)eachSm);
 		}
 		return count;
+	}
+	
+	private static void pushVersionUpdate(String identifier, String value) throws IOException, InterruptedException {
+		String body ="""
+				{
+			"modelType": "Property",
+			"semanticId": {
+				"keys": [
+					{
+						"type": "GlobalReference",
+						"value": "0173-1#02-AAS383#003"
+					}
+				],
+				"type": "ExternalReference"
+			},
+			"value": 
+			""";
+		body += " \"" + value + "\", ";
+		body += """
+			"valueType": "xs:string",
+			"category": "PARAMETER",
+			"idShort": "SoftwareRevision"
+		}""";
+	    HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/submodels/aHR0cDovL2Fhcy5kZmtpLmRlL2lkcy9zbS9pZGVudGlmaWNhdGlvbl8xMDAwMDAwMA/submodel-elements/SoftwareRevision"))
+                .header("Content-Type", "application/json")
+                .method("PUT", HttpRequest.BodyPublishers.ofString(body))
+                .build();
+	    CLIENT.send(request, HttpResponse.BodyHandlers.discarding());
+	    
+		
 	}
 
 	private static void pushShell(String id, String shell) throws IOException, InterruptedException {

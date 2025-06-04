@@ -69,7 +69,7 @@ return distinct a, s, pMf, pPd, pVers
 MATCH (a:AssetAdministrationShell)-[:HAS_SUBMODEL]->(s:Submodel)
 MATCH (s)-[:HAS_ELEMENT]->(pMf)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '0173-1#02-AAO677#002'})
 MATCH (s)-[:HAS_ELEMENT]->(pPd)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '0173-1#02-AAW338#001'})
-MATCH (s)-[:HAS_ELEMENT]->(pVers)-[:HAS_SEMANTIC]->(:SemanticConcept {id: 'www.company.com/ids/cd/2190_5082_7091_3557'})
+MATCH (s)-[:HAS_ELEMENT]->(pVers)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '	0173-1#02-AAS383#003'})
 RETURN DISTINCT 
   a.id AS AAS, 
   a.sourceUrl AS Source, 
@@ -87,3 +87,29 @@ return source.sourceUrl AS sourceUrl , r.type AS refType, target.id AS targetId,
 MATCH (a:AssetAdministrationShell)-[hs:HAS_SUBMODEL]->(s)-[R:HAS_ELEMENT*]->(e:Entity)-[r:HAS_REFERENCE]->(target)
 WHERE target.sourceUrl IS NULL
 RETURN a, s, e, r, target,R,hs
+
+
+match (n:Property {smId: "http://aas.dfki.de/ids/sm/identification_10000000", idShortPath: "SoftwareRevision"}) return n.value
+
+
+
+
+filter by sortware version:
+
+MATCH (a:AssetAdministrationShell)-[:HAS_SUBMODEL]->(s:Submodel)
+MATCH (s)-[:HAS_ELEMENT]->(pMf)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '0173-1#02-AAO677#002'})
+MATCH (s)-[:HAS_ELEMENT]->(pPd)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '0173-1#02-AAW338#001'})
+MATCH (s)-[:HAS_ELEMENT]->(pVers)-[:HAS_SEMANTIC]->(:SemanticConcept {id: '0173-1#02-AAS383#003'})
+WHERE pPd.value = 'MiR100'
+WITH a, s, pMf, pPd, pVers, 
+  split(pVers.value, ".") 
+  AS versionParts
+WITH a, s, pMf, pPd, pVers,
+  toInteger(versionParts[0]) AS major,
+  toInteger(versionParts[1]) AS minor,
+  toInteger(versionParts[2]) AS patch
+WHERE
+  (major < 3) OR
+  (major = 3 AND minor < 5) OR
+  (major = 3 AND minor = 5 AND patch < 2)
+RETURN a.id

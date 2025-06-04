@@ -1,0 +1,94 @@
+networks:
+  basyx:
+    driver: bridge
+  kafka:
+    driver: bridge
+  kafka-connect:
+    driver: bridge
+  neo4j:
+    driver: bridge
+  mongo: 
+    driver: bridge
+
+services:
+
+########### Mongo ###################################################################
+
+  mongo:
+    image: mongo:${MONGODB_VERSION}
+    hostname: mongo
+    container_name: mongo
+    # Provide mongo config
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoAdmin
+      MONGO_INITDB_ROOT_PASSWORD: mongoPassword
+    # Set health checks to wait until mongo has started
+    healthcheck:
+      test: ["CMD", "mongosh", "mongodb://mongoAdmin:mongoPassword@localhost:27017/admin", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+    networks:
+      - basyx
+      - mongo
+
+
+  aas-registry:
+    image: eclipsebasyx/aas-registry-log-mongodb:${BASYX_V3_VERSION}
+    environment: 
+      KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
+      BASYX_CORS_ALLOWED_ORIGINS: '*'
+      BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+    depends_on:
+      kafka:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+    - basyx
+    - mongo
+
+  submodel-registry:
+    #image:  eclipsebasyx/submodel-registry-log-mem:${BASYX_V3_VERSION}
+    image: eclipsebasyx/submodel-registry-log-mongodb:${BASYX_V3_VERSION}
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9092
+      BASYX_CORS_ALLOWED_ORIGINS: '*'
+      BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+    - basyx
+    - mongo
+
+  aas-discovery:
+    environment:
+      BASYX_BACKEND: MongoDB
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+      SPRING_DATA_MONGODB_DATABASE: aas-env
+      BASYX_CORS_ALLOWED_ORIGINS: '*'
+      BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+    - basyx
+    - mongo
+
+  aas-environment:
+    environment:
+      BASYX_BACKEND: MongoDB
+      SPRING_DATA_MONGODB_URI: ${MONGODB_URI}
+      SPRING_DATA_MONGODB_DATABASE: aas-env
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+    - basyx
+    - mongo
+    - kafka

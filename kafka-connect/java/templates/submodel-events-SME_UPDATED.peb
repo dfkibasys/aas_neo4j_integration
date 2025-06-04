@@ -1,6 +1,6 @@
 statements:
 - statement: |
-    MERGE (sme:SubmodelElement:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
+    MERGE (sme:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
     SET sme.value = $sme.value
   parameters:
     submodel:

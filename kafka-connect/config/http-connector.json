@@ -2,7 +2,7 @@
   "name": "Kafka2Neo4jConnector",
   "config": {
     "connector.class": "de.dfki.cos.aas2graph.kafka.Kafka2Neo4jConnector",
-    "tasks.max": "5",
+    "tasks.max": "1",
     "executor.threads": "1",
     "batch.size": "1",
     "topics": "aas-events,submodel-events",
