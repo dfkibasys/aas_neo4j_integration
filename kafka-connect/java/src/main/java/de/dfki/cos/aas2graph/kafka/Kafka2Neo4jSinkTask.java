@@ -1,18 +1,14 @@
 package de.dfki.cos.aas2graph.kafka;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
@@ -101,11 +97,11 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			
 			try {
 				HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-				
+				status = response.statusCode();
 				ObjectMapper mapper = AasIo.jsonMapper();
 				JsonNode root = mapper.readTree(response.body());
 				JsonNode errors = root.path("errors");
-
+				
 				if (errors.isArray() && errors.size() > 0) {
 					log.error("Neo4j responded with semantic/logical errors: {}", errors.toPrettyString());
 					throw new ConnectException("Neo4j rejected the query: " + errors.toString());
@@ -129,9 +125,12 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 
 		
 		if (!success) {
-			log.error("HttpResponse: Failed to send record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
+			log.error("HttpResponse: Failed to send record! statusCode={} statusMessage='Failed' responseBody='{}' ", status, responseBody);
+
 			throw new ConnectException("Failed to send record after " + maxRetries + " attempts.");
 		}
+		log.error("HttpResponse: Successfully send record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
+	
 		return afterTrans;
 	}
 

@@ -132,7 +132,7 @@ public class KnowledgeGraphConnectPluginIT {
 
 	public void postResources(IntegrationTestDefinition def) throws Exception {
 		List<IntegrationTestOperation<?>> input = def.getInput();
-		for (IntegrationTestOperation eachInputItem : input) {
+		for (IntegrationTestOperation<?> eachInputItem : input) {
 			eachInputItem.execute(envAccess);
 			ProcessingEvent evt = resultResolver.awaitNext();
 			Assert.assertTrue(evt.message(), evt.isSuccess());

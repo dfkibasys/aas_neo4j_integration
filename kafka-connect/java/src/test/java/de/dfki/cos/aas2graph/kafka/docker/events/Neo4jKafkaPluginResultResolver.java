@@ -37,7 +37,7 @@ public class Neo4jKafkaPluginResultResolver implements AutoCloseable {
 	}
 
 	public ProcessingEvent awaitNext() throws InterruptedException {
-		return eventDeque.poll(5, TimeUnit.MINUTES);
+		return eventDeque.poll(1, TimeUnit.MINUTES);
 	}
 
 	private static class EventProcessor implements Consumer<OutputFrame> {

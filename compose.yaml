@@ -18,14 +18,13 @@ services:
     hostname: kafka
     container_name: kafka
     ports:
-      - "9093:9093"   # Für externe Clients (EXTERNAL)
+      - "9093:9093"
     environment:
       KAFKA_ADVERTISED_LISTENERS: INTER_BROKER://kafka:9094,PLAINTEXT://kafka:9092,EXTERNAL://localhost:9093
       KAFKA_INTER_BROKER_LISTENER_NAME: INTER_BROKER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      # Definierte Listener, die Kafka tatsächlich bindet:
       KAFKA_LISTENERS: INTER_BROKER://:9094,CONTROLLER://:9095,PLAINTEXT://:9092,EXTERNAL://:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTER_BROKER:PLAINTEXT,PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_BROKER_ID: 1
@@ -116,8 +115,6 @@ services:
       BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
       BASYX_EXTERNALURL: http://localhost:8081,http://aas-environment:8081
 
-
-
     volumes: 
     - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
     - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
@@ -125,33 +122,6 @@ services:
     - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
     - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
     - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
-      # AASX
-#      - ./aasx:/application/files/aasx
-#      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
-#      - ./aasx/ExampleV3.aasx:/application/files/aasx/ExampleV3.aasx
-#      - ./aasx/MRK40_Lab_Instance.aasx:/application/files/aasx/MRK40_Lab_Instance.aasx
-#      - ./aasx/Semitrailer_Truck.aasx:/application/files/aasx/Semitrailer_Truck.aasx
-#      - ./aasx/T4TTruckFrame.aasx:/application/files/aasx/T4TTruckFrame.aasx
-#      - ./aasx/Twinficient_Maxima2_Instance.aasx:/application/files/aasx/Twinficient_Maxima2_Instance.aasx
-#      - ./aasx/Twinficient_Maxima2_Type.aasx:/application/files/aasx/Twinficient_Maxima2_Type.aasx
-#      - ./aasx/WorkpieceCarrier_A.aasx:/application/files/aasx/WorkpieceCarrier_A.aasx
-
-    #  - ./kalzip/:/application/files/aasx/
-    #- ./lab/:/application/files/aasx/
-
-
-    # - ./aasx/Semitrailer.aasx:/application/files/aasx/Semitrailer.aasx
-    # - ./aasx/Semitrailer_truck.aasx:/application/files/aasx/Semitrailer_truck.aasx
-    # - ./aasx/WST_A_1.aasx:/application/files/aasx/WST_A_1.aasx
-    # - ./aasx/WST_A_5.aasx:/application/files/aasx/WST_A_5.aasx
-    # - ./aasx/WST_B_6.aasx:/application/files/aasx/WST_B_6.aasx
-
-
-      # - ./aasx/Semitrailer_afterProcess.aasx:/application/files/aasx/Semitrailer_afterProcess.aasx
-      # - ./aasx/Semitrailer_truck_afterProcess.aasx:/application/files/aasx/Semitrailer_truck_afterProcess.aasx
-      # - ./aasx/WST_A_1 1.aasx:/application/files/aasx/WST_A_1 1.aasx
-      # - ./aasx/WST_A_5.aasx:/application/files/aasx/WST_A_5.aasx
-      # - ./aasx/WST_B_6.aasx:/application/files/aasx/WST_B_6.aasx
     depends_on:
       aas-registry:
         condition: service_healthy
@@ -187,7 +157,7 @@ services:
 ########### Kafka Connect ###########################################################
 
   kafka-connect:
-    image: dfkibasys/aas-neo4j-kafka-connect-plugin:7.7.1-${KAFKA_CONNECT_PLUGIN_VERSION}
+    image: dfkibasys/aas-neo4j-kafka-connect-plugin:${KAFKA_VERSION}-${KAFKA_CONNECT_PLUGIN_VERSION}
     container_name: kafka-connect
     build:
       context: kafka-connect
@@ -195,7 +165,6 @@ services:
     ports:
       - "8085:8083"
     environment: 
-      # CONNECT_CONSUMER_INTERCEPTOR_CLASSES: "de.dfki.cos.aas2graph.kafka.PollLatencyInterceptor"
       CONNECT_BOOTSTRAP_SERVERS: "kafka:9092"     
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"            
       CONNECT_LOG4J_LOGGERS: "de.dfki.cos=INFO,org.apache.kafka.connect=ERROR,org.apache.kafka.connect.runtime=WARN,io.pebbletemplates.pebble=ERROR"    
