@@ -119,12 +119,12 @@ services:
 
 
     volumes: 
-      - ./aasx/mir100_10000000_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
-      - ./aasx/mir100_10000001_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
-      - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
-      - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
-      - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
-      - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
+    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
+    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
+    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
+    - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
+    - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
+    - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
       # AASX
 #      - ./aasx:/application/files/aasx
 #      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx
