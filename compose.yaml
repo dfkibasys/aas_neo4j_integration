@@ -116,12 +116,7 @@ services:
       BASYX_EXTERNALURL: http://localhost:8081,http://aas-environment:8081
 
     volumes: 
-    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
-    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
-    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
-    - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
-    - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
-    - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
+    - ./aasx/:/application/files/aasx/
     depends_on:
       aas-registry:
         condition: service_healthy
