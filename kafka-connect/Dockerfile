@@ -1,4 +1,4 @@
-FROM maven:3.8.4-openjdk-17 AS build
+FROM --platform=$BUILDPLATFORM maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY ./java/pom.xml /app/pom.xml
 RUN mvn dependency:go-offline
@@ -6,7 +6,7 @@ COPY ./java/templates/ /app/templates/
 COPY ./java/src/ /app/src/
 RUN mvn clean install -DskipTests
 
-FROM confluentinc/cp-kafka-connect:7.9.1-1-ubi8
+FROM confluentinc/cp-kafka-connect:7.9.1
 COPY --from=build /app/target/knowledgegraph-connect-plugin-*.jar /tmp/connect-plugins/knowledgegraph-connect-plugin.jar
 COPY ./java/templates /home/appuser/templates
 COPY ./config/http-connector.json /etc/kafka-connect/config/neo4j-connector.json
