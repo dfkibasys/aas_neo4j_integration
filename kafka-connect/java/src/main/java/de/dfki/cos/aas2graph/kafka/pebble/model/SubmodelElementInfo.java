@@ -8,11 +8,10 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 
 import de.dfki.cos.aas2graph.kafka.pebble.model.json.PebbleSubmodelElement;
 
-public class SubmodelElementInfo {
+public class SubmodelElementInfo extends ParentInfo {
 
-	private SubmodelElementInfo parent;
+	private ParentInfo parent;
 	private Integer parentPos;
-	private String idShortPath;
 	private final PebbleSubmodelElement element;
 	private List<SubmodelElementInfo> children;
 
@@ -32,9 +31,6 @@ public class SubmodelElementInfo {
 		return element.getRefs();
 	}
 
-	public void setIdShortPath(String path) {
-		this.idShortPath = path;
-	}
 	
 	public List<SubmodelElementInfo> getChildren() {
 		if (children == null) {
@@ -51,15 +47,12 @@ public class SubmodelElementInfo {
 		return null;
 	}
 
-	public String getIdShortPath() {
-		return idShortPath;
-	}
 
 	public boolean getIsRootElement() {
-		return parentPos == null;
+		return parent == null;
 	}
 	
-	public void setParent(SubmodelElementInfo parent, int parentPos) {
+	public void setParent(ParentInfo parent, int parentPos) {
 		this.parent = parent;
 		this.parentPos = parentPos;
 	}
@@ -68,7 +61,7 @@ public class SubmodelElementInfo {
 		return parentPos;
 	}
 	
-	public SubmodelElementInfo getParent() {
+	public ParentInfo getParent() {
 		return parent;
 	}
 

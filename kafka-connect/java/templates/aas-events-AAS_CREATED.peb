@@ -80,7 +80,7 @@ statements:
       r_{{ loop.index }}:
         id: "{{ eachRef.id }}"
         {%- if eachRef.idShortPath is not null %} 
-        path: "{{ eachRef.idShortPath }}"
+        idShortPath: "{{ eachRef.idShortPath }}"
         {%- endif %}
         {%- if eachRef.label is not null %} 
         label: "{{ eachRef.label }}"

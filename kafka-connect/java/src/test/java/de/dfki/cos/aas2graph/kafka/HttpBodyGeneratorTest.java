@@ -76,7 +76,8 @@ public class HttpBodyGeneratorTest {
 		return normalizedBuilder.toString();
 	}
 
-	private static final class TestDefinition {
+	
+	static final class TestDefinition {
 
 		private PebbleContext input;
 

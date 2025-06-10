@@ -1,0 +1,61 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+  - type: POST_SHELL
+    body:
+      id: http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/C1/1/1
+        assetKind: Instance
+        assetType: Heater
+      submodels:
+      - type: ModelReference
+        keys: 
+          type: Submodel
+          value: http://test.sm
+  - type: PUT_ASSET_INFORMATION
+    body:
+      globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/type
+      assetKind: Type
+      assetType: Test
+expected:
+  nodes:
+    - id: "0"
+      labels:
+      - Identifiable
+      - Submodel
+      - Referable
+      properties:
+        registrationTime: 1732781746575
+        sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+        id: "http://test.sm" 
+    - id: "1" 
+      labels: 
+      - AssetAdministrationShell
+      - Identifiable
+      - Referable
+      properties:
+        id: "http://test.shell"
+        registrationTime: 1732779314520
+        sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+    - id: "2"
+      labels:
+      - Asset
+      properties:
+        globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/type
+        sourceUrl: http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information
+        assetKind: Type
+        assetType: Test
+  relationships:
+    - id: "0"
+      type: HAS_ASSET
+      startNode: "1"
+      endNode: "2"
+    - id: "1"
+      type: HAS_SUBMODEL
+      startNode: "1"
+      endNode: "0"

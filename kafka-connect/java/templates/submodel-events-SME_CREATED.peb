@@ -1,1 +1,65 @@
-statements: []
+{%- set sme = event.smElement %}
+{%- set smId = event.id %}
+{%- set smePath = event.smElementPath %}
+{% set smeList = collectAllSubmodelElements(sme, smId, smePath) %}
+
+statements:
+{%- for elem in smeList %} 
+- statement: |
+    MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+    {%- if elem.labels is not empty %} 
+    SET e{% for eachLabel in elem.labels %}:{{ eachLabel }}{% endfor %} 
+    {%- endif %} 
+    {%- if elem.idShort is not null %} 
+    SET e.idShort = $sme.idShort
+    {%- endif %} 
+    {%- if meta.sourceUrl is not null %} 
+    SET e.sourceUrl = $sme.sourceUrl
+    {%- endif %} 
+    {%- if elem.value is not null %} 
+    SET e.value = $sme.value
+    {%- endif %}
+    {%- if elem.isRootElement %} 
+    MERGE (p:Submodel { id: $submodel.id })
+    {%- else %} 
+    MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+    {%- endif %} 
+    MERGE (p)-[:HAS_ELEMENT]->(e)
+    {% for eachRef in elem.refs %} 
+    MERGE (re_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %} { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
+    MERGE (e) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {type: $refs.r_{{ loop.index }}.type} ]->(re_{{ loop.index }}) 
+    {%- endfor %}  
+  parameters:
+    submodel:
+      id: "{{ smId }}"
+    {%- if elem.parent is not null %} 
+    parent:
+      idShortPath: "{{ elem.parent.idShortPath }}"
+    {%- endif %} 
+    sme:
+      idShortPath: "{{ elem.idShortPath }}"
+      {%- if elem.idShort %} 
+      idShort: "{{ elem.idShort }}"
+      {%- endif %} 
+      {%- if meta.sourceUrl %} 
+      {%- set encodedPath = elem.idShortPath | urlencode %} 
+      sourceUrl: "{{ meta.sourceUrl }}/submodels/{{ smId | base64encode | replace({'=':''}) | urlencode }}/submodel-elements/{{ encodedPath }}"
+      {%- endif %} 
+      {%- if elem.value is not null %} 
+      value: "{{ elem.value }}"
+      {%- endif %} 
+    {%- if elem.refs is not empty %} 
+    refs: 
+      {%- for eachRef in elem.refs %} 
+      r_{{ loop.index }}:
+        id: "{{ eachRef.id }}"
+        {%- if eachRef.idShortPath is not null %} 
+        idShortPath: "{{ eachRef.idShortPath }}"
+        {%- endif %} 
+        {%- if eachRef.label is not null %} 
+        label: "{{ eachRef.label }}"
+        {%- endif %} 
+        type: "{{ eachRef.refType }}" 
+      {%- endfor %} 
+    {% endif %}
+{%- endfor %} 

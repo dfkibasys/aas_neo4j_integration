@@ -1,1 +1,25 @@
-statements: []
+{%- set assetInfo = event.assetInformation %}  
+statements:
+- statement: |
+    MERGE (a:Asset { id: $asset.globalAssetId })
+    {%- if meta.sourceUrl is not null %} 
+    SET a.sourceUrl = $asset.sourceUrl
+    {%- endif %} 
+    {%- if assetInfo.assetKind is not null %} 
+    SET a.assetKind = $asset.assetKind
+    {%- endif %}
+    {%- if assetInfo.assetType is not null %} 
+    SET a.assetType = $asset.assetType
+    {%- endif %} 
+  parameters:
+    asset:
+      globalAssetId: "{{ assetInfo.globalAssetId }}"
+      {%- if meta.sourceUrl is not null %} 
+      sourceUrl: "{{ meta.sourceUrl }}/shells/{{ event.id | base64encode | replace({ '=': '' }) | urlencode }}/asset-information"
+      {%- endif %}
+      {%- if assetInfo.assetKind is not null %} 
+      assetKind: "{{ assetInfo.assetKind | capitalize }}"
+      {%- endif %} 
+      {%- if assetInfo.assetType is not null %} 
+      assetType: "{{ assetInfo.assetType }}"
+      {%- endif %} 

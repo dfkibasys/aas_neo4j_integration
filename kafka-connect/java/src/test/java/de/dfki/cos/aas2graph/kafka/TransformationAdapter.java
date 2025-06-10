@@ -16,7 +16,7 @@ public class TransformationAdapter {
 
 	
 	 public void start() {
-	        String bootstrapServers = "localhost:9099"; // je nach Setup
+	        String bootstrapServers = "localhost:9099"; 
 	        String groupId = "debug-transformer";
 
 	        Properties props = new Properties();

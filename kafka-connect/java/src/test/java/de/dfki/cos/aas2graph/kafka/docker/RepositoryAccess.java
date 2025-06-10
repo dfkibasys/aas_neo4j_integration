@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.DeserializationException;
 import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.SerializationException;
+import org.eclipse.digitaltwin.aas4j.v3.model.AssetInformation;
 import org.eclipse.digitaltwin.aas4j.v3.model.Identifiable;
 import org.junit.Assert;
 
@@ -70,6 +71,25 @@ public class RepositoryAccess<T extends Identifiable> {
 		String result = post(body);
 		return mapper.readValue(result, cls);
 	}
+	
+	public <U> void putUnderPath(String path, U item) throws IOException, InterruptedException, SerializationException, DeserializationException {
+		ObjectMapper mapper = AasIo.jsonMapper();
+		String body = mapper.writeValueAsString(item);
+		put(path, body);
+		
+	}
+	
+	private String put(String path, String body) throws IOException, InterruptedException {
+		URI uri = URI.create(baseUri + '/' + path );
+		HttpRequest request = HttpRequest.newBuilder().uri(uri)
+				.header("Content-Type", "application/json")
+				.header("Accept", "application/json").POST(HttpRequest.BodyPublishers.ofString(body)).build();
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString()); 
+		Assert.assertEquals(response.body(), 201, response.statusCode());
+		
+		return response.body();
+	}
+	
 	private String post(String body) throws IOException, InterruptedException {
 		URI uri = URI.create(baseUri);
 		HttpRequest request = HttpRequest.newBuilder().uri(uri)

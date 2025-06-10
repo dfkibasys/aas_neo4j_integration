@@ -54,6 +54,7 @@ public class HttpResponseLog implements ProcessingEvent {
 	}
 
 	public static Optional<HttpResponseLog> fromLog(String log) {
+		System.out.println(log);
 		if (!log.contains("HttpResponse")) {
 			return Optional.empty();
 		}

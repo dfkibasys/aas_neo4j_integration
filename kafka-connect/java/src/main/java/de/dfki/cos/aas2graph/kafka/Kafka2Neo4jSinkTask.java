@@ -1,14 +1,9 @@
 package de.dfki.cos.aas2graph.kafka;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
@@ -62,8 +57,6 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			return;
 		}
 		
-		
-	//	long startTransformation = System.nanoTime();
 		for (SinkRecord r : records) {
 			long startTime = System.nanoTime();
 			long afterTrans = writeRecord(r);
@@ -73,17 +66,13 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			long httpTime = (now - afterTrans) / 1_000_000;
 			long total = (now - startTime) / 1_000_000;
 			
-			
 			log.info("EVAL-RECORD-{}-{}-transformation{}ms-httpCypher{}-total{}-sinceInsertion{}",  r.topic(), r.key(), transTime, httpTime, total, fromIns);
 		}
-	//	long endTransformation = System.nanoTime();
-	//	log.info("EVAL-ALL-RECORDS-{}-{}ms", records.size(), (endTransformation - startTransformation)  / 1_000_000);
 	}
 
 	private long writeRecord(SinkRecord record) {
-		
+
 		String payload = (String) transformation.apply(record).value();
-	//	log.info("PAYLOAD {}", payload);
 		
 		long afterTrans = System.nanoTime();
 		boolean success = false;
@@ -101,7 +90,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			
 			try {
 				HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
-				
+				status = response.statusCode();
 				ObjectMapper mapper = AasIo.jsonMapper();
 				JsonNode root = mapper.readTree(response.body());
 				JsonNode errors = root.path("errors");
@@ -111,7 +100,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 					throw new ConnectException("Neo4j rejected the query: " + errors.toString());
 				}
 
-				log.debug("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
+				log.info("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
 				success = true;
 				break;
 
