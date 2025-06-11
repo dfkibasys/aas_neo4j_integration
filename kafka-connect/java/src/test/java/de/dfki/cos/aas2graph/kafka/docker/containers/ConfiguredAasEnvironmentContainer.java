@@ -11,7 +11,8 @@ public class ConfiguredAasEnvironmentContainer extends GenericContainer<Configur
 	private static final String NETWORK_ALIAS = "aas-env";
 
 	public ConfiguredAasEnvironmentContainer(Network network, Startable kafka) {
-		super("eclipsebasyx/aas-environment:2.0.0-SNAPSHOT-d81b59c");
+		super("dfkibasys/aas-environment:kafka");
+		//super("eclipsebasyx/aas-environment:2.0.0-SNAPSHOT-d81b59c");
 
 		withNetwork(network).withNetworkAliases(NETWORK_ALIAS).withReuse(true).withExposedPorts(8081).dependsOn(kafka)
 				.withEnv(envVars());

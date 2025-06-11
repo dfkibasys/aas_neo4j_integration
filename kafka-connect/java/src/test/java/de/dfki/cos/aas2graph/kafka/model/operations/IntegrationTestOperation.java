@@ -8,7 +8,8 @@ import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({ @JsonSubTypes.Type(value = PostShellOperation.class, name = "POST_SHELL"),
 		@JsonSubTypes.Type(value = PostSubmodelOperation.class, name = "POST_SUBMODEL"),
-		@JsonSubTypes.Type(value = PutAssetInformationOperation.class, name = "PUT_ASSET_INFORMATION")
+		@JsonSubTypes.Type(value = PutAssetInformationOperation.class, name = "PUT_ASSET_INFORMATION"),
+		@JsonSubTypes.Type(value = PostSubmodelElementOperation.class, name = "POST_SUBMODEL_ELEMENT")
 })
 public abstract class IntegrationTestOperation<T> {
 

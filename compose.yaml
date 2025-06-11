@@ -99,7 +99,8 @@ services:
       - basyx
 
   aas-environment:
-    image: eclipsebasyx/aas-environment:${BASYX_V3_VERSION}
+    #image: eclipsebasyx/aas-environment:${BASYX_V3_VERSION}
+    image: dfkibasys/aas-environment:kafka
     container_name: aas-environment
     restart: always
     ports:

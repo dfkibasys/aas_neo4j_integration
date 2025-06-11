@@ -14,6 +14,7 @@ import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementCollection;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultAssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultAssetInformation;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultKey;
+import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultReference;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementCollection;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 import de.dfki.cos.aas2graph.kafka.model.operations.PostShellOperation;
+import de.dfki.cos.aas2graph.kafka.model.operations.PostSubmodelElementOperation;
 import de.dfki.cos.aas2graph.kafka.model.operations.PostSubmodelOperation;
 import de.dfki.cos.aas2graph.kafka.model.operations.PutAssetInformationOperation;
 import de.dfki.cos.aas2graph.kafka.util.AasIo;
@@ -38,32 +40,33 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		EnvironmentAccess access = new EnvironmentAccess("http://localhost:8081");
 
-		AssetAdministrationShell shell = newTestShell();
-		new PostShellOperation(shell).execute(access);
 		Submodel sm = newTestSubmodel();
 		new PostSubmodelOperation(sm).execute(access);
+		AssetAdministrationShell shell = newTestShell();
+		new PostShellOperation(shell).execute(access);
 //		AssetInformation info = newTestAssetInfo();
 //		new PutAssetInformationOperation(shell.getId(), info).execute(access);
+		SubmodelElement elem = newTestSubmodelElement("Prop1", "1");
+		new PostSubmodelElementOperation(sm.getId(), "Col1", elem).execute(access);
+		elem = newTestSubmodelElement("Prop2", "2");
+		new PostSubmodelElementOperation(sm.getId(), null, elem).execute(access);
+		
+	}
 
+	private static SubmodelElement newTestSubmodelElement(String id, String value) {
+		return new DefaultProperty.Builder().idShort(id).value(value).build();
 	}
 
 	private static Submodel newTestSubmodel() throws JsonMappingException, JsonProcessingException {
 		String json = """
 				{
 					"modelType" : "Submodel",
-					"id" : "http://sm.dfki.de/mir_100/1/test",
-					"idShort" : "Sm1",
+					"id" : "http://test.sm",
+					"idShort" : "SM1",
 					"submodelElements" : [
 						{
 							"modelType" : "SubmodelElementCollection",
-							"idShort" : "Col",
-							"value" : [
-								{
-									"modelType" : "Property",
-									"idShort" : "Prop1",
-									"value" : "1"
-								}
-							]
+							"idShort" : "Col1"
 						}
 					]
 				}
@@ -74,12 +77,12 @@ public class Main {
 
 	private static AssetInformation newTestAssetInfo() throws JsonMappingException, JsonProcessingException {
 		String json = """
-			{
-				"assetType" : "Robot",
-				"assetKind" : "Type",
-				"globalAssetId" : "http://asset.dfki.de/mir_100"
-			}
-			""";
+				{
+					"assetType" : "Robot",
+					"assetKind" : "Type",
+					"globalAssetId" : "http://asset.dfki.de/mir_100"
+				}
+				""";
 		return AasIo.jsonMapper().readValue(json, AssetInformation.class);
 
 	}
@@ -88,26 +91,27 @@ public class Main {
 		String json = """
 				{
 					"modelType" : "Submodel",
-					"id" : "http://aas.dfki.de/mir_100/1",
-					"idShort" : "MiR100_1",
-					"assetInformation" : {
-						"assetType" : "Robot",
-						"assetKind" : "Instance",
-						"globalAssetId" : "http://asset.dfki.de/mir_100/1"
-					},
+					"id" : "http://test.shell",
+					"idShort" : "AAS_Test",
 					"submodels" : [
 						{
 							"type": "ModelReference",
 							"keys" : [
 								{
 									"type" : "Submodel",
-									"value" : "http://sm.dfki.de/mir_100/1/test"
+									"value" : "http://test.sm"
 								}
 							]
 						}
 					]
 				}
 				""";
+
+//		"assetInformation" : {
+//			"assetType" : "Robot",
+//			"assetKind" : "Instance",
+//			"globalAssetId" : "http://asset.dfki.de/mir_100/1"
+//		},
 		return AasIo.jsonMapper().readValue(json, AssetAdministrationShell.class);
 	}
 

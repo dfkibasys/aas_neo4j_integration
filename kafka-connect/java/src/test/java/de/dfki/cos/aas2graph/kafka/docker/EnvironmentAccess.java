@@ -17,7 +17,7 @@ public class EnvironmentAccess {
 		this.aasRepo = new ConnectedAasRepository(envUri);		
 	}
 	
-	public ConnectedSubmodelRepository submodelRepo() {
+	public ConnectedSubmodelRepository smRepo() {
 		return submodelRepo;
 	}
 	

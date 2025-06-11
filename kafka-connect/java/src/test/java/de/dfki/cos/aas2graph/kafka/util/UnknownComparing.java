@@ -41,17 +41,22 @@ public class UnknownComparing {
 		}
 		Object valueExpected = expectedProps.get(propertyName);
 		Object valueResult =resultProps.get(propertyName);
-		if (valueExpected == null) {
+		if (valueResult == null && valueExpected != null) {
 			Assert.assertNull("Property '" + propertyName + "' is expected but not set in result.", valueResult);
-		} else {
+		} 
+		if (valueResult != null && valueExpected == null ) {
 			Assert.assertNotNull("Property '" + propertyName + "' is not expected but set in result.", valueResult);
-			resetProperties(expectedProps, resultProps);
 		}
+		resetProperties(expectedProps, resultProps);
 	}	
 
 	private void resetProperties(Map<String, Object> expectedProps, Map<String, Object> resultProps) {
-		expectedProps.put(propertyName, replacement);
-		resultProps.put(propertyName, replacement);
+		if (expectedProps.containsKey(propertyName)) {
+			expectedProps.put(propertyName, replacement);
+		}
+		if (resultProps.containsKey(propertyName)) {
+			resultProps.put(propertyName, replacement);
+		}
 	}
 
 }
