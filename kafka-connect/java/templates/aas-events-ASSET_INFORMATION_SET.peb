@@ -1,7 +1,8 @@
 {%- set assetInfo = event.assetInformation %}  
 statements:
 - statement: |
-    MERGE (a:Asset { id: $asset.globalAssetId })
+    MATCH (:AssetAdministrationShell {id: $shell.id })-[HAS_ASSET]->(a:Asset)
+    SET a.id = $asset.globalAssetId
     {%- if meta.sourceUrl is not null %} 
     SET a.sourceUrl = $asset.sourceUrl
     {%- endif %} 
@@ -12,6 +13,8 @@ statements:
     SET a.assetType = $asset.assetType
     {%- endif %} 
   parameters:
+    shell:
+      id: "{{ event.id }}"
     asset:
       globalAssetId: "{{ assetInfo.globalAssetId }}"
       {%- if meta.sourceUrl is not null %} 

@@ -24,9 +24,22 @@
 		<junit.jupiter.version>5.11.3</junit.jupiter.version>
 		<maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
 		<maven.shade.plugin.version>3.4.1</maven.shade.plugin.version>
+		<basyx.client.sdk.version>2.0.0-milestone-05</basyx.client.sdk.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.digitaltwin.basyx</groupId>
+			<artifactId>basyx.aasrepository-client</artifactId>
+			<version>${basyx.client.sdk.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.digitaltwin.basyx</groupId>
+			<artifactId>basyx.submodelrepository-client</artifactId>
+			<version>${basyx.client.sdk.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.eclipse.digitaltwin.aas4j</groupId>
 			<artifactId>aas4j-model</artifactId>

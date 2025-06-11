@@ -23,6 +23,6 @@ public class PostShellOperation extends IntegrationTestOperation<AssetAdministra
 	
 	@Override
 	public void execute(EnvironmentAccess access) throws Exception {
-		access.shells().post(shell);
+		access.aasRepo().createAas(shell);
 	}
 }

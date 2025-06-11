@@ -13,11 +13,14 @@ input:
 expected: |
   statements: 
   - statement: |
-      MERGE (a:Asset { id: $asset.globalAssetId })
+      MATCH (:AssetAdministrationShell {id: $shell.id })-[HAS_ASSET]->(a:Asset)
+      SET a.id = $asset.globalAssetId
       SET a.sourceUrl = $asset.sourceUrl
       SET a.assetKind = $asset.assetKind
       SET a.assetType = $asset.assetType
     parameters:
+      shell:
+        id: "http://aas.twinficient.de/heater/mrk40-lab/C1/1/1"
       asset:
         globalAssetId: "http://asset.twinficient.de/heater/mrk40-lab/C1/1/1"
         sourceUrl: "http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information"

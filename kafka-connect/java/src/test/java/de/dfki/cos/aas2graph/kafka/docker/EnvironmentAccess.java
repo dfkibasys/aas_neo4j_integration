@@ -2,25 +2,37 @@ package de.dfki.cos.aas2graph.kafka.docker;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
+import org.eclipse.digitaltwin.basyx.aasrepository.client.ConnectedAasRepository;
+import org.eclipse.digitaltwin.basyx.core.pagination.PaginationInfo;
+import org.eclipse.digitaltwin.basyx.submodelrepository.client.ConnectedSubmodelRepository;
 
 
 public class EnvironmentAccess {
 	
-	private final RepositoryAccess<AssetAdministrationShell> shellRepoAccess;
-	private final RepositoryAccess<Submodel> smRepoAccess;
+	private final ConnectedSubmodelRepository submodelRepo;
+	private final ConnectedAasRepository aasRepo;
 	
 	public EnvironmentAccess(String envUri) {
-		String shellUri = envUri + "/shells"; 
-		shellRepoAccess = new RepositoryAccess<>(AssetAdministrationShell.class, shellUri);
-		String smUri = envUri + "/submodels";
-		smRepoAccess = new RepositoryAccess<>(Submodel.class, smUri);		
+		this.submodelRepo = new ConnectedSubmodelRepository(envUri);
+		this.aasRepo = new ConnectedAasRepository(envUri);		
 	}
 	
-	public RepositoryAccess<AssetAdministrationShell> shells() {
-		return shellRepoAccess;
+	public ConnectedSubmodelRepository submodelRepo() {
+		return submodelRepo;
+	}
+	
+	public ConnectedAasRepository aasRepo() {
+		return aasRepo;
 	}
 
-	public RepositoryAccess<Submodel> submodels() {
-		return smRepoAccess;
-	}	
+	public void cleanUp() {
+		PaginationInfo all = new PaginationInfo(Integer.MAX_VALUE, null);
+		for (AssetAdministrationShell shell : aasRepo.getAllAas(all).getResult()) {
+			aasRepo.deleteAas(shell.getId());
+		}
+		for (Submodel sm : submodelRepo.getAllSubmodels(all).getResult()) {
+			submodelRepo.deleteSubmodel(sm.getId());
+		}
+		
+	}
 }

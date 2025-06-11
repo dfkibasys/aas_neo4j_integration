@@ -18,6 +18,7 @@ input:
           type: Submodel
           value: http://test.sm
   - type: PUT_ASSET_INFORMATION
+    id: http://test.shell
     body:
       globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/type
       assetKind: Type
@@ -46,8 +47,8 @@ expected:
       labels:
       - Asset
       properties:
-        globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/type
-        sourceUrl: http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information
+        id: http://asset.twinficient.de/heater/mrk40-lab/type
+        sourceUrl: http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw/asset-information
         assetKind: Type
         assetType: Test
   relationships:

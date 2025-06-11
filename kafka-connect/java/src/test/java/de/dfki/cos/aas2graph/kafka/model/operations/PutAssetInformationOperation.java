@@ -1,6 +1,5 @@
 package de.dfki.cos.aas2graph.kafka.model.operations;
 
-import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetInformation;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -10,10 +9,12 @@ import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 
 public class PutAssetInformationOperation extends IntegrationTestOperation<AssetInformation> {
 
-	private AssetInformation info;
+	private final String id;
+	private final AssetInformation info;
 	
 	@JsonCreator
-	public PutAssetInformationOperation(@JsonProperty("body") AssetInformation info) {
+	public PutAssetInformationOperation(@JsonProperty("id") String id, @JsonProperty("body") AssetInformation info) {
+		this.id = id;
 		this.info = info;
 	}
 	
@@ -24,6 +25,6 @@ public class PutAssetInformationOperation extends IntegrationTestOperation<Asset
 	
 	@Override
 	public void execute(EnvironmentAccess access) throws Exception {
-	//	access.shells().putAssetInfo(info);
+		access.aasRepo().setAssetInformation(id, info);
 	}
 }

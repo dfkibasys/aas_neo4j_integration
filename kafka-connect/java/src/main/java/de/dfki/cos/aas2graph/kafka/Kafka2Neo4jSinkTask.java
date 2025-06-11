@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
@@ -84,6 +85,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			builder.header(eachHeader.getKey(), eachHeader.getValue());
 		}
 		builder.timeout(Duration.ofMillis(connectTimeoutMs));
+		log.info("Sending cypher request: {}", payload);
 		HttpRequest request = builder.POST(HttpRequest.BodyPublishers.ofString(payload)).build();
 		
 		for (int attempt = 1; attempt <= maxRetries; attempt++) {
@@ -92,6 +94,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 				HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 				status = response.statusCode();
 				ObjectMapper mapper = AasIo.jsonMapper();
+				responseBody = new String(response.body(), StandardCharsets.UTF_8);
 				JsonNode root = mapper.readTree(response.body());
 				JsonNode errors = root.path("errors");
 
@@ -115,7 +118,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 				break;
 			}
 		}
-
+		
 		
 		if (!success) {
 			log.error("HttpResponse: Failed to send record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
