@@ -70,7 +70,7 @@ public class ReferenceInfos {
 	private static ReferenceInfo resolve(Key eachKey, String refType) {
 		KeyTypes type = eachKey.getType();
 		String value = eachKey.getValue();
-		if ("semanticId".equals(refType)) {
+		if ("semanticId".equals(refType) || "referredSemanticId".equals(refType)) {
 			return new SemanticConceptInfo(value, refType);
 		}
 		switch (eachKey.getType()) {

@@ -17,11 +17,10 @@ expected: |
   statements:
   - statement: |
       MERGE (a:AssetAdministrationShell { id: $shell.id })
-      MERGE (s_0:Submodel { id: $submodels.s_0.id })
-      MERGE (a)-[:HAS_SUBMODEL]->(s_0)
+      MERGE (s:Submodel { id: $submodel.id })
+      MERGE (a)-[:HAS_SUBMODEL]->(s)
     parameters:
       shell:
         id: "http://aas.twinficient.de/heater/mrk40-lab/C1/1/1"
-      submodels:
-        s_0:
-          id: "https://admin-shell.io/idta/TimeSeries/1/1_2"
+      submodel:
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_2"

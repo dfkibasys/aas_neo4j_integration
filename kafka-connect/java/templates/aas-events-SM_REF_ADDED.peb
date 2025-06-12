@@ -1,11 +1,10 @@
 statements:
 - statement: |
     MERGE (a:AssetAdministrationShell { id: $shell.id })
-    MERGE (s_0:Submodel { id: $submodels.s_0.id })
-    MERGE (a)-[:HAS_SUBMODEL]->(s_0)
+    MERGE (s:Submodel { id: $submodel.id })
+    MERGE (a)-[:HAS_SUBMODEL]->(s)
   parameters:
     shell:
       id: "{{ event.id }}"
-    submodels:
-      s_0:
-        id: "{{ event.reference.keys[0].value }}"
+    submodel: 
+      id: "{{ event.submodelId }}"
