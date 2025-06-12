@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 
-public class PostSubmodelRef extends IntegrationTestOperation<Reference> {
+public class PostSubmodelRefOperation extends IntegrationTestOperation<Reference> {
 
 	private final String id;
 	private final Reference body;
 
 	@JsonCreator
-	public PostSubmodelRef(@JsonProperty("id") String id, @JsonProperty("body") Reference elem) {
+	public PostSubmodelRefOperation(@JsonProperty("id") String id, @JsonProperty("body") Reference elem) {
 		this.id = id;
 		this.body = elem;
 	}

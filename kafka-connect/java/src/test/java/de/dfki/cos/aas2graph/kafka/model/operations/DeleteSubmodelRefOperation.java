@@ -7,13 +7,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 
-public class DeleteSubmodelRef extends IntegrationTestOperation<Void> {
+public class DeleteSubmodelRefOperation extends IntegrationTestOperation<Void> {
 
 	private final String id;
 	private final String submodelId;
 
 	@JsonCreator
-	public DeleteSubmodelRef(@JsonProperty("id") String id, @JsonProperty("submodelId") String submodelId) {
+	public DeleteSubmodelRefOperation(@JsonProperty("id") String id, @JsonProperty("submodelId") String submodelId) {
 		this.id = id;		
 		this.submodelId = submodelId;
 	}

@@ -161,9 +161,9 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:Entity  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (re_0:Entity  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
-      MERGE (re_1:Entity  { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
+      MERGE (re_1:Entity  { smId: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_1.type} ]->(re_1)
     parameters:
       submodel:
@@ -210,7 +210,7 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:SubmodelElementCollection  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (re_0:SubmodelElementCollection  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
       MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:

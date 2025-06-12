@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementList;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultSubmodelElementCollection;
 
 import de.dfki.cos.aas2graph.kafka.pebble.model.ParentInfo;
 import de.dfki.cos.aas2graph.kafka.pebble.model.SubmodelElementInfo;

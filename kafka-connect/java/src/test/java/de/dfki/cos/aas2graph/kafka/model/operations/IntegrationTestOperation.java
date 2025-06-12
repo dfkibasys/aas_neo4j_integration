@@ -6,12 +6,13 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
-@JsonSubTypes({ @JsonSubTypes.Type(value = PostShellOperation.class, name = "POST_SHELL"),
+@JsonSubTypes({ @JsonSubTypes.Type(value = PostShellOperation.class, name =  "POST_SHELL"),
 		@JsonSubTypes.Type(value = PostSubmodelOperation.class, name = "POST_SUBMODEL"),
 		@JsonSubTypes.Type(value = PutAssetInformationOperation.class, name = "PUT_ASSET_INFORMATION"),
 		@JsonSubTypes.Type(value = PostSubmodelElementOperation.class, name = "POST_SUBMODEL_ELEMENT"),
-		@JsonSubTypes.Type(value = PostSubmodelRef.class, name = "POST_SUBMODEL_REF"),
-		@JsonSubTypes.Type(value = DeleteSubmodelRef.class, name="DELETE_SUBMODEL_REF")
+		@JsonSubTypes.Type(value = PostSubmodelRefOperation.class, name = "POST_SUBMODEL_REF"),
+		@JsonSubTypes.Type(value = DeleteSubmodelRefOperation.class, name="DELETE_SUBMODEL_REF"),
+		@JsonSubTypes.Type(value = DeleteShellOperation.class, name="DELETE_SHELL")
 })
 public abstract class IntegrationTestOperation<T> {
 

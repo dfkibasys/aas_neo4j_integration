@@ -25,7 +25,7 @@ public class Neo4jResponses {
 		Neo4jResponse response = mapper.readValue(json, Neo4jResponse.class);
 		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(json)));
 		IntegrationTestResult result = new IntegrationTestResult();
-
+	
 		addErrors(response.errors, result.getErrors());
 
 		Set<String> seenNodeIds = new HashSet<>();

@@ -86,6 +86,9 @@ public class KnowledgeGraphConnectPluginIT {
 		postResources(def);
 		String result = neo4jAccess.getData();
 		IntegrationTestResult resultAsObject = Neo4jResponses.toTestResult(result);
+		if (!resultAsObject.getErrors().isEmpty()) {
+			Assert.fail(""+resultAsObject.getErrors());
+		}
 		IntegrationTestResult expected = def.getExpected();
 		assertSame(expected, resultAsObject);
 	}

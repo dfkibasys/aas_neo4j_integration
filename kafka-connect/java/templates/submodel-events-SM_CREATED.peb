@@ -64,7 +64,7 @@ statements:
     SET e.value = $sme.value
     {%- endif %} 
     {% for eachRef in eachElem.refs %} 
-    MERGE (re_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { id: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
+    MERGE (re_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { {% if eachRef.idShortPath is null %}id{%else%}smId{%endif%}: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
     MERGE (e) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {type: $refs.r_{{ loop.index }}.type} ]->(re_{{ loop.index }}) 
     {%- endfor %}  
   parameters:
