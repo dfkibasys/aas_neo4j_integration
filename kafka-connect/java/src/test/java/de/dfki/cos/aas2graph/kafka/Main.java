@@ -2,10 +2,12 @@ package de.dfki.cos.aas2graph.kafka;
 
 import java.util.List;
 
+import org.eclipse.digitaltwin.aas4j.v3.dataformat.core.util.AasUtils;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetAdministrationShell;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetInformation;
 import org.eclipse.digitaltwin.aas4j.v3.model.AssetKind;
 import org.eclipse.digitaltwin.aas4j.v3.model.KeyTypes;
+import org.eclipse.digitaltwin.aas4j.v3.model.ModellingKind;
 import org.eclipse.digitaltwin.aas4j.v3.model.Reference;
 import org.eclipse.digitaltwin.aas4j.v3.model.ReferenceTypes;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
@@ -23,9 +25,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
+import de.dfki.cos.aas2graph.kafka.model.operations.DeleteSubmodelRef;
 import de.dfki.cos.aas2graph.kafka.model.operations.PostShellOperation;
 import de.dfki.cos.aas2graph.kafka.model.operations.PostSubmodelElementOperation;
 import de.dfki.cos.aas2graph.kafka.model.operations.PostSubmodelOperation;
+import de.dfki.cos.aas2graph.kafka.model.operations.PostSubmodelRef;
 import de.dfki.cos.aas2graph.kafka.model.operations.PutAssetInformationOperation;
 import de.dfki.cos.aas2graph.kafka.util.AasIo;
 
@@ -39,17 +43,28 @@ public class Main {
 
 	public static void main(String[] args) throws Exception {
 		EnvironmentAccess access = new EnvironmentAccess("http://localhost:8081");
-
-		Submodel sm = newTestSubmodel();
+		Submodel sm = new DefaultSubmodel.Builder().id("http://test.sm").kind(ModellingKind.INSTANCE).build();
 		new PostSubmodelOperation(sm).execute(access);
-		AssetAdministrationShell shell = newTestShell();
+		AssetAdministrationShell shell = new DefaultAssetAdministrationShell.Builder().id("http://test.shell").submodels(AasUtils.toReference(sm)).build();
 		new PostShellOperation(shell).execute(access);
+		new DeleteSubmodelRef(shell.getId(), sm.getId()).execute(access);
+		
+		
+//
+//		Submodel sm = newTestSubmodel();
+	//	new PostSubmodelOperation(sm).execute(access);
+	//	AssetAdministrationShell shell = newTestShell();
+//		new PostShellOperation(shell).execute(access);
+//		Reference ref = new DefaultReference.Builder().type(ReferenceTypes.MODEL_REFERENCE)
+//				.keys(new DefaultKey.Builder().type(KeyTypes.SUBMODEL).value("http://sm.addesref.de").build()).build();
+//		new PostSubmodelRef(shell.getId(), ref).execute(access);
+//		new DeleteSubmodelRef(shell.getId(), 	"http://sm.addesref.de").execute(access);;
 //		AssetInformation info = newTestAssetInfo();
 //		new PutAssetInformationOperation(shell.getId(), info).execute(access);
-		SubmodelElement elem = newTestSubmodelElement("Prop1", "1");
-		new PostSubmodelElementOperation(sm.getId(), "Col1", elem).execute(access);
-		elem = newTestSubmodelElement("Prop2", "2");
-		new PostSubmodelElementOperation(sm.getId(), null, elem).execute(access);
+//		SubmodelElement elem = newTestSubmodelElement("Prop1", "1");
+//		new PostSubmodelElementOperation(sm.getId(), "Col1", elem).execute(access);
+//		elem = newTestSubmodelElement("Prop2", "2");
+//		new PostSubmodelElementOperation(sm.getId(), null, elem).execute(access);
 		
 	}
 

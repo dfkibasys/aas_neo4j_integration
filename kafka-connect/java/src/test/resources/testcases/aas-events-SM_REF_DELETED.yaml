@@ -1,0 +1,22 @@
+input:
+  meta:
+    topic: aas-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: SM_REF_DELETED
+    id: http://aas.twinficient.de/heater/mrk40-lab/C1/1/1
+    submodelId: https://admin-shell.io/idta/TimeSeries/1/1_2
+expected: |
+  statements:
+  - statement: |
+      MATCH (a:AssetAdministrationShell { id: $shell.id })-[r:HAS_SUBMODEL]->(s:Submodel {id: $submodel.id})
+      DELETE r
+      WITH s
+      WHERE s.sourceUrl IS NULL AND NOT (s)<--()
+      DELETE s
+    parameters:
+      shell:
+        id: "http://aas.twinficient.de/heater/mrk40-lab/C1/1/1"
+      submodel: 
+        id: "https://admin-shell.io/idta/TimeSeries/1/1_2"

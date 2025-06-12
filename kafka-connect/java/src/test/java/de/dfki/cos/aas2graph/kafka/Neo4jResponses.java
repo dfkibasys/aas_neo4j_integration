@@ -23,6 +23,7 @@ public class Neo4jResponses {
 	public static IntegrationTestResult toTestResult(String json) throws IOException, DeserializationException {
 		ObjectMapper mapper = AasIo.jsonMapper();
 		Neo4jResponse response = mapper.readValue(json, Neo4jResponse.class);
+		System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mapper.readTree(json)));
 		IntegrationTestResult result = new IntegrationTestResult();
 
 		addErrors(response.errors, result.getErrors());
