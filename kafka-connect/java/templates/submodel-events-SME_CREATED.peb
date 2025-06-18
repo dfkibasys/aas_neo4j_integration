@@ -1,1 +1,2 @@
-statements: []
+statements:
+{% include "./submodel-events-SME_CREATED-partial.peb" %}

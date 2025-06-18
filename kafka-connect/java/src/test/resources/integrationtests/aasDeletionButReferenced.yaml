@@ -1,0 +1,65 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: ReferenceElement
+        idShort: RE
+        value:
+          type: ModelReference
+          keys: 
+            type: AssetAdministrationShell
+            value: http://test.shell 
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+#  - type: DELETE_SHELL
+#    id: http://test.shell
+expected:
+  errors: []
+  nodes:
+  - id: "0"
+    labels:
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
+    properties:
+      id: "http://test.sm"
+      registrationTime: 1749634301873
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+  - id: "1"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "ReferenceElement"
+    - "Referable"
+    properties:
+      idShort: RE
+      idShortPath: "RE"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/RE"
+  - id: "2" 
+    labels: 
+    - AssetAdministrationShell
+    - Identifiable
+    - Referable
+    properties:
+      id: "http://test.shell"
+      registrationTime: 1749634301973
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"      
+  relationships: 
+  - id: "0"
+    type: HAS_ELEMENT
+    startNode: "0"
+    endNode: "1"
+    properties: {}
+  - id: "1"
+    type: HAS_REFERENCE
+    startNode: "1"
+    endNode: "2"
+    properties:
+      name: value
+      type: ModelReference

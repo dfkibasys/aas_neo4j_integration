@@ -1,7 +1,2 @@
 statements:
-- statement: |
-    MATCH (s:Submodel {id: $submodel.id})-[:HAS_SUBMODEL_ELEMENT|HAS_CHILD*0..]->(node)
-    DETACH DELETE node;
-  parameters:
-    submodel:
-      id: "{{ event.id }}"
+{% include "./submodel-events-SM_DELETED-partial.peb" %}

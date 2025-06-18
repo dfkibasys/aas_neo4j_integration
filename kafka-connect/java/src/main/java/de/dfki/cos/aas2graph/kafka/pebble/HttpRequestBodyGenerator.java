@@ -18,14 +18,15 @@ public class HttpRequestBodyGenerator {
 	public HttpRequestBodyGenerator() {
 		FileLoader loader = new FileLoader();
 		loader.setPrefix(locationPrefix());
-		engine = new PebbleEngine.Builder().loader(loader).extension(new Neo4jTransformationExtension()).cacheActive(true).build();
+		engine = new PebbleEngine.Builder().loader(loader).extension(new Neo4jTransformationExtension())
+				.cacheActive(true).build();
 		warmup();
 	}
 	
 	private void warmup() {
 		
 		try {
-			for (Path name : Files.list(Path.of(locationPrefix())).collect(Collectors.toList())) {
+			for (Path name : Files.list(Path.of(locationPrefix())).filter(p->p.endsWith(".peb")).collect(Collectors.toList())) {
 				engine.getTemplate(name.getName(name.getNameCount()-1).toString());
 			}
 		} catch (IOException e) {

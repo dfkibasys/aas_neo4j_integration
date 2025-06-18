@@ -4,11 +4,11 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
 
 import org.apache.kafka.connect.errors.ConnectException;
 import org.apache.kafka.connect.sink.SinkRecord;
@@ -58,8 +58,6 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			return;
 		}
 		
-		
-	//	long startTransformation = System.nanoTime();
 		for (SinkRecord r : records) {
 			long startTime = System.nanoTime();
 			long afterTrans = writeRecord(r);
@@ -69,17 +67,13 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			long httpTime = (now - afterTrans) / 1_000_000;
 			long total = (now - startTime) / 1_000_000;
 			
-			
 			log.info("EVAL-RECORD-{}-{}-transformation{}ms-httpCypher{}-total{}-sinceInsertion{}",  r.topic(), r.key(), transTime, httpTime, total, fromIns);
 		}
-	//	long endTransformation = System.nanoTime();
-	//	log.info("EVAL-ALL-RECORDS-{}-{}ms", records.size(), (endTransformation - startTransformation)  / 1_000_000);
 	}
 
 	private long writeRecord(SinkRecord record) {
-		
+
 		String payload = (String) transformation.apply(record).value();
-	//	log.info("PAYLOAD {}", payload);
 		
 		long afterTrans = System.nanoTime();
 		boolean success = false;
@@ -91,6 +85,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 			builder.header(eachHeader.getKey(), eachHeader.getValue());
 		}
 		builder.timeout(Duration.ofMillis(connectTimeoutMs));
+		log.info("Sending cypher request: {}", payload);
 		HttpRequest request = builder.POST(HttpRequest.BodyPublishers.ofString(payload)).build();
 		
 		for (int attempt = 1; attempt <= maxRetries; attempt++) {
@@ -99,6 +94,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 				HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
 				status = response.statusCode();
 				ObjectMapper mapper = AasIo.jsonMapper();
+				responseBody = new String(response.body(), StandardCharsets.UTF_8);
 				JsonNode root = mapper.readTree(response.body());
 				JsonNode errors = root.path("errors");
 				
@@ -107,7 +103,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 					throw new ConnectException("Neo4j rejected the query: " + errors.toString());
 				}
 
-				log.debug("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
+				log.info("HttpResponse: Successfully sent record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
 				success = true;
 				break;
 
@@ -122,7 +118,7 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 				break;
 			}
 		}
-
+		
 		
 		if (!success) {
 			log.error("HttpResponse: Failed to send record! statusCode={} statusMessage='Failed' responseBody='{}' ", status, responseBody);

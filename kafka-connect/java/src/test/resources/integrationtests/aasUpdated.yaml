@@ -1,0 +1,108 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: ReferenceElement
+        idShort: RE
+        value: 
+          type: ModelReference
+          keys: 
+          - type: AssetAdministrationShell
+            value: http://test.shell
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://test.asset
+      submodels:
+        - type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+  - type: PUT_SHELL
+    id : http://test.shell
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://test.asset
+      submodels:
+        - type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+        - type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test_dangling.sm
+expected:
+  errors: []
+  nodes:
+  - id: "0"
+    labels:
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
+    properties:
+      id: "http://test.sm"
+      registrationTime: 1749634301873
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+  - id: "1"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "ReferenceElement"
+    - "Referable"
+    properties:
+      idShort: RE
+      idShortPath: RE
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/RE"
+  - id: "2"
+    labels:
+    - "AssetAdministrationShell"
+    - "Identifiable"
+    - "Referable"
+    properties:
+      id: "http://test.shell"
+      registrationTime: 1749634301883
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+  - id: "4"
+    labels:
+    - "Asset"
+    properties:
+      id: "http://test.asset"
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw/asset-information"
+  - id: "5"
+    labels:
+    - "Submodel"
+    properties:
+      id: "http://test_dangling.sm" 
+  relationships: 
+  - id: "0"
+    type: HAS_ELEMENT
+    startNode: "0"
+    endNode: "1"
+  - id: "1"
+    type: "HAS_REFERENCE"
+    startNode: "1"
+    endNode: "2"
+    properties:
+      name: value
+      type: ModelReference
+  - id: "4"
+    type: "HAS_ASSET"
+    startNode: "2"
+    endNode: "4"
+  - id: "5"
+    type: "HAS_SUBMODEL"
+    startNode: "2"
+    endNode: "0"
+  - id: "6"
+    type: "HAS_SUBMODEL"
+    startNode: "2"
+    endNode: "5"

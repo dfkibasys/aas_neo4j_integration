@@ -1,1 +1,12 @@
-statements: []
+statements:
+- statement: |
+    MATCH (a:AssetAdministrationShell { id: $shell.id })-[r:HAS_SUBMODEL]->(s:Submodel {id: $submodel.id})
+    DELETE r
+    WITH s
+    WHERE s.sourceUrl IS NULL AND NOT (s)<--()
+    DELETE s
+  parameters:
+    shell:
+      id: "{{ event.id }}"
+    submodel: 
+      id: "{{ event.submodelId }}"

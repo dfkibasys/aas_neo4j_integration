@@ -1,0 +1,189 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: SME_CREATED
+    id: https://aas.example.org/sm/1
+    smElementPath: "Col1.List1"
+    smElement:
+      modelType: SubmodelElementList
+      idShort: "List1"
+      value:
+        - modelType: Property
+          idShort: "P1"
+          value: "42"
+        - modelType: AnnotatedRelationshipElement
+          idShort: Rel_65400080_E20_0
+          annotations: 
+          - modelType: ReferenceElement
+            idShort: Data
+            value:
+              type: ModelReference 
+              keys:
+              - type: Submodel
+                value: "http://aas.dfki.de/ids/sm/product_relationships"
+              - type: SubmodelElementCollection
+                value: ProfileClip
+              - type: SubmodelElementCollection
+                value: Rel_65400080_E20_0_Data
+          first:
+            type: ModelReference
+            keys: 
+            - type: Submodel
+              value: http://aas.dfki.de/ids/sm/profile_types
+            - type: Entity
+              value: KAL
+            - type: Entity
+              value: KAL65
+            - type: Entity
+              value: KAL65400
+            - type: Entity
+              value: KAL6540080
+          second: 
+            type: ModelReference
+            keys: 
+            - type: Submodel
+              value: http://aas.dfki.de/ids/sm/clip_types
+            - type: Entity
+              value: Clip
+            - type: Entity
+              value: E
+            - type: Entity
+              value: E20
+        - modelType: SubmodelElementCollection
+          idShort: "Inner"
+          value:
+            - modelType: Property
+              idShort: "P2"
+              value: "x"
+
+expected: |
+  statements:
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:Referable:SubmodelElement:SubmodelElementList
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1"
+      sme:
+        idShortPath: "Col1.List1"
+        idShort: "List1"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1"
+      sme:
+        idShortPath: "Col1.List1[0]"
+        idShort: "P1"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B0%5D"
+        value: "42"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:AnnotatedRelationshipElement:Referable:RelationshipElement:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      MERGE (re_0:Entity { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_1:Entity { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_1.name, type: $refs.r_1.type} ]->(re_1)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1"
+      sme:
+        idShortPath: "Col1.List1[1]"
+        idShort: "Rel_65400080_E20_0"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B1%5D"
+      refs:
+        r_0:
+          id: "http://aas.dfki.de/ids/sm/profile_types"
+          idShortPath: "KAL.KAL65.KAL65400.KAL6540080"
+          label: "Entity"
+          name: "first"
+          type: "ModelReference"
+        r_1:
+          id: "http://aas.dfki.de/ids/sm/clip_types"
+          idShortPath: "Clip.E.E20"
+          label: "Entity"
+          name: "second"
+          type: "ModelReference"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:Referable:SubmodelElement:SubmodelElementCollection
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1"
+      sme:
+        idShortPath: "Col1.List1[2]"
+        idShort: "Inner"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B2%5D"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Referable:ReferenceElement:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+      MERGE (re_0:SubmodelElementCollection { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1[1]"
+      sme:
+        idShortPath: "Col1.List1[1].Data"
+        idShort: "Data"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B1%5D.Data"
+      refs:
+        r_0:
+          id: "http://aas.dfki.de/ids/sm/product_relationships"
+          idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
+          label: "SubmodelElementCollection"
+          name: "value"
+          type: "ModelReference"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1[2]"
+      sme:
+        idShortPath: "Col1.List1[2].P2"
+        idShort: "P2"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B2%5D.P2"
+        value: "x"

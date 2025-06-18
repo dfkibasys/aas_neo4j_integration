@@ -34,12 +34,13 @@ public class HttpBodyGeneratorTest {
 
 	private static Arguments toTestCase(Path path) {
 		ObjectMapper yamlMapper = AasIo.yamlMapper();
+		String name = path.getFileName().toString();
 		try (Reader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			TestDefinition definition = yamlMapper.readValue(reader, TestDefinition.class);
-			String name = path.getFileName().toString();
 			return Arguments.of(name, definition, yamlMapper);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		} catch (Exception e) {
+			
+			throw new RuntimeException("Failed to load testcase: " + name, e);
 		}
 	}
 
@@ -76,7 +77,8 @@ public class HttpBodyGeneratorTest {
 		return normalizedBuilder.toString();
 	}
 
-	private static final class TestDefinition {
+	
+	static final class TestDefinition {
 
 		private PebbleContext input;
 

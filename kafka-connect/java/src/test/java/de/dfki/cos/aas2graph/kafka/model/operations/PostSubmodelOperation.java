@@ -19,11 +19,10 @@ public class PostSubmodelOperation extends IntegrationTestOperation<Submodel> {
 	@Override
 	public Submodel getBody() {
 		return submodel;
-	}
-	
+	}	
 	
 	@Override
 	public void execute(EnvironmentAccess access) throws Exception {
-		access.submodels().post(submodel);
+		access.smRepo().createSubmodel(submodel);
 	}
 }

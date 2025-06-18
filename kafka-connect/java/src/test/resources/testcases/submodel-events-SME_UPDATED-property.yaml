@@ -3,23 +3,80 @@ input:
     topic: submodel-events
     sourceUrl: "http://localhost:8081"
     registrationTime: 1730878783379
-  event: 
-    id: https://smartfactory.de/submodels/00828c1d-cd3b-418f-a4bf-fe4b69c69b4a
+  event:
     type: SME_UPDATED
-    smElementPath: Details.IsFinished
-    smElement: 
+    id: https://aas.example.org/sm/1
+    smElementPath: "P1"
+    smElement:
       modelType: Property
-      value: "false"
-      valueType: "xs:string"
-      idShort : "isFinished"
+      idShort: "P1"
+      value: "1"
 expected: | 
   statements:
   - statement: |
-      MERGE (sme:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
-      SET sme.value = $sme.value
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+        -[ref:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+      WHERE e.idShortPath STARTS WITH $sme.idShortPath
+      DELETE ref
+      WITH t
+      WHERE t.sourceUrl IS NULL AND NOT EXISTS {
+        (t)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      DETACH DELETE t
     parameters:
       submodel:
-        id: "https://smartfactory.de/submodels/00828c1d-cd3b-418f-a4bf-fe4b69c69b4a"
+        id: "https://aas.example.org/sm/1"
       sme:
-        idShortPath: "Details.IsFinished"
-        value: "false"
+        idShortPath: "P1"
+  - statement: |
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+      WHERE n.idShortPath STARTS WITH $sme.idShortPath
+        AND EXISTS {
+        (n)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      REMOVE n.value, n.sourceUrl
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "P1"
+  - statement: |
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+      WHERE n.idShortPath STARTS WITH $sme.idShortPath
+        AND NOT EXISTS {
+        (n)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      DETACH DELETE n
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "P1"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:Submodel { id: $submodel.id })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "P1"
+        idShort: "P1"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/P1"
+        value: "1"

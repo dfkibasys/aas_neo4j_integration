@@ -1,0 +1,28 @@
+input:
+  - type: POST_SHELL
+    body:
+      id : http://derived.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://derived.asset
+      derivedFrom: 
+        type: ModelReference
+        keys: 
+        - type: AssetAdministrationShell
+          value: http://test.shell
+      extensions:
+      - name: test
+        value: test
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+          - type: Property
+            value: P
+  - type: DELETE_SHELL
+    id: http://derived.shell
+expected:
+  errors: []
+  nodes: []
+  relationships: []

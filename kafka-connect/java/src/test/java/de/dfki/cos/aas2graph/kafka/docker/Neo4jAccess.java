@@ -23,7 +23,7 @@ public class Neo4jAccess {
 	}
 
 	public String getData() throws IOException, InterruptedException {
-		return sendTransactionRequest("MATCH (n)-[r]->(m) RETURN n, r, m");
+		return sendTransactionRequest("MATCH (n) OPTIONAL MATCH (n)-[r]->(m) RETURN n, r, m");
 	}
 
 	public String sendTransactionRequest(String statement) throws IOException, InterruptedException {

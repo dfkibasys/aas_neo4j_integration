@@ -1,0 +1,87 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: Property
+        idShort: P
+        value: "5"
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://test.asset
+  - type: POST_SHELL
+    body:
+      id : http://derived.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://derived.asset
+      derivedFrom: 
+        type: ModelReference
+        keys: 
+        - type: AssetAdministrationShell
+          value: http://test.shell
+      extensions:
+      - name: test
+        value: test
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+          - type: Property
+            value: P
+  - type: DELETE_SHELL
+    id: http://derived.shell
+expected:
+  errors: []
+  nodes:
+  - id: "0"
+    labels:
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
+    properties:
+      id: "http://test.sm"
+      registrationTime: 1749634301873
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+  - id: "1"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "Property"
+    - "Referable"
+    properties:
+      idShort: P
+      idShortPath: P
+      value: "5"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/P"      
+  - id: "2"
+    labels:
+    - "AssetAdministrationShell"
+    - "Identifiable"
+    - "Referable"
+    properties:
+      id: "http://test.shell"
+      registrationTime: 1749634311873
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+  - id: "3"
+    labels:
+    - "Asset"
+    properties:
+      id: "http://test.asset"
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw/asset-information"
+  relationships: 
+  - id: "0"
+    type: HAS_ELEMENT
+    startNode: "0"
+    endNode: "1"
+  - id: "1"
+    type: "HAS_ASSET"
+    startNode: "2"
+    endNode: "3"

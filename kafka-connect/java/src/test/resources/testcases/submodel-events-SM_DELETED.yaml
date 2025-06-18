@@ -1,0 +1,88 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event: 
+    id: https://aas.example.org/sm/1
+    type: SM_DELETED
+expected: | 
+  statements:
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})-[rel:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+      WHERE t.sourceUrl IS NULL AND NOT EXISTS {
+        (t)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> $submodel.id) AND (o.smId IS NULL OR o.smId <> $submodel.id)
+      }
+      DETACH DELETE t
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})-[rel:HAS_REFERENCE|HAS_SEMANTIC]->()
+      DELETE rel
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+        -[ref:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+      WHERE t.sourceUrl IS NULL
+      AND NOT EXISTS {
+        (t)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> s.id) AND (o.smId IS NULL OR o.smId <> s.id)
+      }
+      DETACH DELETE t
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})-[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+      OPTIONAL MATCH (n)-[rel:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+      DELETE rel
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH p = ((s:Submodel {id: $submodel.id})-[r:HAS_ELEMENT*0..]->(n:SubmodelElement))
+      WHERE EXISTS {
+        MATCH (n)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> $submodel.id) AND (o.smId IS NULL OR o.smId <> $submodel.id)
+      }
+      REMOVE n.value, n.sourceUrl
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH p = ((s:Submodel {id: $submodel.id})-[r:HAS_ELEMENT*0..]->(n:SubmodelElement))
+      WHERE NOT EXISTS {
+        MATCH (n)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> s.id) AND (o.smId IS NULL OR o.smId <> s.id)
+      }
+      WITH length(p) AS len, n
+      ORDER BY len DESC
+      DETACH DELETE n
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})
+      WHERE EXISTS {
+        MATCH (s)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> $submodel.id) AND (o.smId IS NULL OR o.smId <> $submodel.id)
+      }
+      REMOVE s.sourceUrl, s.registrationTime
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+  - statement: |
+      MATCH (s:Submodel {id: $submodel.id})
+      WHERE NOT EXISTS {
+        MATCH (s)<-[]-(o:Identifiable|SubmodelElement)
+        WHERE (o.id IS NULL OR o.id <> $submodel.id) AND (o.smId IS NULL OR o.smId <> $submodel.id)
+      }
+      DETACH DELETE s
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"

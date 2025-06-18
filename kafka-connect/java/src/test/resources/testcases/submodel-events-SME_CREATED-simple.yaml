@@ -1,0 +1,93 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: SME_CREATED
+    id: https://aas.example.org/sm/1
+    smElementPath: "Col1.List1"
+    smElement:
+      modelType: SubmodelElementList
+      idShort: "List1"
+      value:
+        - modelType: Property
+          idShort: "P1"
+          value: "42"
+        - modelType: SubmodelElementCollection
+          idShort: "Inner"
+          value:
+            - modelType: Property
+              idShort: "P2"
+              value: "x"
+
+expected: |
+  statements:
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })    
+      SET e:Referable:SubmodelElement:SubmodelElementList
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1"
+      sme:
+        idShortPath: "Col1.List1"
+        idShort: "List1"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1"
+      sme:
+        idShortPath: "Col1.List1[0]"
+        idShort: "P1"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B0%5D"
+        value: "42"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:Referable:SubmodelElement:SubmodelElementCollection
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1"
+      sme:
+        idShortPath: "Col1.List1[1]"
+        idShort: "Inner"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B1%5D"
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:SubmodelElement { smId: $submodel.id, idShortPath: $parent.idShortPath })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      parent:
+        idShortPath: "Col1.List1[1]"
+      sme:
+        idShortPath: "Col1.List1[1].P2"
+        idShort: "P2"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMQ/submodel-elements/Col1.List1%5B1%5D.P2"
+        value: "x"

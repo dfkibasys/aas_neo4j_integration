@@ -1,0 +1,25 @@
+input:
+  meta:
+    topic: aas-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: ASSET_INFORMATION_SET
+    id: http://aas.twinficient.de/heater/mrk40-lab/C1/1/1
+    assetInformation:
+      globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/C1/1/1
+      assetType: Heater
+expected: |
+  statements: 
+  - statement: |
+      MATCH (:AssetAdministrationShell {id: $shell.id })-[HAS_ASSET]->(a:Asset)
+      SET a.sourceUrl = $asset.sourceUrl
+      REMOVE a.assetKind
+      SET a.assetType = $asset.assetType
+    parameters:
+      shell:
+        id: "http://aas.twinficient.de/heater/mrk40-lab/C1/1/1"
+      asset:
+        globalAssetId: "http://asset.twinficient.de/heater/mrk40-lab/C1/1/1"
+        sourceUrl: "http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information"
+        assetType: "Heater"

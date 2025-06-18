@@ -1,0 +1,167 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: Entity
+        idShort: E1
+        globalAssetId : http://asset.test.shell
+      - modelType: Entity
+        idShort: E2
+        globalAssetId : http://asset.unknown.shell
+      extensions:
+      - name: selfReferencing
+        value: selfReferencing
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+      - name: unknownShell
+        value: unknownShell
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: AssetAdministrationShell
+            value: http://unknown.shell
+      - name: existingShell
+        value: existingShell
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: AssetAdministrationShell
+            value: http://test.shell
+      - name: unknownElem
+        value: unknownElem
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: Submodel
+            value: http://test.sm
+          - type: Property
+            value: P22
+      - name: existingElem
+        value: existingElem
+        refersTo:
+          type: ModelReference
+          keys:
+          - type: Submodel
+            value: http://test.sm
+          - type: Property
+            value: E1            
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://tmp.test.shell
+  - type: POST_SHELL
+    body:
+      id : http://other.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+      # referenced from entity // should not be removed
+        globalAssetId: http://asset.test.shell
+  - type: PUT_SUBMODEL
+    id: http://test.sm
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: Entity
+        idShort: E1
+        globalAssetId : http://asset.test.shell
+      - modelType: Property
+        idShort: P2
+        value: "2"
+expected:
+  errors: []
+  nodes:
+  - id: "10"
+    labels:
+    - "AssetAdministrationShell"
+    - "Identifiable"
+    - "Referable"
+    properties:
+      id: "http://other.shell"
+      registrationTime: 1750158331596
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL290aGVyLnNoZWxs"
+  - id: "2"
+    labels:
+    - "AssetAdministrationShell"
+    - "Identifiable"
+    - "Referable"
+    properties:
+      id: "http://test.shell"
+      registrationTime: 1750158331596
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+  - id: "6"
+    labels:
+    - "Asset"
+    properties:
+      id: "http://asset.test.shell"
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL290aGVyLnNoZWxs/asset-information"
+  - id: "9"
+    labels:
+    - "Asset"
+    properties:
+      id: "http://tmp.test.shell"
+      sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw/asset-information"
+  - id: "11"
+    labels:
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
+    properties:
+      id: "http://test.sm"
+      registrationTime: 1750158331712
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+  - id: "12"
+    labels:
+    - "SubmodelElement"
+    - "Entity"
+    - "Referable"
+    properties:
+      idShort: "E1"
+      idShortPath: "E1"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/E1"
+  - id: "13"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "Property"
+    - "Referable"
+    properties:
+      idShort: "P2"
+      idShortPath: "P2"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/P2"
+      value: "2"
+  relationships:
+  - id: "10"
+    type: "HAS_ASSET"
+    startNode: "10"
+    endNode: "6"
+  - id: "11"
+    type: "HAS_ELEMENT"
+    startNode: "11"
+    endNode: "12"
+  - id: "12"
+    type: "HAS_REFERENCE"
+    startNode: "12"
+    endNode: "6"
+    properties:
+      name: value
+      type: ModelReference
+  - id: "13"
+    type: "HAS_ELEMENT"
+    startNode: "11"
+    endNode: "13"
+  - id: "9"
+    type: "HAS_ASSET"
+    startNode: "2"
+    endNode: "9"

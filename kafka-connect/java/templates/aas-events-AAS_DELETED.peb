@@ -1,7 +1,2 @@
 statements:
-- statement: |
-    MATCH (shell:AssetAdministrationShell {id: $shell.id})-[:HAS_ASSET*0..]->(node)
-    DETACH DELETE node;
-  parameters:
-    shell:
-      id: "{{ event.id }}"
+{% include "./aas-events-AAS_DELETED-partial.peb" %}

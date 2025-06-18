@@ -35,6 +35,54 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.eclipse.digitaltwin.basyx</groupId>
+      <artifactId>basyx.aasrepository-client</artifactId>
+      <version>2.0.0-milestone-05</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>basyx.client</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.aasrepository-core</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.authorization</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.aasservice-client</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.digitaltwin.basyx</groupId>
+      <artifactId>basyx.submodelrepository-client</artifactId>
+      <version>2.0.0-milestone-05</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>basyx.submodelrepository-core</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.submodelservice-client</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.client</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>basyx.authorization</artifactId>
+          <groupId>org.eclipse.digitaltwin.basyx</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-api</artifactId>
       <version>3.8.1</version>
@@ -108,6 +156,8 @@
     <docker.image.name>aas-knowledgegraph</docker.image.name>
     <slf4j.version>1.7.32</slf4j.version>
     <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
+    <logback.version>1.2.12</logback.version>
+    <basyx.client.sdk.version>2.0.0-milestone-05</basyx.client.sdk.version>
     <java.version>15</java.version>
     <junit.jupiter.version>5.11.3</junit.jupiter.version>
     <kafka.version>3.8.1</kafka.version>

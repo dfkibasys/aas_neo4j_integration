@@ -1,0 +1,58 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements:
+      - modelType: Entity
+        idShort: E1
+        globalAssetId : http://asset.test.shell 
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://aaset.test.shell
+  - type: DELETE_SHELL
+    id: http://test.shell
+expected:
+  errors: []
+  nodes:
+  - id: "0"
+    labels:
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
+    properties:
+      id: "http://test.sm"
+      registrationTime: 1749634301873
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+  - id: "1"
+    labels:
+    - "SubmodelElement"
+    - "Entity"
+    - "Referable"
+    properties:
+      idShort: E1
+      idShortPath: "E1"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/E1"
+  - id: "2"
+    labels:
+    - "Asset"
+    properties:
+      id: http://asset.test.shell
+  relationships:
+  - id: "0"
+    type: HAS_ELEMENT
+    startNode: "0"
+    endNode: "1"
+    properties: {}
+  - id: "1"
+    type: HAS_REFERENCE
+    startNode: "1"
+    endNode: "2"
+    properties:
+      name: globalAssetId
+      type: AssetId

@@ -1,1 +1,10 @@
-statements: []
+statements:
+- statement: |
+    MERGE (a:AssetAdministrationShell { id: $shell.id })
+    MERGE (s:Submodel { id: $submodel.id })
+    MERGE (a)-[:HAS_SUBMODEL]->(s)
+  parameters:
+    shell:
+      id: "{{ event.id }}"
+    submodel: 
+      id: "{{ event.submodelId }}"

@@ -1,0 +1,31 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: SME_CREATED
+    id: https://aas.example.org/sm/2
+    smElementPath: "P_Root"
+    smElement:
+      modelType: Property
+      idShort: "P_Root"
+      value: "42"
+expected: |
+  statements:
+  - statement: |
+      MERGE (e:SubmodelElement { smId: $submodel.id, idShortPath: $sme.idShortPath })
+      SET e:DataElement:Property:Referable:SubmodelElement
+      SET e.idShort = $sme.idShort
+      SET e.sourceUrl = $sme.sourceUrl
+      SET e.value = $sme.value
+      MERGE (p:Submodel { id: $submodel.id })
+      MERGE (p)-[:HAS_ELEMENT]->(e)
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/2"
+      sme:
+        idShortPath: "P_Root"
+        idShort: "P_Root"
+        sourceUrl: "http://localhost:8081/submodels/aHR0cHM6Ly9hYXMuZXhhbXBsZS5vcmcvc20vMg/submodel-elements/P_Root"
+        value: "42"

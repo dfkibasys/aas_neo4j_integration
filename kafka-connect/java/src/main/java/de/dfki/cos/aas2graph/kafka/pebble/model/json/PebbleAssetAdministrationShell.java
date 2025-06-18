@@ -35,6 +35,7 @@ public class PebbleAssetAdministrationShell extends DefaultAssetAdministrationSh
 		PebbleHasDataSpecification.super.applyRefs(refs);
 	}
 
+
 	private void addAssetInformationRefs(AssetInformation info, List<ReferenceInfo> refs) {
 		if (info == null) {
 			return;

@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.kafka.common.Uuid;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
@@ -26,7 +27,7 @@ public class ConfiguredKafkaNeo4jPluginContainer extends GenericContainer<Config
 	}
 
 	private static ImageFromDockerfile dockerFile() {
-		return new ImageFromDockerfile("dfkibasys/kafka-connect-neo4j:test", true).withDockerfile(Paths.get("../Dockerfile"));
+		return new ImageFromDockerfile("dfkibasys/kafka-connect-neo4j:"+Uuid.randomUuid(), true).withDockerfile(Paths.get("../Dockerfile"));
 	}
 
 	private Map<String, String> envVars() {

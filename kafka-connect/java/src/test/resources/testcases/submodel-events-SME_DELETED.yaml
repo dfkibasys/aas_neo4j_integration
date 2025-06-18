@@ -1,0 +1,62 @@
+input:
+  meta:
+    topic: submodel-events
+    sourceUrl: "http://localhost:8081"
+    registrationTime: 1730878783379
+  event:
+    type: SME_DELETED
+    id: https://aas.example.org/sm/1
+    smElementPath: "Col1.List1"
+expected: |
+  statements:
+  - statement: |
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+        -[ref:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+      WHERE e.idShortPath STARTS WITH $sme.idShortPath
+      DELETE ref
+      WITH t
+      WHERE t.sourceUrl IS NULL AND NOT EXISTS {
+        (t)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      DETACH DELETE t
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "Col1.List1"
+  - statement: |
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+      WHERE n.idShortPath STARTS WITH $sme.idShortPath
+        AND EXISTS {
+        (n)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      REMOVE n.value, n.sourceUrl
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "Col1.List1"
+  - statement: |
+      MATCH (e:SubmodelElement {smId: $submodel.id})
+        -[r:HAS_ELEMENT*0..]->(n:SubmodelElement)
+      WHERE n.idShortPath STARTS WITH $sme.idShortPath
+        AND NOT EXISTS {
+        (n)<-[:HAS_REFERENCE]-(o)
+        WHERE (o:Identifiable)
+          OR (o:SubmodelElement AND (o.smId <> $submodel.id
+            OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
+      }
+      DETACH DELETE n
+    parameters:
+      submodel:
+        id: "https://aas.example.org/sm/1"
+      sme:
+        idShortPath: "Col1.List1"

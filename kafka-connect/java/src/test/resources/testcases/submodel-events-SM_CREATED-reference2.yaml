@@ -155,10 +155,10 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:Entity  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
-      MERGE (re_1:Entity  { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_1.type} ]->(re_1)
+      MERGE (re_0:Entity  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_1:Entity  { smId: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_1.name, type: $refs.r_1.type} ]->(re_1)
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -173,12 +173,14 @@ expected: |
           id: "http://aas.dfki.de/ids/sm/profile_types"
           idShortPath: "KAL.KAL65.KAL65400.KAL65400080"
           label: "Entity"
-          type: "first"
+          name: "first"
+          type: "ModelReference"
         r_1:
           id: "http://aas.dfki.de/ids/sm/clip_types"
           idShortPath: "Clip.E.E20"
           label: "Entity"
-          type: "second"
+          name: "second"
+          type: "ModelReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:AnnotatedRelationshipElement:Referable:RelationshipElement:SubmodelElement
@@ -186,10 +188,10 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:Entity  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
-      MERGE (re_1:Entity  { id: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_1.type} ]->(re_1)
+      MERGE (re_0:Entity  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_1:Entity  { smId: $refs.r_1.id, idShortPath: $refs.r_1.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_1.name, type: $refs.r_1.type} ]->(re_1)
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -204,12 +206,14 @@ expected: |
           id: "http://aas.dfki.de/ids/sm/profile_types"
           idShortPath: "KAL.KAL65.KAL65400.KAL65400080"
           label: "Entity"
-          type: "first"
+          name: "first"
+          type: "ModelReference"
         r_1:
           id: "http://aas.dfki.de/ids/sm/clip_types"
           idShortPath: "Clip.L.L120"
           label: "Entity"
-          type: "second"
+          name: "second"
+          type: "ModelReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:Referable:SubmodelElement:SubmodelElementCollection
@@ -249,8 +253,8 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:SubmodelElementCollection  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_0:SubmodelElementCollection  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -265,7 +269,8 @@ expected: |
           id: "http://aas.dfki.de/ids/sm/product_relationships"
           idShortPath: "ProfileClip.Rel_65400080_E20_0_Data"
           label: "SubmodelElementCollection"
-          type: "value"
+          name: "value"
+          type: "ModelReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:Referable:ReferenceElement:SubmodelElement
@@ -273,8 +278,8 @@ expected: |
       MERGE (p)-[:HAS_ELEMENT]->(e)
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
-      MERGE (re_0:SubmodelElementCollection  { id: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
-      MERGE (e) -[:HAS_REFERENCE {type: $refs.r_0.type} ]->(re_0)
+      MERGE (re_0:SubmodelElementCollection  { smId: $refs.r_0.id, idShortPath: $refs.r_0.idShortPath})
+      MERGE (e) -[:HAS_REFERENCE {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/product_relationships"
@@ -289,7 +294,8 @@ expected: |
           id: "http://aas.dfki.de/ids/sm/product_relationships"
           idShortPath: "ProfileClip.Rel_65400080_L120_0_Data"
           label: "SubmodelElementCollection"
-          type: "value"
+          name: "value"
+          type: "ModelReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:Property:Referable:SubmodelElement
