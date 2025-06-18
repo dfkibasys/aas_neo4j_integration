@@ -55,7 +55,11 @@ expected:
     type: HAS_ELEMENT
     startNode: "0"
     endNode: "1"
+    properties: {}
   - id: "1"
     type: HAS_REFERENCE
     startNode: "1"
     endNode: "2"
+    properties:
+      name: value
+      type: ModelReference

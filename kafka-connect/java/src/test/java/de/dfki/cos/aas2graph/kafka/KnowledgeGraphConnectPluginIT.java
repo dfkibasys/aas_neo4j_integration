@@ -121,7 +121,6 @@ public class KnowledgeGraphConnectPluginIT {
 		for (IntegrationTestOperation<?> eachInputItem : input) {
 			eachInputItem.execute(envAccess);
 			ProcessingEvent evt = resultResolver.awaitNext();
-			System.out.println(evt);
 			Assert.assertTrue(evt.message(), evt.isSuccess());
 		}
 	}

@@ -6,13 +6,23 @@ input:
       kind : Instance
   - type: POST_SHELL
     body:
-      id : http://test.shell
+      id: http://test.shell
       modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/C1/1/1
+        assetKind: Instance
+        assetType: Heater
       submodels:
       - type: ModelReference
         keys: 
           type: Submodel
           value: http://test.sm
+  - type: PUT_ASSET_INFORMATION
+    id: http://test.shell
+    body:
+      globalAssetId: http://asset.twinficient.de/heater/mrk40-lab/type
+      assetKind: Type
+      assetType: Test
 expected:
   nodes:
     - id: "0"
@@ -33,8 +43,20 @@ expected:
         id: "http://test.shell"
         registrationTime: 1732779314520
         sourceUrl: "http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw"
+    - id: "2"
+      labels:
+      - Asset
+      properties:
+        id: http://asset.twinficient.de/heater/mrk40-lab/C1/1/1
+        sourceUrl: http://aas-environment:8081/shells/aHR0cDovL3Rlc3Quc2hlbGw/asset-information
+        assetKind: Type
+        assetType: Test
   relationships:
     - id: "0"
+      type: HAS_ASSET
+      startNode: "1"
+      endNode: "2"
+    - id: "1"
       type: HAS_SUBMODEL
       startNode: "1"
       endNode: "0"

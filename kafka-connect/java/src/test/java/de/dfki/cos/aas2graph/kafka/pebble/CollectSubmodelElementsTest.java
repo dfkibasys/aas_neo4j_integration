@@ -3,13 +3,11 @@ package de.dfki.cos.aas2graph.kafka.pebble;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
-import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElementCollection;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -62,7 +60,6 @@ public class CollectSubmodelElementsTest {
 				), null, null, 0);
 		Assertions.assertEquals(8, elems.size());
 		Set<String> idPaths = elems.stream().map(SubmodelElementInfo::getIdShortPath).collect(Collectors.toSet());
-		System.out.println(idPaths);
 		Assertions.assertTrue(idPaths.contains("L"));
 		Assertions.assertTrue(idPaths.contains("L[0]"));
 		Assertions.assertTrue(idPaths.contains("L[1]"));
@@ -86,7 +83,6 @@ public class CollectSubmodelElementsTest {
 		Assertions.assertEquals(3, elems.size());
 		
 		Set<String> idPaths = elems.stream().map(SubmodelElementInfo::getIdShortPath).collect(Collectors.toSet());
-		System.out.println(idPaths);
 		Assertions.assertTrue(idPaths.contains("C.C2"));
 		Assertions.assertTrue(idPaths.contains("C.C2.Prop1"));
 		Assertions.assertTrue(idPaths.contains("C.C2.Prop2"));
@@ -131,7 +127,6 @@ public class CollectSubmodelElementsTest {
 		Assertions.assertEquals(3, elems.size());
 		
 		Set<String> idPaths = elems.stream().map(SubmodelElementInfo::getIdShortPath).collect(Collectors.toSet());
-		System.out.println(idPaths);
 		Assertions.assertTrue(idPaths.contains("L[3]"));
 		Assertions.assertTrue(idPaths.contains("L[3].Prop1"));
 		Assertions.assertTrue(idPaths.contains("L[3].Prop2"));

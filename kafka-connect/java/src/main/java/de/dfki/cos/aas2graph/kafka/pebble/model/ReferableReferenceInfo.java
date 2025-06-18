@@ -11,8 +11,8 @@ public abstract class ReferableReferenceInfo extends ReferenceInfo {
 
 	private final KeyTypes targetType;
 	
-	public ReferableReferenceInfo(KeyTypes targetType, String refType) {
-		super(refType);
+	public ReferableReferenceInfo(KeyTypes targetType, String refName, String refType) {
+		super(refName, refType);
 		this.targetType = targetType;
 	}
 	

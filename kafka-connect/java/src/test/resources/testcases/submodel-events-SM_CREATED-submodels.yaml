@@ -138,7 +138,7 @@ expected: |
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -150,7 +150,8 @@ expected: |
         r_0:
           id: "https://admin-shell.io/idta/TimeSeries/Metadata/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:MultiLanguageProperty:Referable:SubmodelElement
@@ -159,7 +160,7 @@ expected: |
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -173,7 +174,8 @@ expected: |
         r_0:
           id: "https://admin-shell.io/idta/TimeSeries/Metadata/Name/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference" 
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:MultiLanguageProperty:Referable:SubmodelElement
@@ -182,7 +184,7 @@ expected: |
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -196,7 +198,8 @@ expected: |
         r_0:
           id: "https://admin-shell.io/idta/TimeSeries/Metadata/Description/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:Referable:SubmodelElement:SubmodelElementCollection
@@ -205,7 +208,7 @@ expected: |
       SET e.idShort = $sme.idShort
       SET e.sourceUrl = $sme.sourceUrl
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -219,7 +222,8 @@ expected: |
         r_0:
           id: "https://admin-shell.io/idta/TimeSeries/Record/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:Property:Referable:SubmodelElement
@@ -229,11 +233,11 @@ expected: |
       SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
       MERGE (re_1:SemanticConcept  { id: $refs.r_1.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_1.type} ]->(re_1)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_1.name, type: $refs.r_1.type} ]->(re_1)
       MERGE (re_2:SemanticConcept  { id: $refs.r_2.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_2.type} ]->(re_2)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_2.name, type: $refs.r_2.type} ]->(re_2)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -248,15 +252,18 @@ expected: |
         r_0:
           id: "https://admin-shell.io/idta/TimeSeries/RelativePointInTime/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
         r_1:
           id: "https://admin-shell.io/SubmodelTemplates/Cardinality/1/0"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
         r_2:
           id: "https://admin-shell.io/SubmodelTemplates/AllowedIdShort/1/0"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"
   - statement: |
       MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
       SET e:DataElement:Property:Referable:SubmodelElement
@@ -266,7 +273,7 @@ expected: |
       SET e.sourceUrl = $sme.sourceUrl
       SET e.value = $sme.value
       MERGE (re_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (e) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(re_0)
+      MERGE (e) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(re_0)
     parameters:
       submodel:
         id: "https://admin-shell.io/idta/TimeSeries/1/1_1"
@@ -281,4 +288,5 @@ expected: |
         r_0:
           id: "https://sample.com/AccelerationX/1/1"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"

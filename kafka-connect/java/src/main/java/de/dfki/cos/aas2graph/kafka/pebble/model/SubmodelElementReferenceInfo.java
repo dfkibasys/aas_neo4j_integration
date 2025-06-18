@@ -9,8 +9,8 @@ public class SubmodelElementReferenceInfo extends ReferableReferenceInfo {
 	private final String idShortPath;
 	private final String id;
 
-	public SubmodelElementReferenceInfo(KeyTypes targetType, String id, String idShortPath, String refType) {
-		super(targetType, refType);
+	public SubmodelElementReferenceInfo(KeyTypes targetType, String id, String idShortPath, String refName, String refType) {
+		super(targetType, refName, refType);
 		this.idShortPath =  idShortPath;
 		this.id = id;
 	}

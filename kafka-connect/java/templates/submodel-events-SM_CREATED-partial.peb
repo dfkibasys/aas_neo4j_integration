@@ -1,0 +1,108 @@
+{% set sm = event.submodel %}
+{%- set smElems = collectAllSubmodelElements(sm) %}
+{%- if meta.sourceUrl %}
+    {%- set globalSourceUrl = meta.sourceUrl %}
+{%- endif %}
+{%- set globalIdEncoded = sm.id | base64encode | replace({ '=': '' }) | urlencode %} 
+- statement: |
+    MERGE (s:Submodel { id: $submodel.id })
+    SET s{% for eachLabel in sm.labels %}:{{eachLabel}}{% endfor %}  
+    {% if sm.idShort -%}
+    SET s.idShort = $submodel.idShort
+    {%- endif %} 
+    {% if meta.sourceUrl -%}
+    SET s.sourceUrl = $submodel.sourceUrl
+    {%- endif %} 
+    {% if meta.registrationTime -%}
+    SET s.registrationTime = $submodel.registrationTime
+    {%- endif %} 
+    {% for eachRef in sm.refs %} 
+    MERGE (r_{{ loop.index }}{%if eachRef.label is not null %}:{{ eachRef.label }}{%- endif %}  { {% if eachRef.idShortPath is null %}id{% else %}smId{% endif %}: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
+    MERGE (s) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {name: $refs.r_{{ loop.index }}.name, type: $refs.r_{{ loop.index }}.type} ]->(r_{{ loop.index }})
+    {%- endfor %} 
+  parameters:
+    submodel:
+      id: "{{ sm.id }}"
+      {% if sm.idShort -%}
+      idShort: "{{ sm.idShort }}"
+      {%- endif %} 
+      {% if meta.sourceUrl and sm.id -%}
+      sourceUrl: "{{ globalSourceUrl ~ '/submodels/' ~ globalIdEncoded }}" {% endif %} 
+      {% if meta.registrationTime -%}
+      registrationTime: {{ meta.registrationTime }}
+      {%- endif %} 
+    {%- if sm.refs is not empty %} 
+    refs: 
+      {% for eachRef in sm.refs %} 
+      r_{{ loop.index }}:
+        id: "{{ eachRef.id }}"
+        {%- if eachRef.idShortPath is not null %} 
+        idShortPath: "{{ eachRef.idShortPath }}"
+        {%- endif %} 
+        {%- if eachRef.label is not null %} 
+        label: "{{ eachRef.label }}" 
+        {%- endif %} 
+        name: "{{ eachRef.refName }}" 
+        type: "{{ eachRef.refType }}" 
+      {%- endfor %} 
+    {% endif %}
+{% for eachElem in smElems %}      
+- statement: | 
+    MERGE (e:SubmodelElement {smId: $submodel.id, idShortPath: $sme.idShortPath })
+    SET e{% for eachLabel in eachElem.labels %}:{{eachLabel}}{% endfor %} 
+    {%- if eachElem.isRootElement %} 
+    MERGE (p:Submodel {id: $submodel.id })
+    {%- else %} 
+    MERGE (p:SubmodelElement {smId: $submodel.id, idShortPath: $parent.idShortPath })
+    {%- endif %} 
+    MERGE (p)-[:HAS_ELEMENT]->(e)
+    {%- if eachElem.idShort %} 
+    SET e.idShort = $sme.idShort
+    {%- endif %}
+    {%- if meta.sourceUrl and sm.id %} 
+    SET e.sourceUrl = $sme.sourceUrl
+    {%- endif %}
+    {%- if eachElem.value is not null %} 
+    SET e.value = $sme.value
+    {%- endif %} 
+    {% for eachRef in eachElem.refs %} 
+    MERGE (re_{{ loop.index }}{%if eachRef.label is not empty %}:{{ eachRef.label }}{%- endif %}  { {% if eachRef.idShortPath is null %}id{%else%}smId{%endif%}: $refs.r_{{ loop.index }}.id{% if eachRef.idShortPath is not null %}, idShortPath: $refs.r_{{ loop.index }}.idShortPath{% endif %}})
+    MERGE (e) -[:{% if eachRef.semantics %}HAS_SEMANTIC{% else %}HAS_REFERENCE{% endif %} {name: $refs.r_{{ loop.index }}.name{%- if eachRef.refType is not null %}, type: $refs.r_{{ loop.index }}.type{% endif %}} ]->(re_{{ loop.index }}) 
+    {%- endfor %}  
+  parameters:
+    submodel:
+      id: "{{ sm.id }}"
+    {%- if eachElem.parent.idShortPath %} 
+    parent: 
+      idShortPath: "{{eachElem.parent.idShortPath}}" 
+    {%- endif %} 
+    sme:   
+      {% if eachElem.idShort -%}
+      idShort: "{{eachElem.idShort}}"
+      {%- endif %} 
+      {% if meta.sourceUrl and sm.id -%}
+      {%- set idShortEncoded = eachElem.idShortPath | urlencode %} 
+      sourceUrl: {{ globalSourceUrl ~ '/submodels/' ~ globalIdEncoded ~ "/submodel-elements/" ~ idShortEncoded }} 
+      {%- endif %}  
+      idShortPath: "{{eachElem.idShortPath}}" 
+      {%- if eachElem.value is not null %} 
+      value: "{{eachElem.value}}" 
+      {%- endif %} 
+      {%- if eachElem.refs is not empty %} 
+    refs: 
+      {%- for eachRef in eachElem.refs %} 
+      r_{{ loop.index }}:
+        id: "{{ eachRef.id }}"
+        {%- if eachRef.idShortPath is not null %} 
+        idShortPath: "{{ eachRef.idShortPath }}"
+        {%- endif %} 
+        {%- if eachRef.label is not null %} 
+        label: "{{ eachRef.label }}"
+        {%- endif %} 
+        name: "{{ eachRef.refName }}" 
+        {%- if eachRef.refType is not null %} 
+        type: "{{ eachRef.refType }}" 
+        {%- endif %} 
+      {%- endfor %} 
+  {% endif %}
+{%- endfor %}

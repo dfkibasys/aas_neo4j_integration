@@ -1,7 +1,5 @@
 package de.dfki.cos.aas2graph.kafka.model.operations;
 
-import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

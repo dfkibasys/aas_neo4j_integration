@@ -8,20 +8,28 @@ input:
     type: AAS_DELETED
 expected: | 
   statements:
-  - statement: | 
+  - statement: |
       MATCH (a:AssetAdministrationShell {id: $shell.id})-[rel:HAS_SUBMODEL]->(s:Submodel)
       DELETE rel
       WITH s
-      WHERE s.sourceUrl IS NULL AND NOT (s)<--() AND NOT (s)-->()
-      DELETE s
+      WHERE s.sourceUrl IS NULL
+      AND NOT EXISTS {
+        MATCH (s)<-[]-(o)
+        WHERE o.id IS NULL OR o.id <> $shell.id
+      }
+      DETACH DELETE s
     parameters:
       shell:
         id: "http://aas.twinficient.de/heater/mrk40-lab/C1/1/1"
-  - statement: | 
+  - statement: |
       MATCH (a:AssetAdministrationShell {id: $shell.id})-[rel:HAS_REFERENCE|HAS_SEMANTIC]->(ref)
       DELETE rel
       WITH ref
-      WHERE ref.sourceUrl IS NULL AND NOT (ref)<--() AND NOT (ref)-->()
+      WHERE ref.sourceUrl IS NULL
+      AND NOT EXISTS {
+        MATCH (ref)<-[]-(o)
+        WHERE o.id IS NULL OR o.id <> $shell.id
+      }
       DELETE ref
     parameters:
       shell:

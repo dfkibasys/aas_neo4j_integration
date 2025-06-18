@@ -1,0 +1,9 @@
+MATCH (s:Submodel {id: 'http://test.sm'})-[rel:HAS_REFERENCE|HAS_SEMANTIC]->(t)
+WHERE t.sourceUrl IS NULL
+WITH t, EXISTS {
+    (t)<-[]-(o:Identifiable|SubmodelElement) 
+    WHERE (o.id IS NOT NULL AND o.id <> $submodel.id) OR (o.smId IS NOT NULL AND o.smId <> $submodel.id)
+  }} AS otherRefsExist
+FOREACH (_ IN CASE WHEN !otherRefsExist THEN [1] ELSE [] END |
+  DETACH DELETE t
+)

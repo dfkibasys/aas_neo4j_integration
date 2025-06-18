@@ -99,8 +99,7 @@ services:
       - basyx
 
   aas-environment:
-    #image: eclipsebasyx/aas-environment:${BASYX_V3_VERSION}
-    image: dfkibasys/aas-environment:kafka
+    image: eclipsebasyx/aas-environment:${BASYX_V3_VERSION}
     container_name: aas-environment
     restart: always
     ports:
@@ -113,19 +112,20 @@ services:
       BASYX_SUBMODELREPOSITORY_FEATURE_REGISTRYINTEGRATION: http://submodel-registry:8080
       BASYX_AASREPOSITORY_FEATURE_AASXUPLOAD_ENABLED: "true"   
       BASYX_CORS_ALLOWED_ORIGINS: '*'
-    #  BASYX_ENVIRONMENT: file:/application/files/aasx/
+   #   BASYX_ENVIRONMENT: file:/application/files/aasx/
       BASYX_CORS_ALLOWED_METHODS: GET,POST,PATCH,DELETE,PUT,OPTIONS,HEAD
       BASYX_EXTERNALURL: http://localhost:8081,http://aas-environment:8081
 
 
 
-    volumes: 
-    - ./aasx/mir100_10000000_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
-    - ./aasx/mir100_10000001_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
-    - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
-    - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
-    - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
-    - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
+  #  volumes: 
+  #  - ./aasx/:/application/files/aasx/:ro
+    #- ./aasx/mir100_10000000_aas.aasx:/application/files/aasx/mir100_10000000_aas.aasx
+    # - ./aasx/mir100_10000001_aas.aasx:/application/files/aasx/mir100_10000001_aas.aasx
+    # - ./aasx/mir100_10000002_aas.aasx:/application/files/aasx/mir100_10000002_aas.aasx
+    # - ./aasx/mir100_10000003_aas.aasx:/application/files/aasx/mir100_10000003_aas.aasx
+    # - ./aasx/mir100_10000004_aas.aasx:/application/files/aasx/mir100_10000004_aas.aasx
+    # - ./aasx/mir100_10000005_aas.aasx:/application/files/aasx/mir100_10000005_aas.aasx
       # AASX
 #      - ./aasx:/application/files/aasx
 #      - ./aasx/Cab_A_Blue_2.aasx:/application/files/aasx/Cab_A_Blue_2.aasx

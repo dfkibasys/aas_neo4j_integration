@@ -37,4 +37,3 @@ expected: |
         sourceUrl: http://localhost:8081/shells/aHR0cDovL2Fhcy50d2luZmljaWVudC5kZS9oZWF0ZXIvbXJrNDAtbGFiL0MxLzEvMQ/asset-information
         assetKind: "Instance"
         assetType: "Heater"
-      

@@ -1,0 +1,56 @@
+- statement: | 
+    MATCH (a:AssetAdministrationShell {id: $shell.id})-[rel:HAS_SUBMODEL]->(s:Submodel)
+    DELETE rel
+    WITH s
+    WHERE s.sourceUrl IS NULL
+    AND NOT EXISTS {
+      MATCH (s)<-[]-(o)
+      WHERE o.id IS NULL OR o.id <> $shell.id
+    }
+    DETACH DELETE s
+  parameters:
+    shell:
+      id: "{{ event.id }}"
+- statement: | 
+    MATCH (a:AssetAdministrationShell {id: $shell.id})-[rel:HAS_REFERENCE|HAS_SEMANTIC]->(ref)
+    DELETE rel
+    WITH ref
+    WHERE ref.sourceUrl IS NULL 
+    AND NOT EXISTS {
+      MATCH (ref)<-[]-(o)
+      WHERE o.id IS NULL OR o.id <> $shell.id
+    }
+    DELETE ref
+  parameters:
+    shell:
+      id: "{{ event.id }}"
+- statement: | 
+    MATCH (a:AssetAdministrationShell {id: $shell.id})-[rel:HAS_ASSET]->(asset:Asset)
+    DELETE rel
+    WITH asset
+    OPTIONAL MATCH (asset)<-[other]-()
+    WITH asset, COUNT(other) AS incoming
+    FOREACH (_ IN CASE WHEN incoming = 0 THEN [1] ELSE [] END |
+      DELETE asset
+    )
+    FOREACH (_ IN CASE WHEN incoming > 0 THEN [1] ELSE [] END |
+      REMOVE asset.assetKind, asset.assetType, asset.sourceUrl, asset.registrationTime
+    )
+  parameters:
+    shell:
+      id: "{{ event.id }}"
+- statement: |
+    MATCH (a:AssetAdministrationShell { id: $shell.id })
+    OPTIONAL MATCH (a)<-[r]-()
+    WITH a, COUNT(r) AS incoming
+    FOREACH (_ IN CASE WHEN incoming = 0 THEN [1] ELSE [] END |
+      DELETE a
+    )
+    FOREACH (_ IN CASE WHEN incoming > 0 THEN [1] ELSE [] END |
+      REMOVE a.idShort,
+             a.sourceUrl,
+             a.registrationTime
+    )
+  parameters:
+    shell:
+      id: "{{ event.id }}"

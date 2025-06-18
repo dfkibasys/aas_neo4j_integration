@@ -7,7 +7,7 @@ public class AssetReferenceInfo extends ReferenceInfo {
 	private String assetId;
 
 	public AssetReferenceInfo(String assetId) {
-		super("globalAssetId");
+		super("globalAssetId", "AssetId");
 		this.assetId = assetId;	
 	}
 	

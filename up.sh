@@ -4,7 +4,8 @@
 # mvn -f kafka-connect/java clean install
 # echo "Starting stack..."
 docker-compose  --project-name knowledgegraph-v3 up --detach --remove-orphans --force-recreate --renew-anon-volumes
-# --file compose.yaml
+#docker-compose  --project-name knowledgegraph-v3  --file compose.yaml up --detach --remove-orphans --force-recreate --renew-anon-volumes
+# 
 source .env
 
 # Colors

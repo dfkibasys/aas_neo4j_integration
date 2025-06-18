@@ -1,0 +1,21 @@
+input:
+  - type: POST_SHELL
+    body:
+      id : http://test.shell
+      modelType: AssetAdministrationShell
+      assetInformation:
+        globalAssetId: http://test.asset
+      extensions:
+      - name: test
+        value: test
+        refersTo:
+          type: ModelReference
+          keys: 
+          - type: AssetAdministrationShell
+            value: http://test.shell
+  - type: DELETE_SHELL
+    id: http://test.shell
+expected:
+  errors: []
+  nodes: []
+  relationships: []

@@ -12,7 +12,13 @@ import de.dfki.cos.aas2graph.kafka.docker.EnvironmentAccess;
 		@JsonSubTypes.Type(value = PostSubmodelElementOperation.class, name = "POST_SUBMODEL_ELEMENT"),
 		@JsonSubTypes.Type(value = PostSubmodelRefOperation.class, name = "POST_SUBMODEL_REF"),
 		@JsonSubTypes.Type(value = DeleteSubmodelRefOperation.class, name="DELETE_SUBMODEL_REF"),
-		@JsonSubTypes.Type(value = DeleteShellOperation.class, name="DELETE_SHELL")
+		@JsonSubTypes.Type(value = DeleteShellOperation.class, name="DELETE_SHELL"),
+		@JsonSubTypes.Type(value = DeleteSubmodelOperation.class, name="DELETE_SUBMODEL"),
+		@JsonSubTypes.Type(value = PutShellOperation.class, name="PUT_SHELL"),
+		@JsonSubTypes.Type(value = PutSubmodelOperation.class, name="PUT_SUBMODEL"),
+		@JsonSubTypes.Type(value = DeleteSubmodelElementOperation.class, name="DELETE_SUBMODEL_ELEMENT"),
+		@JsonSubTypes.Type(value = PutSubmodelElementOperation.class, name="PUT_SUBMODEL_ELEMENT")
+
 })
 public abstract class IntegrationTestOperation<T> {
 

@@ -4,8 +4,8 @@ public class SemanticConceptInfo extends ReferenceInfo {
 
 	private final String id;
 	
-	public SemanticConceptInfo(String id, String refType) {
-		super(refType);
+	public SemanticConceptInfo(String id, String refName, String refType) {
+		super(refName, refType);
 		this.id = id;
 	}
 

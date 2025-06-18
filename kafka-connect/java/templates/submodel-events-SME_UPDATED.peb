@@ -1,10 +1,3 @@
 statements:
-- statement: |
-    MERGE (sme:Property {smId: $submodel.id, idShortPath: $sme.idShortPath }) 
-    SET sme.value = $sme.value
-  parameters:
-    submodel:
-      id: "{{ event.id }}"
-    sme:
-      idShortPath: "{{ event.smElementPath }}"
-      value: "{{ event.smElement.value }}"
+{% include "./submodel-events-SME_DELETED-partial.peb" %}
+{% include "./submodel-events-SME_CREATED-partial.peb" %}

@@ -2,27 +2,32 @@
 statements:
 - statement: |
     MATCH (:AssetAdministrationShell {id: $shell.id })-[HAS_ASSET]->(a:Asset)
-    SET a.id = $asset.globalAssetId
-    {%- if meta.sourceUrl is not null %} 
+{%- if meta.sourceUrl %} 
     SET a.sourceUrl = $asset.sourceUrl
-    {%- endif %} 
-    {%- if assetInfo.assetKind is not null %} 
+{%- else %} 
+    REMOVE a.sourceUrl
+{%- endif %} 
+{%- if assetInfo.assetKind is not null %} 
     SET a.assetKind = $asset.assetKind
-    {%- endif %}
-    {%- if assetInfo.assetType is not null %} 
+{%- else %} 
+    REMOVE a.assetKind
+{%- endif %} 
+{%- if assetInfo.assetType is not null %}  
     SET a.assetType = $asset.assetType
-    {%- endif %} 
+{%- else %} 
+    REMOVE a.assetType
+{%- endif %} 
   parameters:
     shell:
       id: "{{ event.id }}"
     asset:
       globalAssetId: "{{ assetInfo.globalAssetId }}"
-      {%- if meta.sourceUrl is not null %} 
+{%- if meta.sourceUrl is not null %} 
       sourceUrl: "{{ meta.sourceUrl }}/shells/{{ event.id | base64encode | replace({ '=': '' }) | urlencode }}/asset-information"
-      {%- endif %}
-      {%- if assetInfo.assetKind is not null %} 
+{%- endif %}
+{%- if assetInfo.assetKind is not null %} 
       assetKind: "{{ assetInfo.assetKind | capitalize }}"
-      {%- endif %} 
-      {%- if assetInfo.assetType is not null %} 
+{%- endif %} 
+{%- if assetInfo.assetType is not null %} 
       assetType: "{{ assetInfo.assetType }}"
-      {%- endif %} 
+{%- endif %} 

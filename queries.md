@@ -113,3 +113,10 @@ WHERE
   (major = 3 AND minor < 5) OR
   (major = 3 AND minor = 5 AND patch < 2)
 RETURN a.id
+
+
+
+
+
+
+MERGE (a:Asset { id: $asset.globalAssetId }) \nSET a.sourceUrl = $asset.sourceUrl \nSET a.assetKind = $asset.assetKind \nSET a.assetType = $asset.assetType \n

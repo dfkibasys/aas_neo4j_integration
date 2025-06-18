@@ -7,18 +7,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Base64;
 
-import org.apache.kafka.shaded.io.opentelemetry.proto.trace.v1.Status.StatusCode;
-import org.eclipse.digitaltwin.aas4j.v3.model.DataTypeDefXsd;
-import org.eclipse.digitaltwin.aas4j.v3.model.Property;
 import org.eclipse.digitaltwin.aas4j.v3.model.Submodel;
 import org.eclipse.digitaltwin.aas4j.v3.model.SubmodelElement;
-import org.eclipse.digitaltwin.aas4j.v3.model.impl.DefaultProperty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.util.Identifiable;
 
 import de.dfki.cos.aas2graph.kafka.pebble.model.json.PebbleSubmodelElement;
 import de.dfki.cos.aas2graph.kafka.util.AasIo;
@@ -28,40 +22,40 @@ public class Evaluation {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 
-//		ArrayList<String> shells = new ArrayList<>();
-//		ArrayList<String> identifications = new ArrayList<>();
-//		ArrayList<String> signals = new ArrayList<>();
-//		
-//		int from = 12222;
-//		int num = 1020;
-//		
-//		for (int i = from; i < num + from; i++) {
-//			String shell = newShell(i);
-//			shells.add(shell);
-//			String identification = newIdentification(i, i%2 == 0 ? "2.3.0": "2.7.0");
-//			identifications.add(identification);
-//		//	System.out.println(countSmes(identification));
-//			String signal = newSignals(i);
-//	//		System.out.println(countSmes(signal));
-//			signals.add(signal);
-//		}
-//		long start = System.nanoTime();
-//		for (int i = 0; i < num; i++) {
-//			pushShell("http://aas.dfki.de/ids/aas/mir100_" + i,  shells.get(i));
-//		//	Thread.sleep(10);
-//			pushSubmodel("http://aas.dfki.de/ids/sm/identification_" + i, identifications.get(i));
-//			pushSubmodel("http://aas.dfki.de/ids/sm/signals" + i, signals.get(i));
-//		//	Thread.sleep(10);
-//		}
-//		long end = System.nanoTime();
-//		System.out.println((end - start) / 1_000_000 / 10000);
-//		
+		ArrayList<String> shells = new ArrayList<>();
+		ArrayList<String> identifications = new ArrayList<>();
+		ArrayList<String> signals = new ArrayList<>();
 		
-		Thread.sleep(5000);
-		for (int i = 0; i < 10; i++) {
-			pushVersionUpdate("http://aas.dfki.de/ids/aas/evaluation/mir100_1", "3.5.2");
-			Thread.sleep(1);
+		int from = 0;
+		int num = 1000;
+		
+		for (int i = from; i < num + from; i++) {
+			String shell = newShell(i);
+			shells.add(shell);
+			String identification = newIdentification(i, i%2 == 0 ? "2.3.0": "2.7.0");
+			identifications.add(identification);
+		//	System.out.println(countSmes(identification));
+			String signal = newSignals(i);
+	//		System.out.println(countSmes(signal));
+			signals.add(signal);
 		}
+		long start = System.nanoTime();
+		for (int i = 0; i < num; i++) {
+			pushShell("http://aas.dfki.de/ids/aas/mir100_" + i,  shells.get(i));
+		//	Thread.sleep(10);
+			pushSubmodel("http://aas.dfki.de/ids/sm/identification_" + i, identifications.get(i));
+			pushSubmodel("http://aas.dfki.de/ids/sm/signals" + i, signals.get(i));
+		//	Thread.sleep(10);
+		}
+		long end = System.nanoTime();
+		System.out.println((end - start) / 1_000_000 / 10000);
+		
+		
+//		Thread.sleep(5000);
+//		for (int i = 0; i < 10; i++) {
+//			pushVersionUpdate("http://aas.dfki.de/ids/aas/evaluation/mir100_1", "3.5.2");
+//			Thread.sleep(1);
+//		}
 	}
 
 

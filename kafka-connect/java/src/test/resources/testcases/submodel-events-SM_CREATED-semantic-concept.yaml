@@ -25,7 +25,7 @@ expected: |
       SET s.sourceUrl = $submodel.sourceUrl
       SET s.registrationTime = $submodel.registrationTime
       MERGE (r_0:SemanticConcept  { id: $refs.r_0.id})
-      MERGE (s) -[:HAS_SEMANTIC {type: $refs.r_0.type} ]->(r_0)
+      MERGE (s) -[:HAS_SEMANTIC {name: $refs.r_0.name, type: $refs.r_0.type} ]->(r_0)
     parameters:
       submodel:
         id: "http://aas.dfki.de/ids/sm/6520_7132_1112_3075"
@@ -36,4 +36,5 @@ expected: |
         r_0:
           id: "https://www.hsu-hh.de/aut/aas/identification"
           label: "SemanticConcept"
-          type: "semanticId"
+          name: "semanticId"
+          type: "ExternalReference"

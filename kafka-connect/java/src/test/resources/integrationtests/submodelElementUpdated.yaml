@@ -1,0 +1,158 @@
+input:
+  - type: POST_SUBMODEL
+    body:
+      id: http://test.sm
+      modelType: Submodel
+      kind : Instance
+      submodelElements: 
+      - modelType: SubmodelElementCollection
+        idShort: Col
+        value:
+        - modelType: Property
+          idShort: Prop1
+          value: "1"
+      - modelType: SubmodelElementList
+        idShort: List
+  - type: POST_SUBMODEL_ELEMENT
+    smId: http://test.sm 
+    path: Col
+    body: 
+      modelType: ReferenceElement
+      idShort: RE
+      value: 
+        type: ModelReference
+        keys: 
+        - type: Submodel
+          value: http://test.sm
+        - type: SubmodelElementCollection
+          value: Col
+        - type: Property
+          value: Prop1
+  - type: POST_SUBMODEL_ELEMENT
+    smId: http://test.sm 
+    body: 
+      modelType: Property
+      idShort: Prop3
+      value: "3"
+  - type: PUT_SUBMODEL_ELEMENT
+    smId: http://test.sm
+    path: Prop3
+    body: 
+      modelType: Property
+      idShort: Prop3
+      value: "7"
+  - type: PUT_SUBMODEL_ELEMENT
+    smId: http://test.sm
+    path: Col.RE
+    body:
+      modelType: ReferenceElement
+      idShort: RE
+      value: 
+        type: ModelReference
+        keys: 
+          - type: Submodel
+            value: http://test.sm
+          - type: SubmodelElementCollection
+            value: Col
+          - type: Property
+            value: Prop3
+expected:
+  nodes:
+  - id: "0"
+    labels:
+    - Identifiable
+    - Submodel
+    - Referable
+    properties:
+      registrationTime: 1732781746575
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
+      id: "http://test.sm" 
+  - id: "1"
+    labels:
+    - "SubmodelElement"
+    - "SubmodelElementCollection"
+    - "Referable"
+    properties:
+      idShort: "Col"
+      idShortPath: "Col"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/Col"
+  - id: "2"
+    labels:
+    - "SubmodelElement"
+    - "SubmodelElementList"
+    - "Referable"
+    properties:
+      idShort: "List"
+      idShortPath: "List"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/List"
+  - id: "3"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "Property"
+    - "Referable"
+    properties:
+      idShort: "Prop1"
+      idShortPath: "Col.Prop1"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/Col.Prop1"
+      value: "1"
+  - id: "7"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "Property"
+    - "Referable"
+    properties:
+      idShort: "Prop3"
+      idShortPath: "Prop3"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/Prop3"
+      value: "7"
+  - id: "8"
+    labels:
+    - "SubmodelElement"
+    - "DataElement"
+    - "ReferenceElement"
+    - "Referable"
+    properties:
+      idShort: "RE"
+      idShortPath: "Col.RE"
+      smId: "http://test.sm"
+      sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20/submodel-elements/Col.RE"
+  - id: "9"
+    labels:
+    - "Property"
+    properties:
+      id: "http://test.sm"
+      idShortPath: "Col.Prop3"
+  relationships:
+  - id: "0"
+    type: "HAS_ELEMENT"
+    startNode: "0"
+    endNode: "1"
+  - id: "1"
+    type: "HAS_ELEMENT"
+    startNode: "0"
+    endNode: "2"
+  - id: "2"
+    type: "HAS_ELEMENT"
+    startNode: "1"
+    endNode: "3"
+  - id: "6"
+    type: "HAS_ELEMENT"
+    startNode: "0"
+    endNode: "7"
+  - id: "7"
+    type: "HAS_ELEMENT"
+    startNode: "1"
+    endNode: "8"
+  - id: "8"
+    type: "HAS_REFERENCE"
+    startNode: "8"
+    endNode: "9"
+    properties:
+      name: value
+      type: ModelReference
