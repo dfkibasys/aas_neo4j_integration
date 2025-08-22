@@ -60,13 +60,13 @@ expected:
   nodes:
   - id: "0"
     labels:
-    - Identifiable
-    - Submodel
-    - Referable
+    - "Identifiable"
+    - "Submodel"
+    - "Referable"
     properties:
-      registrationTime: 1732781746575
+      id: "http://test.sm"
+      registrationTime: 0
       sourceUrl: "http://aas-environment:8081/submodels/aHR0cDovL3Rlc3Quc20"
-      id: "http://test.sm" 
   - id: "1"
     labels:
     - "SubmodelElement"
@@ -154,5 +154,5 @@ expected:
     startNode: "8"
     endNode: "9"
     properties:
-      name: value
-      type: ModelReference
+      name: "value"
+      type: "ModelReference"

@@ -44,7 +44,7 @@ RETURN *
 
 
 
-# Really return everything
+# Realy return everything
 
 MATCH (n)-[r]->(m)
 RETURN n, r, m
