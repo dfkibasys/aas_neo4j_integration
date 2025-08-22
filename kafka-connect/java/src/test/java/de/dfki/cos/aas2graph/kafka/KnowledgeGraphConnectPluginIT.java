@@ -64,8 +64,9 @@ public class KnowledgeGraphConnectPluginIT {
 	}
 
 	@BeforeEach
-	public void startContainers() {
+	public void startContainers() throws InterruptedException {
 		stack.start();
+		Thread.sleep(1000);	
 		envAccess = new EnvironmentAccess(stack.aasEnv().urlAsString());
 		neo4jAccess = new Neo4jAccess(stack.neo4j().getTransactionalHttpUrl());
 	}
