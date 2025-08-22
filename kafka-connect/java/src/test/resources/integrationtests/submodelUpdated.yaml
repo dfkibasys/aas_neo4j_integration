@@ -155,8 +155,8 @@ expected:
     startNode: "12"
     endNode: "6"
     properties:
-      name: value
-      type: ModelReference
+      name: globalAssetId
+      type: AssetId
   - id: "13"
     type: "HAS_ELEMENT"
     startNode: "11"

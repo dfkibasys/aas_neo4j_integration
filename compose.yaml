@@ -130,7 +130,11 @@ services:
 
 ########### Neo4j ###################################################################
   neo4j:
-    image: neo4j:5.23.0-community-bullseye
+    image: dfki-neo4j:5.28.0-community-bullseye-apoc
+    build:
+      dockerfile: Dockerfile.neo4j-apoc
+      context: .
+    # neo4j:5.23.0-community-bullseye
     container_name: neo4j
     restart: always
     ports:

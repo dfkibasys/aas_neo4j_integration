@@ -125,7 +125,6 @@ public class Kafka2Neo4jSinkTask extends SinkTask {
 
 			throw new ConnectException("Failed to send record after " + maxRetries + " attempts.");
 		}
-		log.error("HttpResponse: Successfully send record! statusCode={} statusMessage='Success' responseBody='{}' ", status, responseBody);
 	
 		return afterTrans;
 	}

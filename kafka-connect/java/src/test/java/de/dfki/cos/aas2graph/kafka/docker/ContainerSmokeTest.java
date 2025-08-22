@@ -22,7 +22,9 @@ public class ContainerSmokeTest {
 				ConfiguredKafkaNeo4jPluginContainer plugin = new ConfiguredKafkaNeo4jPluginContainer(network, kafka, neo4j)) {
 
 			kafka.start();
+		
 			neo4j.start();
+			Thread.sleep(1000);
 			plugin.start();
 
 			waitForRunning(plugin);

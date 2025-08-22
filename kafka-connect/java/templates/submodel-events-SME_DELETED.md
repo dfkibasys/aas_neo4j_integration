@@ -40,7 +40,7 @@ This statement identifies `HAS_REFERENCE` or `HAS_SEMANTIC` relationships origin
     DELETE ref
     WITH t
     WHERE t.sourceUrl IS NULL AND NOT EXISTS {
-      (t)<-[:HAS_REFERENCE]-(o)
+      (t)<-[:HAS_REFERENCE|HAS_SEMANTIC]-(o)
       WHERE (o:Identifiable)
         OR (o:SubmodelElement AND (o.smId <> $submodel.id
           OR NOT o.idShortPath STARTS WITH $sme.idShortPath))
