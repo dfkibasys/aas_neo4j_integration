@@ -1,4 +1,5 @@
-FROM --platform=$BUILDPLATFORM maven:3.8.4-openjdk-17 AS build
+ARG TARGETPLATFORM=linux/amd64
+FROM --platform=${TARGETPLATFORM} maven:3.8.4-openjdk-17 AS build
 WORKDIR /app
 COPY ./java/pom.xml /app/pom.xml
 RUN mvn dependency:go-offline

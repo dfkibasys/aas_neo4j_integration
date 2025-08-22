@@ -19,7 +19,7 @@ public class ConfiguredKafkaNeo4jPluginContainer extends GenericContainer<Config
 		super(dockerFile());
 		// could take longer to build
 		withStartupTimeout(Duration.ofMinutes(2));
-		withEnv(envVars()).withNetwork(network).withNetworkAliases("neo4j-kafka-connect").dependsOn(List.of(kafka, neo4j)).withReuse(true).waitingFor(Wait.forLogMessage(".*neo4j-kafka-connect plugin is ready to use.*", 1))
+		withEnv(envVars()).withNetwork(network).withNetworkAliases("neo4j-kafka-connect").dependsOn(List.of(kafka, neo4j)).withReuse(true).waitingFor(Wait.forLogMessage(".*Adding newly assigned partitions.*", 1))
 				.withLogConsumer(o -> {
 					System.err.println(o.getUtf8String());
 				});
@@ -27,7 +27,8 @@ public class ConfiguredKafkaNeo4jPluginContainer extends GenericContainer<Config
 	}
 
 	private static ImageFromDockerfile dockerFile() {
-		return new ImageFromDockerfile("dfkibasys/kafka-connect-neo4j:"+Uuid.randomUuid(), true).withDockerfile(Paths.get("../Dockerfile"));
+		return new ImageFromDockerfile("dfkibasys/kafka-connect-neo4j:"+Uuid.randomUuid(), true)
+				.withDockerfile(Paths.get("../Dockerfile"));
 	}
 
 	private Map<String, String> envVars() {

@@ -25,7 +25,6 @@ public class PluginDockerStack implements Startable {
 	@Override
 	public void start() {
 		Startables.deepStart(List.of(kafka, neo4j, aasEnv, connect)).join();
-
 	}
 	
 	@Override

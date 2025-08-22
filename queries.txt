@@ -1,0 +1,54 @@
+# DerivedFrom References
+MATCH (a:AssetAdministrationShell)-[r:HAS_REFERENCE {name:"derivedFrom"} ]
+    ->(target)
+RETURN *
+
+
+# Dangling refs: Message Broker and type aas not available -> we want to see the shells as well
+
+MATCH (s)-[r1:HAS_REFERENCE]->(t)
+WHERE t.sourceUrl IS NULL
+MATCH path1=(sm:Submodel)-[:HAS_ELEMENT*]->(s)
+MATCH path2=(aas:AssetAdministrationShell)-[:HAS_SUBMODEL]->(sm)
+MATCH (asset:Asset)<-[r2:HAS_ASSET]-(aas)
+RETURN *
+
+# All identification submodels with a version
+
+MATCH (aas:AssetAdministrationShell)-[r1:HAS_SUBMODEL]->(s:Submodel)
+MATCH (aas)-[r2:HAS_ASSET]->(a)
+MATCH (s)-[r3:HAS_SEMANTIC]->(:SemanticConcept {id:"https://www.hsu-hh.de/aut/aas/identification"})
+MATCH (s)-[r4:HAS_ELEMENT]->(pMf)-[hs1:HAS_SEMANTIC]->(:SemanticConcept{id: "0173-1#02-AAO677#002"})
+MATCH (s)-[r5:HAS_ELEMENT]->(pPd)-[hs2:HAS_SEMANTIC]->(:SemanticConcept{id: "0173-1#02-AAW338#001"})
+MATCH (s)-[r6:HAS_ELEMENT]->(pVers)-[hs3:HAS_SEMANTIC]->(versId:SemanticConcept{id: "0173-1#02-AAS383#003"})
+RETURN *
+
+
+# Filtered by version
+MATCH (aas:AssetAdministrationShell)-[r1:HAS_SUBMODEL]->(s:Submodel)
+MATCH (aas)-[r2:HAS_ASSET]->(a)
+MATCH (s)-[r3:HAS_SEMANTIC]->(:SemanticConcept {id:"https://www.hsu-hh.de/aut/aas/identification"})
+MATCH (s)-[r4:HAS_ELEMENT]->(pMf)-[:HAS_SEMANTIC]->(:SemanticConcept{id: "0173-1#02-AAO677#002"})
+MATCH (s)-[r5:HAS_ELEMENT]->(pPd)-[:HAS_SEMANTIC]->(:SemanticConcept{id: "0173-1#02-AAW338#001"})
+MATCH (s)-[r6:HAS_ELEMENT]->(pVers)-[s3:HAS_SEMANTIC]->(sc:SemanticConcept{id: "0173-1#02-AAS383#003"})
+WITH *, split(pVers.value, ".") AS versionParts
+WITH *,
+toInteger(versionParts[0]) AS major,
+toInteger(versionParts[1]) AS minor,
+toInteger(versionParts[2]) AS patch
+WHERE
+(major < 2) OR
+(major = 2 AND minor < 4) OR
+(major = 2 AND minor = 4 AND patch < 2)
+RETURN * 
+
+
+
+# Return everything
+
+MATCH (n)-[r]->(m)
+RETURN n, r, m
+UNION
+MATCH (n)
+WHERE NOT (n)--()
+RETURN n, null AS r, null AS m;

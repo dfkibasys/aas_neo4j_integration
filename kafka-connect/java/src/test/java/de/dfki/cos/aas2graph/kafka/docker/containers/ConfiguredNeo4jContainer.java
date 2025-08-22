@@ -15,6 +15,7 @@ public class ConfiguredNeo4jContainer extends Neo4jContainer<ConfiguredNeo4jCont
 			.withoutAuthentication()
 			.withNetwork(network).waitingFor(Wait.forLogMessage(".*Started.*", 1)).withNetworkAliases(NETWORK_ALIAS)
 			.withReuse(true);
+		
 	}
 
 	public String getTransactionalHttpUrl() {
