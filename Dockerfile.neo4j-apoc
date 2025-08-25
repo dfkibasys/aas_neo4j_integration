@@ -5,5 +5,5 @@ ADD https://github.com/neo4j/apoc/releases/download/5.26.8/apoc-5.26.8-core.jar 
 ENV NEO4J_apoc_export_file_enabled=true \
     NEO4J_apoc_import_file_enabled=true \
     NEO4J_apoc_import_file_use__neo4j__config=true \
-    NEO4J_dbms_security_procedures_unrestricted=apoc.meta.data
+    NEO4J_dbms_security_procedures_unrestricted=apoc.*
 
